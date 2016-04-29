@@ -1,0 +1,64 @@
+version: '2'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: remarker-web
+    networks:
+      - app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    container_name: remarker-php-fpm
+    networks:
+      - app
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
+  redis:
+    container_name: remarker-redis
+    image: redis:3.0.7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app
+
+  mysql:
+    container_name: remarker-mysql
+    image: mysql:5.7.11
+    ports:
+      - "3306:3306"
+    networks:
+      - app
+    volumes:
+      - mysql-data:/var/lib/mysql
+    env_file:
+      - .env
+
+volumes:
+  redis-data:
+    driver: local
+  mysql-data:
+    driver: local
+
+networks:
+  app:
