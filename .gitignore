@@ -1,0 +1,8 @@
+# Excluded files
+.env
+robots.txt
+*.bak
+app/config/config.php
+
+# Excluded folders
+vendor/
