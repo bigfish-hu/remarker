@@ -25,12 +25,13 @@ class GetFrontend
     public function __invoke(JsonApi $jsonApi)
     {
         $params = [];
+        $params["base_url"] = $this->config->getBaseUrl();
         $params["text"] = $this->config->getText();
         $params["project"] = $jsonApi->request->getAttribute("project");
 
         $response = $jsonApi->respond()->genericSuccess(200);
         $response = $response->withHeader("Content-Type", "application/javascript; charset=utf-8");
-        $response->getBody()->write($this->twig->render("feedback.twig.js", [$params]));
+        $response->getBody()->write($this->twig->render("feedback.twig.js", $params));
 
         return $response;
     }

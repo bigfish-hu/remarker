@@ -9,13 +9,13 @@ class Project
     protected $code;
 
     /**
-     * @var \Src\Feedback\Domain\NotificationService[]
+     * @var \Src\Feedback\Domain\NotificationInterface[]
      */
     protected $notificationServices;
 
     /**
      * @param string $code
-     * @param \Src\Feedback\Domain\NotificationService[] $notificationServices
+     * @param \Src\Feedback\Domain\NotificationInterface[] $notificationServices
      */
     public function __construct($code, array $notificationServices)
     {

@@ -3,7 +3,7 @@ namespace Src\Feedback\Infrastructure\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FeedbackModel extends Model
+class EloquentProjectEmailModel extends Model
 {
-    protected $table = "feedbacks";
+    protected $table = "project_emails";
 }

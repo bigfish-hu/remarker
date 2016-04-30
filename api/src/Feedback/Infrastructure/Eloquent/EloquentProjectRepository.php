@@ -2,7 +2,7 @@
 namespace Src\Feedback\Infrastructure\Eloquent;
 
 use Src\Base\Config\Config;
-use Src\Feedback\Domain\NotificationServiceFactory;
+use Src\Feedback\Infrastructure\Eloquent\EloquentNotificationServiceFactory;
 use Src\Feedback\Domain\Project;
 use Src\Feedback\Domain\ProjectRepositoryInterface;
 use Src\Feedback\Exception\ProjectNotFound;
@@ -15,11 +15,11 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
     protected $config;
 
     /**
-     * @var \Src\Feedback\Domain\NotificationServiceFactory
+     * @var \Src\Feedback\Infrastructure\Eloquent\EloquentNotificationServiceFactory
      */
     protected $notificationServiceFactory;
 
-    public function __construct(Config $config, NotificationServiceFactory $notificationServiceFactory)
+    public function __construct(Config $config, EloquentNotificationServiceFactory $notificationServiceFactory)
     {
         $this->config = $config;
         $this->notificationServiceFactory = $notificationServiceFactory;
@@ -32,16 +32,26 @@ class EloquentProjectRepository implements ProjectRepositoryInterface
      */
     public function getProject($code)
     {
-        $project = $this->config->getProject($code);
-        if (empty($project) === true) {
+        $project = EloquentProjectModel::query()
+            ->with(
+                [
+                    "allowedUrls",
+                    "emails",
+                    "issueTrackers",
+                    "issueTrackers.issueTracker",
+                    "issueTrackers.watchers"
+                ]
+            )
+            ->where("name", "=", $code)
+            ->get()
+            ->first();
+
+        if (empty($project)) {
             throw new ProjectNotFound();
         }
         
-        $notificationServices = [];
-        foreach ($project as $notificationServiceName) {
-            $notificationServices[] = $this->notificationServiceFactory->createNotificationService($notificationServiceName);
-        }
-        
+        $notificationServices = $this->notificationServiceFactory->createNotifications($project->toArray());
+                
         return new Project($code, $notificationServices);
     }
 }

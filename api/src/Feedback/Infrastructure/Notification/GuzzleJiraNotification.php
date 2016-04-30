@@ -3,7 +3,7 @@ namespace Src\Feedback\Infrastructure\Notification;
 
 use GuzzleHttp\Psr7\Request;
 use Src\Base\Config\Config;
-use Src\Feedback\Domain\AbstractNotificationService;
+use Src\Feedback\Domain\AbstractNotification;
 use Src\Feedback\Domain\Feedback;
 use Src\Feedback\Domain\Project;
 use Src\Feedback\Exception\IssueTrackerNotFound;
@@ -11,7 +11,7 @@ use Src\Feedback\Exception\JiraIssueCantBeCreated;
 use Src\Feedback\Exception\ProjectNotFound;
 use Src\Feedback\Utils\ApiClient;
 
-class GuzzleJiraNotificationService extends AbstractNotificationService
+class GuzzleJiraNotification extends AbstractNotification
 {
     /**
      * @var \Src\Feedback\Utils\ApiClient

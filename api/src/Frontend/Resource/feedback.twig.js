@@ -2,7 +2,7 @@
 	$.feedback = function(options) {
 
     var settings = $.extend({
-			ajaxURL: '{{ base_url }}/api/feedbacks/{{project_id }}',
+			ajaxURL: '{{ base_url }}/api/feedbacks/{{ project }}',
 			postBrowserInfo: true,
 			postHTML: false,
 			postURL: true,

@@ -3,7 +3,7 @@ namespace Src\Feedback\Domain;
 
 use Src\Base\Config\Config;
 
-abstract class AbstractNotificationService implements NotificationService
+abstract class AbstractNotification implements NotificationInterface
 {
     /**
      * @var \Src\Base\Config\Config

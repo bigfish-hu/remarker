@@ -4,13 +4,13 @@ namespace Src\Feedback\Infrastructure\Notification;
 use Exception;
 use PHPMailer;
 use Src\Base\Config\Config;
-use Src\Feedback\Domain\AbstractNotificationService;
+use Src\Feedback\Domain\AbstractNotification;
 use Src\Feedback\Domain\Feedback;
 use Src\Feedback\Domain\Project;
 use Src\Feedback\Exception\EmailCannotBeSent;
 use Src\Feedback\Infrastructure\Twig\FeedbackTwig;
 
-class PhpMailerEmailNotificationService extends AbstractNotificationService
+class PhpMailerEmailNotification extends AbstractNotification
 {
     /**
      * @var \Src\Base\Infrastructure\Twig\TwigInterface
@@ -23,9 +23,9 @@ class PhpMailerEmailNotificationService extends AbstractNotificationService
         $this->twig = $twig;
     }
 
-    public function notify(Project $projectConfig, Feedback $feedback)
+    public function notify(Project $project, Feedback $feedback)
     {
-        $recipients = $this->config->getEmailNotificationRecipients($projectConfig);
+        $recipients = $this->config->getEmailNotificationRecipients($project);
         if (empty($recipients)) {
             return;
         }
@@ -37,7 +37,7 @@ class PhpMailerEmailNotificationService extends AbstractNotificationService
         foreach ($recipients as $recipient) {
             $mailer->addAddress($recipient);
         }
-        $mailer->Subject = "Új észrevétel a(z) " . $projectConfig->getCode() . " nevű projekthez";
+        $mailer->Subject = "Új észrevétel a(z) " . $project->getCode() . " nevű projekthez";
         $mailer->isHTML(true);
         $mailer->msgHTML($this->getBody($feedback));
         $mailer->addStringAttachment($feedback->getScreenshot(), "screenshot.jpg");
