@@ -6,3 +6,4 @@ app/config/config.php
 
 # Excluded folders
 vendor/
+.idea/
