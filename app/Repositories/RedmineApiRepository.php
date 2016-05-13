@@ -1,26 +1,30 @@
 <?php
-namespace Src\Feedback\Infrastructure\Notification;
+namespace App\Repositories;
 
-use GuzzleHttp\Psr7\Request;
-use Src\Base\Config\Config;
-use Src\Feedback\Domain\AbstractNotification;
-use Src\Feedback\Domain\Feedback;
-use Src\Feedback\Domain\Project;
-use Src\Feedback\Exception\IssueTrackerNotFound;
-use Src\Feedback\Exception\ProjectNotFound;
-use Src\Feedback\Exception\RedmineIssueCantBeCreated;
-use Src\Feedback\Utils\ApiClient;
+use App\Feedback;
+use App\IssueTracker;
+use App\Repositories\Contracts\IssueTrackerApiInterface;
 
-class GuzzleRedmineNotification extends AbstractNotification
+
+class RedmineApiRepository implements IssueTrackerApiInterface
 {
     /**
-     * @var \Src\Feedback\Utils\ApiClient
      */
     protected $client;
 
+    protected $type = 'redmine';
+
+    public function getUsers(IssueTracker $issueTracker)
+    {
+
+    }
+
+    public function getProjects(IssueTracker $issueTracker)
+    {
+
+    }
+
     /**
-     * @param \Src\Feedback\Utils\ApiClient $client
-     * @param \Src\Base\Config\Config $config
      */
     public function __construct(ApiClient $client, Config $config)
     {
@@ -31,8 +35,7 @@ class GuzzleRedmineNotification extends AbstractNotification
     /**
      * @param Project $project
      * @param Feedback $feedback
-     * @throws \Src\Feedback\Exception\IssueTrackerNotFound
-     * @throws \Src\Feedback\Exception\ProjectNotFound
+
      */
     public function notify(Project $project, Feedback $feedback)
     {
@@ -55,7 +58,6 @@ class GuzzleRedmineNotification extends AbstractNotification
      * @param Feedback $feedback
      * @param array $issueTrackerConfig
      * @param string $token
-     * @throws \Src\Feedback\Exception\RedmineIssueCantBeCreated
      */
     protected function uploadImage(
         Feedback $feedback,
@@ -89,18 +91,12 @@ class GuzzleRedmineNotification extends AbstractNotification
      * @param array $issueTrackerConfig
      * @param array $projectConfig
      * @param string $token
-     * @throws \Src\Feedback\Exception\RedmineIssueCantBeCreated
      */
-    protected function createIssue(
-        Feedback $feedback,
-        array $issueTrackerConfig,
-        array $projectConfig,
-        $token
-    ) {
-        $description = "*Bejelentés leírása:* " . $feedback->getDescription() . "\n" .
-            "*Url:* " . $feedback->getUrl() . "\n\n" .
-            "*Operációs rendszer:* " . $feedback->getBrowser()->getPlatform() . "\n" .
-            "*Böngésző:* " . $feedback->getBrowser()->getName() . "\n" .
+    public function createIssue(IssueTracker $issueTracker, Feedback $feedback) {
+        $description = "*Bejelentés leírása:* " . $feedback->description . "\n" .
+            "*Url:* " . $feedback->url . "\n\n" .
+            "*Operációs rendszer:* " . $feedback->platform . "\n" .
+            "*Böngésző:* " . $feedback->browser . "\n" .
             "*Sütik:* " . ($feedback->getBrowser()->isCookieEnabled() ? "engedélyezve" : "letiltva") . "\n" .
             "*Képernyőméret:* " . $feedback->getBrowser()->getScreen() . "\n" .
             "*User Agent:* " . $feedback->getBrowser()->getUserAgent();

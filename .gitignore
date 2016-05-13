@@ -3,6 +3,7 @@
 robots.txt
 *.bak
 app/config/config.php
+composer.lock
 
 # Excluded folders
 vendor/

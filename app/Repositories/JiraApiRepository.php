@@ -1,6 +1,8 @@
 <?php
 namespace App\Repositories;
 
+use App\Feedback;
+use App\IssueTracker;
 use App\Repositories\Contracts\IssueTrackerApiInterface;
 
 
@@ -11,6 +13,16 @@ class JiraApiRepository implements IssueTrackerApiInterface
     protected $client;
 
     public $type = 'jira';
+
+    public function getUsers(IssueTracker $issueTracker)
+    {
+
+    }
+
+    public function getProjects(IssueTracker $issueTracker)
+    {
+
+    }
 
     /**
      */
@@ -42,12 +54,7 @@ class JiraApiRepository implements IssueTrackerApiInterface
     }
 
 
-    public function createIssue(
-        Feedback $feedback,
-        array $issueTrackerConfig,
-        array $projectConfig,
-        &$issueLink
-    ) {
+    public function createIssue(IssueTracker $issueTracker, Feedback $feedback) {
         $headers = [
             "Content-Type" => "application/json"
         ];
