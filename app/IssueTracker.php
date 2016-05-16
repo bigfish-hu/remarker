@@ -12,7 +12,7 @@ class IssueTracker extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'user_name', 'password',
+        'name', 'user_name', 'password', 'type'
     ];
 
     /**

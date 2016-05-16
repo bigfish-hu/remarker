@@ -12,7 +12,7 @@ class ExtUser extends Model
      * @var array
      */
     protected $fillable = [
-        'issue_tracker_id', 'key', 'login_name', 'display_name'
+        'issue_tracker', 'key', 'login_name', 'display_name'
     ];
 
     public function issueTracker()

@@ -44,4 +44,12 @@ class Feedback extends Model
     {
         return $this->project()->getResults()->users();
     }
+
+    /**
+     * @return resource
+     */
+    public function getScreenshot()
+    {
+        return base64_decode($this->screenshot);
+    }
 }

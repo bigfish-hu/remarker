@@ -5,36 +5,32 @@ use App\Feedback;
 use App\IssueTracker;
 use App\Repositories\Contracts\IssueTrackerApiInterface;
 
-
-class JiraApiRepository implements IssueTrackerApiInterface
+// @TODO
+class JiraApiRepository extends IssueTrackerApiBaseRepository implements IssueTrackerApiInterface
 {
-    /**
-     */
+
     protected $client;
 
     public $type = 'jira';
 
-    public function getUsers(IssueTracker $issueTracker)
+    public function getUsers()
     {
 
     }
 
-    public function getProjects(IssueTracker $issueTracker)
+    public function getProjects()
     {
 
     }
 
-    /**
-     */
+
     public function __construct(ApiClient $client, Config $config)
     {
         $this->client = $client;
         parent::__construct($config);
     }
 
-    /**
-     *
-     */
+
     public function notify(Project $project, Feedback $feedback)
     {
         $issueTrackerConfig = $this->config->getJiraSettings();
@@ -64,13 +60,7 @@ class JiraApiRepository implements IssueTrackerApiInterface
             $watchers[] = ["name" => $watcher];
         }
 
-        $description = "*Bejelentés leírása:* " . $feedback->getDescription() . "\n" .
-            "*Url:* " . $feedback->getUrl() . "\n\n" .
-            "*Operációs rendszer:* " . $feedback->getBrowser()->getPlatform() . "\n" .
-            "*Böngésző:* " . $feedback->getBrowser()->getName() . "\n" .
-            "*Sütik:* " . ($feedback->getBrowser()->isCookieEnabled() ? "engedélyezve" : "letiltva") . "\n" .
-            "*Képernyőméret:* " . $feedback->getBrowser()->getScreen() . "\n" .
-            "*User Agent:* " . $feedback->getBrowser()->getUserAgent();
+        $description = $this->createIssueDescription($feedback);
 
         $body = [
             "fields" => [
@@ -108,9 +98,7 @@ class JiraApiRepository implements IssueTrackerApiInterface
         $issueLink = $body["self"];
     }
 
-    /**
-     *
-     */
+
     protected function addWatchers(array $issueTrackerConfig, array $projectConfig, $issueLink)
     {
         foreach ($projectConfig["watchers"] as $watcher) {

@@ -3,13 +3,13 @@
 namespace App\Repositories\Contracts;
 
 use App\Feedback;
-use App\IssueTracker;
+use Illuminate\Database\Eloquent\Collection;
 
 interface IssueTrackerApiInterface extends RepositoryInterface
 {
-    public function getProjects(IssueTracker $issueTracker);
+    public function getProjects();
 
-    public function getUsers(IssueTracker $issueTracker);
+    public function getUsers();
 
-    public function createIssue(IssueTracker $issueTracker, Feedback $feedback);
+    public function createIssue(Feedback $feedback);
 }

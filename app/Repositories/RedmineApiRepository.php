@@ -3,47 +3,34 @@ namespace App\Repositories;
 
 use App\Feedback;
 use App\IssueTracker;
+use App\Project;
 use App\Repositories\Contracts\IssueTrackerApiInterface;
+use GuzzleHttp\Psr7\Request;
 
 
-class RedmineApiRepository implements IssueTrackerApiInterface
+class RedmineApiRepository extends IssueTrackerApiBaseRepository implements IssueTrackerApiInterface
 {
-    /**
-     */
-    protected $client;
+    protected $type = 'Redmine';
 
-    protected $type = 'redmine';
 
-    public function getUsers(IssueTracker $issueTracker)
+    public function __construct(array $config)
     {
+        $this->config = $config;
+    }
+
+    public function getUsers()
+    {
+
 
     }
 
-    public function getProjects(IssueTracker $issueTracker)
+    public function getProjects()
     {
-
+        return $this->config;
     }
 
-    /**
-     */
-    public function __construct(ApiClient $client, Config $config)
-    {
-        $this->client = $client;
-        parent::__construct($config);
-    }
-
-    /**
-     * @param Project $project
-     * @param Feedback $feedback
-
-     */
     public function notify(Project $project, Feedback $feedback)
     {
-        $issueTrackerConfig = $this->config->getRedmineSettings();
-        if (empty($issueTrackerConfig)) {
-            throw new IssueTrackerNotFound();
-        }
-
         if (isset($issueTrackerConfig["projects"][$project->getCode()]) === false) {
             throw new ProjectNotFound();
         }
@@ -54,11 +41,7 @@ class RedmineApiRepository implements IssueTrackerApiInterface
         $this->createIssue($feedback, $issueTrackerConfig, $projectConfig, $token);
     }
 
-    /**
-     * @param Feedback $feedback
-     * @param array $issueTrackerConfig
-     * @param string $token
-     */
+
     protected function uploadImage(
         Feedback $feedback,
         array $issueTrackerConfig,
@@ -86,20 +69,10 @@ class RedmineApiRepository implements IssueTrackerApiInterface
         $token = $body["upload"]["token"];
     }
 
-    /**
-     * @param Feedback $feedback
-     * @param array $issueTrackerConfig
-     * @param array $projectConfig
-     * @param string $token
-     */
-    public function createIssue(IssueTracker $issueTracker, Feedback $feedback) {
-        $description = "*Bejelentés leírása:* " . $feedback->description . "\n" .
-            "*Url:* " . $feedback->url . "\n\n" .
-            "*Operációs rendszer:* " . $feedback->platform . "\n" .
-            "*Böngésző:* " . $feedback->browser . "\n" .
-            "*Sütik:* " . ($feedback->getBrowser()->isCookieEnabled() ? "engedélyezve" : "letiltva") . "\n" .
-            "*Képernyőméret:* " . $feedback->getBrowser()->getScreen() . "\n" .
-            "*User Agent:* " . $feedback->getBrowser()->getUserAgent();
+
+    public function createIssue(Feedback $feedback) {
+
+        $description = $this->createIssueDescription($feedback);
 
         $headers = [
             "Content-Type" => "application/json"
@@ -133,17 +106,13 @@ class RedmineApiRepository implements IssueTrackerApiInterface
         }
     }
 
-    /**
-     * @param \GuzzleHttp\Psr7\Request $request
-     * @param array $issueTrackerConfig
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function sendRequest(Request $request, array $issueTrackerConfig)
+
+    protected function sendRequest(Request $request)
     {
         return $this->client->request(
             $request,
             [
-                "auth" => [$issueTrackerConfig["username"], $issueTrackerConfig["password"]],
+                "auth" => $this->config['username'], $this->config["password"],
                 "verify" => false
             ]
         );

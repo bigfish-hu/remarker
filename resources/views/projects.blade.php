@@ -43,7 +43,7 @@
     </div>
     @can('edit-projects', Auth::user())
     <div>
-        <button id="getProjectsFromIssueTracker" type="button" data-toggle="modal" data-target="#createProjectModal" class="btn btn-success">{{ trans('admin/projects.sync_projects') }}</button>
+        <a href="/admin/projects/sync" id="getProjectsFromIssueTracker" type="button" class="btn btn-success">{{ trans('admin/projects.sync_projects') }}</a>
     </div>
     @endcan
 @endsection
@@ -195,7 +195,7 @@
             } );
 
             $('#getProjectsFromIssueTracker').on('click', function(){
-
+// @TODO download and save the list of projects from issue trackers
             });
 
 

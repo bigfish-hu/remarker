@@ -24,11 +24,11 @@
                 </a>
             </li>
 
-            <li>
+            {{--<li>
                 <a href="/admin/trackers">
                     <i class="fa fa-folder"></i> <span>{{ trans('admin/sidebar.trackers') }}</span>
                 </a>
-            </li>
+            </li>--}}
 
             <li>
                 <a href="/admin/users">

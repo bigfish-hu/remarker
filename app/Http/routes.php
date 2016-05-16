@@ -61,10 +61,10 @@ Route::group(['prefix' => 'admin'], function () {
         $this->put('/users/{id}', 'AdminController@updateUser');
         $this->delete('/users/{id}', 'AdminController@deleteUser');
 
-        //create or modify tracker routes
-        $this->post('/trackers', 'TrackerController@createTracker');
-        $this->put('/trackers/{id}', 'TrackerController@updateTracker');
-        $this->delete('/trackers/{id}', 'TrackerController@deleteTracker');
+//        //create or modify tracker routes
+//        $this->post('/trackers', 'TrackerController@createTracker');
+//        $this->put('/trackers/{id}', 'TrackerController@updateTracker');
+//        $this->delete('/trackers/{id}', 'TrackerController@deleteTracker');
 
         //create or modify project routes
         $this->post('/projects', 'ProjectController@createProject');

@@ -16,9 +16,9 @@ class CreateProjectsTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->integer('ext_id')->unique();
-            $table->integer('issue_tracker_id');
+            $table->string('name');
+            $table->integer('ext_id');
+            $table->string('issue_tracker');
             $table->boolean('is_automatic_notification');
             $table->timestamps();
         });

@@ -16,7 +16,7 @@ class CreateExtUsersTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('issue_tracker_id');
+            $table->string('issue_tracker');
             $table->string('key');
             $table->string('login_name');
             $table->string('display_name');

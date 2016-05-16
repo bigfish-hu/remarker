@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\IssueTracker;
 use App\Project;
+use App\Services\IssueTrackerApiConnectionService;
 use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -13,18 +14,22 @@ use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
 {
+    private $apiService;
+
+    public function __construct(IssueTrackerApiConnectionService $apiService)
+    {
+        $this->apiService = $apiService;
+    }
+
     public function getProjects()
     {
         $projects = Project::with([
-            'issueTracker',
             'users'
         ])->get();
 
-        $issueTrackers = IssueTracker::all();
-
         $users = User::all();
 
-        return view('projects', ['projects' => $projects, 'trackers' => $issueTrackers, 'users' => $users]);
+        return view('projects', ['projects' => $projects, 'users' => $users]);
     }
 
     /**
@@ -86,7 +91,6 @@ class ProjectController extends Controller
                 }
             }
         } catch (QueryException $e) {
-            // @TODO the localization of this message
             redirect('admin/projects')->withErrors(trans('admin/projects.messages.user_already_assigned'));
         }
 
@@ -97,7 +101,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Utterly destroy, delete, exterminate a user by id.
+     * Utterly destroy, delete, demolish a user by id.
      *
      * @param array|int $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -129,7 +133,8 @@ class ProjectController extends Controller
 
     public function getProjectsFromIssueTrackers()
     {
-
+        $this->apiService->syncProjects();
+        return redirect("/admin/projects");
     }
 
 }
