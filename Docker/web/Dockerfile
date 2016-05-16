@@ -4,29 +4,37 @@
 FROM debian:jessie
 MAINTAINER BIG FISH <cafe@bigfish.hu>
 
+RUN \
+  apt-get update && \
+  apt-get install -y \
+  curl \
+  wget
+
+RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.org.list && \
+    echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.org.list && \
+    wget -O- http://www.dotdeb.org/dotdeb.gpg | apt-key add -
+
 #
 # Install packages
 #
 RUN apt-get update && \
-    apt-get install -y php5-common \
-                       php5-cli \
-                       php5-fpm \
-                       php5-curl \
-                       php5-gd \
-                       php5-mcrypt \
-                       php5-memcached \
-                       php5-mysql \
-                       php5-json \
-                       php5-xdebug \
-                       nginx \
-                       wget
+    apt-get install -y php7.0-common \
+                       php7.0-cli \
+                       php7.0-fpm \
+                       php7.0-curl \
+                       php7.0-gd \
+                       php7.0-mcrypt \
+                       php7.0-mysql \
+                       php7.0-json \
+                       php7.0-xdebug \
+                       nginx
 
 #
 # PHP config
 #
-ADD ./conf/php/000-php-settings.ini /etc/php5/mods-available/000-php-settings.ini
-RUN ln -s /etc/php5/mods-available/000-php-settings.ini /etc/php5/cli/conf.d/000-php-settings.ini
-RUN ln -s /etc/php5/mods-available/000-php-settings.ini /etc/php5/fpm/conf.d/000-php-settings.ini
+ADD ./conf/php/000-php-settings.ini /etc/php7.0/mods-available/000-php-settings.ini
+ADD ./conf/php/000-php-settings.ini /etc/php7.0/cli/conf.d/000-php-settings.ini
+ADD ./conf/php/000-php-settings.ini /etc/php7.0/fpm/conf.d/000-php-settings.ini
 
 
 #
@@ -78,4 +86,4 @@ EXPOSE 80 443
 #
 # Start services
 #
-CMD service php5-fpm start && nginx
+CMD service php7.0-fpm start && nginx
