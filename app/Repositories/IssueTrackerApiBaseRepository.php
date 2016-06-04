@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Feedback;
 use App\IssueTracker;
 use App\Project;
+use App\Contracts\ApiClientInterface;
 
 abstract class IssueTrackerApiBaseRepository
 {
@@ -19,6 +20,9 @@ abstract class IssueTrackerApiBaseRepository
 
     /** @var  string */
     protected $type;
+
+    /** @var  \App\Contracts\ApiClientInterface */
+    protected $client;
 
 
     /**

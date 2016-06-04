@@ -12,7 +12,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'ext_id', 'issue_tracker_id', 'is_automatic_notification'
+        'name', 'ext_id', 'issue_tracker', 'is_automatic_notification'
     ];
 
     protected $hidden = ['pivot'];

@@ -6,10 +6,12 @@ use App\IssueTracker;
 use App\Project;
 use App\Services\IssueTrackerApiConnectionService;
 use App\User;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
@@ -133,7 +135,28 @@ class ProjectController extends Controller
 
     public function getProjectsFromIssueTrackers()
     {
-        $this->apiService->syncProjects();
+        try {
+            $allProjects = $this->apiService->syncProjects();
+
+            DB::transaction(function() use ($allProjects){
+                foreach ($allProjects as $tracker => $projects) {
+                    foreach ($projects as $project) {
+                        Project::query()->updateOrCreate([
+                            'ext_id' => $project['id'],
+                            'issue_tracker' => $tracker
+                        ],[
+                            'name' => $project['name'],
+                            'ext_id' => $project['id'],
+                            'issue_tracker' => $tracker,
+                            'is_automatic_notification' => false
+                        ]);
+                    }
+                }
+            });
+
+        } catch (ClientException $e) {
+            return redirect("/admin/projects")->withErrors("invalid credentials");
+        }
         return redirect("/admin/projects");
     }
 

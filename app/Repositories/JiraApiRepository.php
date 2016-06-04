@@ -3,7 +3,7 @@ namespace App\Repositories;
 
 use App\Feedback;
 use App\IssueTracker;
-use App\Repositories\Contracts\IssueTrackerApiInterface;
+use App\Contracts\IssueTrackerApiInterface;
 
 // @TODO
 class JiraApiRepository extends IssueTrackerApiBaseRepository implements IssueTrackerApiInterface

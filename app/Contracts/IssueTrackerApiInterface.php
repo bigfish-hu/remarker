@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Contracts;
 
 use App\Feedback;
+use App\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 interface IssueTrackerApiInterface extends RepositoryInterface

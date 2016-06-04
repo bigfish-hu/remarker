@@ -28,7 +28,7 @@
                     <td class="accordion-toggle">{{ $project->id }}</td>
                     <td class="accordion-toggle">{{ $project->name }}</td>
                     <td class="accordion-toggle">{{ $project->ext_id }}</td>
-                    <td class="accordion-toggle">{{ $project->issueTracker->name }}</td>
+                    <td class="accordion-toggle">{{ $project->issue_tracker }}</td>
                     <td class="accordion-toggle">{{ $project->is_automatic_notification }}</td>
                     @can('edit-projects', Auth::user())
                     <td>
@@ -43,7 +43,7 @@
     </div>
     @can('edit-projects', Auth::user())
     <div>
-        <a href="/admin/projects/sync" id="getProjectsFromIssueTracker" type="button" class="btn btn-success">{{ trans('admin/projects.sync_projects') }}</a>
+        <a href="/admin/projects/sync" id="getProjectsFromIssueTracker" class="btn btn-success">{{ trans('admin/projects.sync_projects') }}</a>
     </div>
     @endcan
 @endsection
@@ -195,7 +195,11 @@
             } );
 
             $('#getProjectsFromIssueTracker').on('click', function(){
-// @TODO download and save the list of projects from issue trackers
+                $.ajax('/admin/projects/sync', {
+                    success: function(response){
+                        console.log(response);
+                    }
+                });
             });
 
 

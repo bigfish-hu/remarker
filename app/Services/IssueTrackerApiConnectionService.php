@@ -2,31 +2,42 @@
 
 namespace App\Services;
 
-use App\Repositories\Contracts\IssueTrackerApiInterface;
-use App\Repositories\JiraApiRepository;
-use App\Repositories\RedmineApiRepository;
+use App\Contracts\IssueTrackerApiInterface;
+use App\Contracts\ApiClientInterface;
 
 class IssueTrackerApiConnectionService
 {
-
+    /** @var mixed array */
     private $configs;
 
-    public function __construct()
+    /** @var \App\Contracts\ApiClientInterface */
+    private $apiClient;
+
+    /**
+     * @param ApiClientInterface $apiClient
+     */
+    public function __construct(ApiClientInterface $apiClient)
     {
+        $this->apiClient = $apiClient;
         $this->configs = config('trackers');
     }
 
+    /**
+     * @return array
+     */
     public function syncProjects()
     {
+        $projects = [];
+
         foreach ($this->configs as $tracker => $config) {
             if ($config['active']) {
-                $name = $tracker.'ApiRepository';
-                /** @var IssueTrackerApiInterface $api */
-                $api = new $name($config);
-                $api->getProjects();
+                $name = 'App\Repositories\\'.$tracker.'ApiRepository';
+                /** @var \App\Contracts\IssueTrackerApiInterface $api */
+                $api = new $name($config, $this->apiClient);
+                $projects[$tracker] = $api->getProjects();
             }
         }
 
-
+        return $projects;
     }
 }

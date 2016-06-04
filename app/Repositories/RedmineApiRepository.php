@@ -2,19 +2,21 @@
 namespace App\Repositories;
 
 use App\Feedback;
-use App\IssueTracker;
 use App\Project;
-use App\Repositories\Contracts\IssueTrackerApiInterface;
+use App\Contracts\IssueTrackerApiInterface;
+use App\Contracts\ApiClientInterface;
 use GuzzleHttp\Psr7\Request;
 
 
 class RedmineApiRepository extends IssueTrackerApiBaseRepository implements IssueTrackerApiInterface
 {
     protected $type = 'Redmine';
+    protected $client;
+    protected $config;
 
-
-    public function __construct(array $config)
+    public function __construct(array $config, ApiClientInterface $client)
     {
+        $this->client = $client;
         $this->config = $config;
     }
 
@@ -24,9 +26,16 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
 
     }
 
+    /**
+     * @return array
+     */
     public function getProjects()
     {
-        return $this->config;
+        $response = $this->sendRequest(
+            new Request("GET", $this->config["url"] . "/projects.json?limit=100")
+        );
+
+        return json_decode($response->getBody(), true)['projects'];
     }
 
     public function notify(Project $project, Feedback $feedback)
@@ -97,9 +106,7 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
         ];
 
         $response = $this->sendRequest(
-            new Request("POST", $issueTrackerConfig["url"] . "/issues.json", $headers, json_encode($body)),
-            $issueTrackerConfig
-        );
+            new Request("POST", $this->config["url"] . "/issues.json", $headers, json_encode($body)));
 
         if ($response->getStatusCode() !== 201) {
             throw new RedmineIssueCantBeCreated("");
@@ -107,13 +114,16 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
     }
 
 
+    /**
+     * @param Request $request
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     protected function sendRequest(Request $request)
     {
         return $this->client->request(
             $request,
             [
-                "auth" => $this->config['username'], $this->config["password"],
-                "verify" => false
+                "auth" => [$this->config['username'], $this->config["password"]],
             ]
         );
     }
