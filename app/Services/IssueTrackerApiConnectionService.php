@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Contracts\IssueTrackerApiInterface;
 use App\Contracts\ApiClientInterface;
 
 class IssueTrackerApiConnectionService

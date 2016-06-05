@@ -69,7 +69,7 @@
             @endif
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>{{ trans('admin/app.version') }}</b> 0.1
+                    <b>{{ trans('admin/app.version') }}</b> {{env('APP_VERSION')}}
                 </div>
                 <strong>Copyright &copy; {!! date("Y") !!} <a href="http://en.bigfish.hu/en/">BIG FISH</a>.</strong> {{ trans('admin/app.allrigths') }}
             </footer>

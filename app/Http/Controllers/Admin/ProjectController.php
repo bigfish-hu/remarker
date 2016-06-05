@@ -81,7 +81,7 @@ class ProjectController extends Controller
             $input['is_automatic_notification'] = true;
         }
 
-        /** @var Project $user */
+        /** @var Project $project */
         $project = Project::query()->find((int)$id);
 
         $input = $this->unsetEmptyInputFields($input);

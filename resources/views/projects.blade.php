@@ -25,11 +25,11 @@
             <tbody>
             @foreach($projects as $project)
                 <tr data-project_id="{{ $project->id }}">
-                    <td class="accordion-toggle">{{ $project->id }}</td>
-                    <td class="accordion-toggle">{{ $project->name }}</td>
-                    <td class="accordion-toggle">{{ $project->ext_id }}</td>
-                    <td class="accordion-toggle">{{ $project->issue_tracker }}</td>
-                    <td class="accordion-toggle">{{ $project->is_automatic_notification }}</td>
+                    <td>{{ $project->id }}</td>
+                    <td>{{ $project->name }}</td>
+                    <td>{{ $project->ext_id }}</td>
+                    <td>{{ $project->issue_tracker }}</td>
+                    <td>{{ $project->is_automatic_notification ? 'On' : 'Off' }}</td>
                     @can('edit-projects', Auth::user())
                     <td>
                         <span id="edit_project_button" data-obj_id="{{ $project->id }}" data-toggle="modal" data-target="#editProjectModal" class="btn btn-info action-button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ trans('admin/projects.edit') }}</span>
@@ -64,13 +64,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="EditProjectName">{{ trans('admin/projects.name') }}</label>
-                            <input name="name" type="text" class="form-control" id="EditProjectName" placeholder="{{ trans('admin/projects.name') }}">
-                        </div>
-
-                        <div class="form-group">
                             <label for="EditProjectUsers">{{ trans('admin/projects.assign_users') }}</label>
-                            <select name="users[]" id="EditProjectUsers" class="form-control" multiple>
+                            <select style="width:100%" name="users[]" id="EditProjectUsers" class="form-control" multiple>
                             @foreach($users as $user)
                                 <option value="{{$user->id}}">{{$user->name}}</option>
                             @endforeach
