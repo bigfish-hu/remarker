@@ -7,7 +7,6 @@ use App\Contracts\IssueTrackerApiInterface;
 use App\Contracts\ApiClientInterface;
 use GuzzleHttp\Psr7\Request;
 
-
 class RedmineApiRepository extends IssueTrackerApiBaseRepository implements IssueTrackerApiInterface
 {
     protected $type = 'Redmine';
@@ -79,8 +78,8 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
     }
 
 
-    public function createIssue(Feedback $feedback) {
-
+    public function createIssue(Feedback $feedback)
+    {
         $description = $this->createIssueDescription($feedback);
 
         $headers = [
@@ -105,8 +104,7 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
             ]
         ];
 
-        $response = $this->sendRequest(
-            new Request("POST", $this->config["url"] . "/issues.json", $headers, json_encode($body)));
+        $response = $this->sendRequest(new Request("POST", $this->config["url"] . "/issues.json", $headers, json_encode($body)));
 
         if ($response->getStatusCode() !== 201) {
             throw new RedmineIssueCantBeCreated("");

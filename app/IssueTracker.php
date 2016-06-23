@@ -28,5 +28,4 @@ class IssueTracker extends Model
     {
         return $this->hasMany('App\Project', 'issue_tracker_id');
     }
-
 }

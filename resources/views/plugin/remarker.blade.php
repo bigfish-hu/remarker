@@ -2,7 +2,8 @@
         $.feedback = function(options) {
 
             var settings = $.extend({
-                ajaxURL: '/api/project/{{ $id }}',
+                project_id: {{ $id }},
+                ajaxURL: '/api/feedbacks',
                 postBrowserInfo: true,
                 postHTML: false,
                 postURL: true,
@@ -688,6 +689,7 @@
                             $('#feedback-submit-success,#feedback-submit-error').remove();
                             $('#feedback-overview').hide();
 
+                            post.attributes.project_id = settings.project_id;
                             post.attributes.title = $('#feedback-title').val();
                             post.attributes.description = $('#feedback-note').val();
                             post.attributes.name = $('#feedback-name').val();
@@ -702,7 +704,7 @@
                                 },
                                 jsonp: false,
                                 url: settings.ajaxURL,
-                                dataType: 'json',
+                                dataType: 'text',
                                 type: 'POST',
                                 data: post,
                                 success: function() {

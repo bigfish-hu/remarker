@@ -22,5 +22,4 @@ class FeedbackHistory extends Model
     {
         return $this->belongsTo('App\Feedback');
     }
-
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class AuthController extends Controller
 {
@@ -20,27 +22,52 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesUsers, ThrottlesLogins;
-
     /**
-     * Where to redirect users after different actions.
+     * Authenticate user.
      *
-     * @var string
-     */
-    protected $redirectPath = '/admin/home';
-
-    protected $loginPath = '/admin';
-
-    protected $redirectAfterLogout = '/admin';
-
-
-    /**
-     * Create a new authentication controller instance.
+     * @param Instance Request instance
      *
-     * @return void
+     * @return JSON user details and auth credentials
      */
-    public function __construct()
+    public function postLogin(Request $request)
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->validate($request, [
+            'email'    => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        $user = User::whereEmail($credentials['email'])->first();
+
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->error('Invalid credentials', 401);
+            }
+        } catch (\JWTException $e) {
+            return response()->error('Could not create token', 500);
+        }
+
+        $user = Auth::user();
+        $token = JWTAuth::fromUser($user);
+
+        return response()->success(compact('user', 'token'));
+    }
+
+    /**
+     * Get authenticated user details and auth credentials.
+     *
+     * @return JSON
+     */
+    public function getAuthenticatedUser()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $token = JWTAuth::fromUser($user);
+
+            return response()->success(compact('user', 'token'));
+        } else {
+            return response()->error('unauthorized', 401);
+        }
     }
 }

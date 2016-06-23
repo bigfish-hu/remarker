@@ -14,9 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('escape', function($str) {
+        Blade::directive('escape', function ($str) {
             $str = trim($str, "()");
-            $str = preg_replace( "/\r|\n/", "", $str);
+            $str = preg_replace("/\r|\n/", "", $str);
             return $str;
         });
     }

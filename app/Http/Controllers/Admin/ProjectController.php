@@ -87,7 +87,7 @@ class ProjectController extends Controller
         $input = $this->unsetEmptyInputFields($input);
 
         try {
-            if (isset($input['users'])){
+            if (isset($input['users'])) {
                 foreach ($input['users'] as $user) {
                     $project->users()->attach($user);
                 }
@@ -138,13 +138,13 @@ class ProjectController extends Controller
         try {
             $allProjects = $this->apiService->syncProjects();
 
-            DB::transaction(function() use ($allProjects){
+            DB::transaction(function () use ($allProjects) {
                 foreach ($allProjects as $tracker => $projects) {
                     foreach ($projects as $project) {
                         Project::query()->updateOrCreate([
                             'ext_id' => $project['id'],
                             'issue_tracker' => $tracker
-                        ],[
+                        ], [
                             'name' => $project['name'],
                             'ext_id' => $project['id'],
                             'issue_tracker' => $tracker,
@@ -153,11 +153,9 @@ class ProjectController extends Controller
                     }
                 }
             });
-
         } catch (ClientException $e) {
             return redirect("/admin/projects")->withErrors("invalid credentials");
         }
         return redirect("/admin/projects");
     }
-
 }
