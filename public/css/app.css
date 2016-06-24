@@ -22,35 +22,8 @@ md-toast[md-theme=warn] .md-toast-content {
 
 
 
-
-.ForgotPassword-input {
-  margin-bottom: 0; }
-
-
-
-.RegisterForm-inputContainer {
-  margin-top: 10px;
-  margin-bottom: 0px;
-  width: 80%;
-  min-width: 300px; }
-
-.RegisterForm-submit {
-  margin-bottom: 40px;
-  margin-left: 0;
-  width: 100%;
-  padding: 5px 0; }
-
-.ResetPassword-input {
-  margin-bottom: 0; }
-
-
-
-
-
-
-
-
-
+.user-panel {
+  height: 30px; }
 
 
 
@@ -79,10 +52,6 @@ md-toast[md-theme=warn] .md-toast-content {
 .Footer-logo {
   width: 49px;
   height: 46px; }
-
-.ForgotPassword-formContainer {
-  margin-top: 80px;
-  margin-bottom: 80px; }
 
 
 .Landing {
@@ -275,17 +244,5 @@ Make sure to remove this when you modify this demo
   margin-top: 80px;
   margin-bottom: 80px; }
 
-
-.Register-formContainer {
-  margin-top: 80px;
-  margin-bottom: 80px; }
-
-.ResetPassword-formContainer {
-  margin-top: 80px;
-  margin-bottom: 80px; }
-
-.Login-formContainer {
-  margin-top: 80px;
-  margin-bottom: 80px; }
 
 /*# sourceMappingURL=app.css.map */

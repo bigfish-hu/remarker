@@ -1,12 +1,12 @@
 class NavSidebarController {
   constructor (ContextService) {
-    'ngInject'
+    'ngInject';
 
-    let navSideBar = this
+    let navSideBar = this;
 
     ContextService.me(function (data) {
-      navSideBar.userData = data
-    })
+      navSideBar.userData = data;
+    });
   }
 
   $onInit () {}
@@ -17,4 +17,4 @@ export const NavSidebarComponent = {
   controller: NavSidebarController,
   controllerAs: 'vm',
   bindings: {}
-}
+};

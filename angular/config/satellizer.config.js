@@ -1,10 +1,10 @@
 export function SatellizerConfig ($authProvider) {
-  "ngInject";
+  'ngInject';
 
   $authProvider.httpInterceptor = function () {
     return true;
   };
 
-  $authProvider.loginUrl = "api/auth/login";
-  $authProvider.tokenRoot = "data"; // compensates success response macro
+  $authProvider.loginUrl = 'api/auth/login';
+  $authProvider.tokenRoot = 'data'; // compensates success response macro
 }

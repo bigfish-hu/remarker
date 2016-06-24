@@ -29,11 +29,6 @@ Elixir.extend('angular', function (src, output, outputFilename) {
       .pipe(gulpif(config.production, uglify()))
       .pipe(gulpif(!config.production, sourcemaps.write()))
       .pipe(gulp.dest(output || config.js.outputFolder))
-      .pipe(notify({
-        title: 'Laravel Elixir',
-        subtitle: 'Angular Compiled!',
-        icon: __dirname + '/../node_modules/laravel-elixir/icons/laravel.png',
-        message: ' '
-      }))
+
   }).watch(baseDir + '/**/*.js')
 });

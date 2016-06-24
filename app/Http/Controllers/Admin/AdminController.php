@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Gate;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -28,9 +27,22 @@ class AdminController extends Controller
      */
     public function getUsers()
     {
-        $users = \App\User::with('projects')->get();
+        $users = User::with('projects')->get();
 
-        return view('users', ['users' => $users]);
+        return response()->success(compact('users'));
+    }
+
+    /**
+     * Get a user by id.
+     *
+     * @param $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getUser($id)
+    {
+        $user = User::find($id);
+
+        return response()->success(compact('user'));
     }
 
     /**
@@ -41,23 +53,28 @@ class AdminController extends Controller
      */
     public function createUser(Request $request)
     {
-        /** @var AdminController $this */
-        $this->validate($request, [
-            'email' => 'required|email|unique:users|max:50',
-            'name' => 'required|string|max:50',
-            'password' => 'required|string|min:6'
-        ]);
-
-        /** @var array $input */
         $input = $request->all();
 
-        if (isset($input['is_superadmin'])) {
-            $input['is_superadmin'] = true;
+        /** @var AdminController $this */
+        $this->validate($request, [
+            'data.user.email' => 'required|email|unique:users,email|max:50',
+            'data.user.name' => 'required|min:3|max:50',
+            'data.user.password' => 'required|string|min:6'
+        ]);
+
+        $userData = [
+            'name' => $input['data']['user']['name'],
+            'email' => $input['data']['user']['email'],
+            'password' => $input['data']['user']['password'],
+        ];
+
+        if (isset($input['data']['user']['is_superadmin'])) {
+            $userData['is_superadmin'] = $input['data']['user']['is_superadmin'];
         }
 
-        User::create($input);
+        User::create($userData);
 
-        return redirect('admin/users');
+        return $this->response->created('success');
     }
 
     /**
@@ -69,28 +86,34 @@ class AdminController extends Controller
      */
     public function updateUser(Request $request, $id)
     {
-        /** @var AdminController $this */
+        $userForm = array_dot(
+            app('request')->only(
+                'data.user.name',
+                'data.user.email',
+                'data.user.id',
+                'data.user.is_superadmin'
+            )
+        );
+
+        $userId = intval($userForm['data.user.id']);
+
+        $user = User::find($userId);
+
         $this->validate($request, [
-            'email' => 'email|unique:users|max:50',
-            'name' => 'string|max:50',
-            'password' => 'string|min:6'
+            'data.user.id' => 'required|integer',
+            'data.user.name' => 'required|min:3',
+            'data.user.email' => 'required|email|unique:users,email,'.$user->id,
         ]);
 
-        /** @var array $input */
-        $input = $request->all();
+        $userData = [
+            'name' => $userForm['data.user.name'],
+            'email' => $userForm['data.user.email'],
+            'is_superadmin' => $userForm['data.user.is_superadmin'],
+        ];
 
-        if (isset($input['is_superadmin'])) {
-            $input['is_superadmin'] = true;
-        }
+        $affectedRows = User::where('id', '=', $userId)->update($userData);
 
-        /** @var User $user */
-        $user = User::query()->find((int)$id);
-
-        $input = $this->unsetEmptyInputFields($input);
-
-        $user->update($input);
-
-        return redirect('admin/users');
+        return response()->success('success');
     }
 
     /**
@@ -103,6 +126,6 @@ class AdminController extends Controller
     {
         User::destroy($id);
 
-        return redirect('admin/users');
+        return response()->success('success');
     }
 }

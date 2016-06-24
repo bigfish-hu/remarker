@@ -1,7 +1,7 @@
 export function DateMillisFilter () {
-  'ngInject'
+  'ngInject';
 
   return function (input) {
-    return Date.parse(input)
-  }
+    return Date.parse(input);
+  };
 }

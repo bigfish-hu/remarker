@@ -16,37 +16,25 @@ $this->get('/', function () {
     return view('index');
 });
 
-//Route::get('/api/authenticate/user', 'Auth\AuthController@getAuthenticatedUser');
-
 $this->get('api/js/{id}', 'PluginController@getJs');
 
 $this->get('admin', 'AngularController@serveApp');
 
+$this->post('api/feedbacks', 'Admin\FeedbackController@createFeedback');
 
 $api->version('v1', function ($api) {
-    $api->post('auth/login', ['uses' => 'App\Http\Controllers\Auth\AuthController@postLogin']);
-
-
-    $api->group(['middleware' => ['web']], function ($api) {
-        $api->post('/feedbacks', 'App\Http\Controllers\Admin\FeedbackController@createFeedback');
-    });
-
     $api->group(['middleware' => ['api']], function ($api) {
-
-
-        // Routes which everyone can use
-//    $this->post('/login', 'Auth\AuthController@login');
-//    $this->get('/logout', 'Auth\AuthController@logout');
-
+        $api->post('auth/login', 'App\Http\Controllers\Auth\AuthController@postLogin');
 
         // only registered users
-        $api->group(['middleware' => 'auth', 'namespace' => 'Admin'], function ($api) {
+        $api->group(['middleware' => ['api', 'api.auth']], function ($api) {
             $api->get('/home', 'AdminController@index');
+            $api->get('users/me', 'App\Http\Controllers\Auth\AuthController@getAuthenticatedUser');
 
             // projects routes
             $api->get('/projects', 'ProjectController@getProjects');
             $api->get('/projects/{id}/users', 'ProjectController@getProjectUsers');
-
+            $api->get('/projects/sync', 'ProjectController@getProjectsFromIssueTrackers');
 
             // feedbacks routes
             $api->get('/feedbacks', 'FeedbackController@getFeedbacks');
@@ -55,33 +43,34 @@ $api->version('v1', function ($api) {
             });
             $api->delete('/feedbacks/{id}', 'FeedbackController@deleteFeedback');
 
-
             // view trackers list
             $api->get('/trackers', 'TrackerController@getTrackers');
 
-            // view users list
-            $api->get('/users', 'AdminController@getUsers');
 
-        });
+//            $api->get('/users', 'App\Http\Controllers\Admin\AdminController@getUsers');
 
-        // routes only an admin can use (who's also a registered user)
-        $api->group(['namespace' => 'Admin'], function ($api) {
-            // create or modify user routes
-            $api->post('/users', 'AdminController@createUser');
-            $api->put('/users/{id}', 'AdminController@updateUser');
-            $api->delete('/users/{id}', 'AdminController@deleteUser');
+            // routes only an admin can use (who's also a registered user)
+            $api->group(['middleware' => 'can:admin'], function ($api) {
+                // create or modify user routes
+//                $api->controller('users', 'UserController');
+                $api->get('/users/{id}', 'App\Http\Controllers\Admin\AdminController@getUser');
+                $api->get('/users', 'App\Http\Controllers\Admin\AdminController@getUsers');
+                $api->post('/users', 'App\Http\Controllers\Admin\AdminController@createUser');
+                $api->put('/users/{id}', 'App\Http\Controllers\Admin\AdminController@updateUser');
+                $api->delete('/users/{id}', 'App\Http\Controllers\Admin\AdminController@deleteUser');
 
-//        //create or modify tracker routes
-//        $this->post('/trackers', 'TrackerController@createTracker');
-//        $this->put('/trackers/{id}', 'TrackerController@updateTracker');
-//        $this->delete('/trackers/{id}', 'TrackerController@deleteTracker');
+                //create or modify tracker routes
+                $this->post('/trackers', 'App\Http\Controllers\Admin\TrackerController@createTracker');
+                $this->put('/trackers/{id}', 'App\Http\Controllers\Admin\TrackerController@updateTracker');
+                $this->delete('/trackers/{id}', 'App\Http\Controllers\Admin\TrackerController@deleteTracker');
 
-            //create or modify project routes
-            $api->post('/projects', 'ProjectController@createProject');
-            $api->put('/projects/{id}', 'ProjectController@updateProject');
-            $api->delete('/projects/{id}', 'ProjectController@deleteProject');
-            $api->delete('/projects/{project}/users/{user}', 'ProjectController@removeUserFromProject');
-            $api->get('/projects/sync', 'ProjectController@getProjectsFromIssueTrackers');
+                // create or modify project routes
+                $api->post('/projects', 'App\Http\Controllers\Admin\ProjectController@createProject');
+                $api->put('/projects/{id}', 'App\Http\Controllers\Admin\ProjectController@updateProject');
+                $api->delete('/projects/{id}', 'App\Http\Controllers\Admin\ProjectController@deleteProject');
+                $api->delete('/projects/{project}/users/{user}',
+                    'App\Http\Controllers\Admin\ProjectController@removeUserFromProject');
+            });
         });
     });
 });

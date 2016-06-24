@@ -8,3 +8,5 @@ composer.lock
 # Excluded folders
 vendor/
 .idea/
+bower_components/
+node_modules/

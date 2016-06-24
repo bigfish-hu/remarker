@@ -1,35 +1,40 @@
 class UserListsController {
   constructor ($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API) {
-    'ngInject'
-    this.API = API
-    this.$state = $state
+    'ngInject';
+    this.API = API;
+    this.$state = $state;
 
-    let Users = this.API.service('users')
+    let Users = this.API.service('users');
 
     Users.getList()
       .then((response) => {
-        let dataSet = response.plain()
+        let dataSet = response.plain();
 
         this.dtOptions = DTOptionsBuilder.newOptions()
           .withOption('data', dataSet)
           .withOption('createdRow', createdRow)
           .withOption('responsive', true)
-          .withBootstrap()
+          .withBootstrap();
 
         this.dtColumns = [
           DTColumnBuilder.newColumn('id').withTitle('ID'),
           DTColumnBuilder.newColumn('name').withTitle('Name'),
           DTColumnBuilder.newColumn('email').withTitle('Email'),
+          DTColumnBuilder.newColumn('is_superadmin').withTitle('Is admin').renderWith(isAdminHtml),
           DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
-        ]
+        ];
 
-        this.displayTable = true
-      })
+        this.displayTable = true;
+      });
 
     let createdRow = (row) => {
-      $compile(angular.element(row).contents())($scope)
-    }
+      $compile(angular.element(row).contents())($scope);
+    };
+
+      let isAdminHtml = (data) => {
+          return data ? 'Yes' : 'No';
+      };
 
     let actionsHtml = (data) => {
       return `
@@ -37,15 +42,15 @@ class UserListsController {
                     <i class="fa fa-edit"></i>
                 </a>
                 &nbsp
-                <button class="btn btn-xs btn-danger" ng-click="vm.delete(${data.id})">
+                <button class="btn btn-xs btn-danger" ng-click="vm.deleteUser(${data.id})">
                     <i class="fa fa-trash-o"></i>
-                </button>`
-    }
+                </button>`;
+    };
   }
 
-  delete (userId) {
-    let API = this.API
-    let $state = this.$state
+  deleteUser(userId) {
+    let API = this.API;
+    let $state = this.$state;
 
     swal({
       title: 'Are you sure?',
@@ -58,19 +63,19 @@ class UserListsController {
       showLoaderOnConfirm: true,
       html: false
     }, function () {
-      API.one('users').one('user', userId).remove()
+      API.service('users').one(userId).remove()
         .then(() => {
           swal({
             title: 'Deleted!',
-            text: 'User Permission has been deleted.',
+            text: 'User has been deleted.',
             type: 'success',
             confirmButtonText: 'OK',
             closeOnConfirm: true
           }, function () {
-            $state.reload()
-          })
-        })
-    })
+            $state.reload();
+          });
+        });
+    });
   }
 
   $onInit () {}
@@ -81,4 +86,4 @@ export const UserListsComponent = {
   controller: UserListsController,
   controllerAs: 'vm',
   bindings: {}
-}
+};

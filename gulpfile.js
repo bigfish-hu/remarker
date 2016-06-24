@@ -1,12 +1,12 @@
-var elixir = require('laravel-elixir')
-require('laravel-elixir-karma')
-require('./tasks/angular.task.js')
-require('./tasks/bower.task.js')
-require('./tasks/ngHtml2Js.task.js')
+var elixir = require('laravel-elixir');
+require('laravel-elixir-karma');
+require('./tasks/angular.task.js');
+require('./tasks/bower.task.js');
+require('./tasks/ngHtml2Js.task.js');
 
-if (!elixir.config.production) {
-  require('./tasks/phpcs.task.js')
-}
+//if (!elixir.config.production) {
+//  require('./tasks/phpcs.task.js')
+//}
 
 /*
  |--------------------------------------------------------------------------
@@ -20,10 +20,10 @@ if (!elixir.config.production) {
  */
 
 elixir(function (mix) {
-  var jsOutputFolder = config.js.outputFolder
-  var cssOutputFolder = config.css.outputFolder
-  var fontsOutputFolder = config.fonts.outputFolder
-  var buildPath = config.buildPath
+  var jsOutputFolder = config.js.outputFolder;
+  var cssOutputFolder = config.css.outputFolder;
+  var fontsOutputFolder = config.fonts.outputFolder;
+  var buildPath = config.buildPath;
 
   var assets = [
       jsOutputFolder + '/vendor.js',
@@ -47,13 +47,13 @@ elixir(function (mix) {
     .ngHtml2Js('./angular/**/*.html')
     .sass('./angular/**/*.scss', 'public/css')
     .version(assets)
-    .browserSync({
-      proxy: 'localhost:8000'
-    })
-    .karma({
-      jsDir: karmaJsDir
-    })
+    //.browserSync({
+    //  proxy: 'localhost:8000'
+    //})
+    //.karma({
+    //  jsDir: karmaJsDir
+    //})
 
   mix
     .copy(fontsOutputFolder, buildPath + '/fonts')
-})
+});

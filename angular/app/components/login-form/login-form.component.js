@@ -1,5 +1,5 @@
 class LoginFormController {
-  constructor ($rootScope, $auth, $state, $stateParams, API) {
+  constructor ($rootScope, $auth, $state, $stateParams) {
     'ngInject';
 
     delete $rootScope.me;
@@ -30,8 +30,6 @@ class LoginFormController {
 
     this.$auth.login(user)
       .then((response) => {
-        let data = response.data.data;
-
         this.$auth.setToken(response.data);
         this.$state.go('app.landing');
       })

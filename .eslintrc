@@ -5,7 +5,7 @@
     "angular/no-service-method": 0,
     "angular/on-watch": 0,
     "semi": [2, "always"],
-    "quotes": [2, "double"]
+    "quotes": [2, "single"]
   },
   "env": {
     "es6": true,

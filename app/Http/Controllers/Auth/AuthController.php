@@ -23,7 +23,7 @@ class AuthController extends Controller
     */
 
     /**
-     * Authenticate user.
+     * Authorize user.
      *
      * @param Instance Request instance
      *
@@ -61,13 +61,8 @@ class AuthController extends Controller
      */
     public function getAuthenticatedUser()
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            $token = JWTAuth::fromUser($user);
+        $user = Auth::user();
 
-            return response()->success(compact('user', 'token'));
-        } else {
-            return response()->error('unauthorized', 401);
-        }
+        return response()->success($user);
     }
 }

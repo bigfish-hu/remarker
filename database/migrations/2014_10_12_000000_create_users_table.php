@@ -19,9 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->integer('project_id');
             $table->boolean('is_superadmin')->default(false);
-            $table->rememberToken();
             $table->timestamps();
         });
     }
