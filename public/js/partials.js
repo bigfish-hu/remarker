@@ -113,8 +113,12 @@ module.run(['$templateCache', function($templateCache) {
     '  <section class="sidebar">\n' +
     '    <!-- Sidebar user panel -->\n' +
     '    <div class="user-panel">\n' +
+    '      <div class="pull-left image">\n' +
+    '        <img src={{vm.avatarUrl}} class="img-circle" alt="User Image">\n' +
+    '      </div>\n' +
     '      <div class="pull-left info">\n' +
-    '        <p>{{vm.userData.name | capitalize}}</p>\n' +
+    '        <p>{{vm.userData.name}}</p>\n' +
+    '        <small> {{vm.role}}</small>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '    <!-- sidebar menu: : style can be found in sidebar.less -->\n' +
@@ -126,6 +130,11 @@ module.run(['$templateCache', function($templateCache) {
     '        </a>\n' +
     '      </li>\n' +
     '      <li>\n' +
+    '        <a ui-sref=\'app.projectlist\'>\n' +
+    '          <i class="fa fa-list"></i> <span>Projects</span>\n' +
+    '        </a>\n' +
+    '      </li>\n' +
+    '      <li ng-show="vm.userData.is_superadmin === 1">\n' +
     '          <a ui-sref=\'app.userlist\'><i class="fa fa-users"></i> <span>User List</span></a>\n' +
     '      </li>\n' +
     '    </ul>\n' +
@@ -142,12 +151,128 @@ try {
   module = angular.module('app.partials', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('./views/app/components/user-edit/user-edit.component.html',
+  $templateCache.put('./views/app/components/project-list/project-list.component.html',
     '<section class="content-header">\n' +
-    '    <h1>Users <small>Module description here</small></h1>\n' +
+    '    <h1>Projects </h1>\n' +
     '    <ol class="breadcrumb">\n' +
     '        <li><a ui-sref="app.landing"><i class="fa fa-dashboard"></i> Home</a></li>\n' +
-    '        <li><a ui-sref="app.userlist">User Lists</a></li>\n' +
+    '        <li class="active">Project List</li>\n' +
+    '    </ol>\n' +
+    '</section>\n' +
+    '<section class="content">\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-md-12">\n' +
+    '            <div class="box box-info">\n' +
+    '                <div class="box-header with-border">\n' +
+    '                    <h3 class="box-title">Project List</h3>\n' +
+    '                    <div class="box-tools pull-right">\n' +
+    '                        <a ng-click="vm.syncProjects()" type="button" class="btn btn-success"><i class="fa fa-refresh"></i> Synchronize Projects</a>\n' +
+    '                    </div>\n' +
+    '                </div>\n' +
+    '                <div class="box-body">\n' +
+    '                    <table datatable="" width="100%"  class="table table-striped table-bordered"\n' +
+    '                           ng-if="vm.displayTable"\n' +
+    '                           dt-options="vm.dtOptions"\n' +
+    '                           dt-columns="vm.dtColumns"></table>\n' +
+    '                </div>\n' +
+    '            </div>\n' +
+    '            <!-- /.box -->\n' +
+    '        </div>\n' +
+    '        <!-- /.col -->\n' +
+    '    </div>\n' +
+    '</section>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('app.partials');
+} catch (e) {
+  module = angular.module('app.partials', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('./views/app/components/user-add/user-add.component.html',
+    '<section class="content-header">\n' +
+    '    <h1>Users </h1>\n' +
+    '    <ol class="breadcrumb">\n' +
+    '        <li><a ui-sref="app.landing"><i class="fa fa-dashboard"></i> Home</a></li>\n' +
+    '        <li><a ui-sref="app.userlist">User List</a></li>\n' +
+    '        <li class="active">Create User</li>\n' +
+    '    </ol>\n' +
+    '</section>\n' +
+    '<section class="content">\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-sm-12 col-md-7">\n' +
+    '            <div class="box box-primary">\n' +
+    '                <div class="box-header with-border">\n' +
+    '                    <h3 class="box-title">Create User</h3>\n' +
+    '                </div>\n' +
+    '                <form class="form-horizontal" name="userForm" ng-submit="vm.save(userForm.$valid)" novalidate>\n' +
+    '                    <div class="box-body">\n' +
+    '                        <div ng-if="vm.alerts" class="alert alert-{{alert.type}}" ng-repeat="alert in vm.alerts">\n' +
+    '                            <h4>{{alert.title}}</h4>\n' +
+    '                            <p>{{alert.msg}}</p>\n' +
+    '                        </div>\n' +
+    '\n' +
+    '                        <div class="form-group" ng-class="{ \'has-error\': userForm.name.$invalid && ( vm.formSubmitted || userForm.name.$touched) }">\n' +
+    '                            <label for="name" class="col-sm-2 control-label">Name</label>\n' +
+    '                            <div class="col-sm-10">\n' +
+    '                                <input id="name" type="text" class="form-control" ng-model="vm.usereditdata.data.user.name" name="name" placeholder="Name" required>\n' +
+    '                                <p ng-show="userForm.name.$error.required && ( vm.formSubmitted || userForm.name.$touched)" class="help-block">Name is required.</p>\n' +
+    '                            </div>\n' +
+    '                        </div>\n' +
+    '\n' +
+    '                        <div class="form-group" ng-class="{ \'has-error\': userForm.email.$invalid && ( vm.formSubmitted || userForm.email.$touched) }">\n' +
+    '                            <label for="email" class="col-sm-2 control-label">Email</label>\n' +
+    '                            <div class="col-sm-10">\n' +
+    '                                <input id="email" type="email" class="form-control" ng-model="vm.usereditdata.data.user.email" name="email" placeholder="Email" required>\n' +
+    '                                <p ng-show="userForm.email.$error.required && ( vm.formSubmitted || userForm.email.$touched)" class="help-block">Email is required.</p>\n' +
+    '                                <p ng-show="userForm.email.$error.email  && ( vm.formSubmitted || userForm.email.$touched)" class="help-block">This is not a valid email.</p>\n' +
+    '                            </div>\n' +
+    '                        </div>\n' +
+    '\n' +
+    '                        <div class="form-group" ng-class="{ \'has-error\': userForm.password.$invalid && ( vm.formSubmitted || userForm.password.$touched) }">\n' +
+    '                            <label for="password" class="col-sm-2 control-label">Password</label>\n' +
+    '                            <div class="col-sm-10">\n' +
+    '                                <input ng-minlength="6" id="password" type="password" class="form-control" ng-model="vm.usereditdata.data.user.password" name="password" placeholder="Password" required>\n' +
+    '                                <p ng-show="userForm.password.$error.required && ( vm.formSubmitted || userForm.password.$touched)" class="help-block">Password is required.</p>\n' +
+    '                                <p ng-show="userForm.password.$error.minlength  && ( vm.formSubmitted || userForm.password.$touched)" class="help-block">The password must be at least 6 characters long.</p>\n' +
+    '                            </div>\n' +
+    '                        </div>\n' +
+    '\n' +
+    '                        <div class="form-group">\n' +
+    '                            <label for="is_superadmin" class="col-sm-2 control-label">Is Admin</label>\n' +
+    '                            <input id="is_superadmin" type="checkbox" ng-model="vm.usereditdata.data.user.is_superadmin" name="is_superadmin">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="box-footer">\n' +
+    '                        <a ui-sref="app.userlist" class="btn btn-default"><i class="fa fa-angle-double-left"></i> Back</a>\n' +
+    '                        <button type="submit" class="btn btn-primary pull-right">Create</button>\n' +
+    '                    </div>\n' +
+    '                </form>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '</section>\n' +
+    '\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('app.partials');
+} catch (e) {
+  module = angular.module('app.partials', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('./views/app/components/user-edit/user-edit.component.html',
+    '<section class="content-header">\n' +
+    '    <h1>Users </h1>\n' +
+    '    <ol class="breadcrumb">\n' +
+    '        <li><a ui-sref="app.landing"><i class="fa fa-dashboard"></i> Home</a></li>\n' +
+    '        <li><a ui-sref="app.userlist">User List</a></li>\n' +
     '        <li class="active">Edit User</li>\n' +
     '    </ol>\n' +
     '</section>\n' +
@@ -165,30 +290,24 @@ module.run(['$templateCache', function($templateCache) {
     '              <p>{{alert.msg}}</p>\n' +
     '            </div>\n' +
     '            <div class="form-group" ng-class="{ \'has-error\': userForm.name.$invalid && ( vm.formSubmitted || userForm.name.$touched) }">\n' +
-    '              <label for="inputEmail3" class="col-sm-2 control-label">Name</label>\n' +
+    '              <label for="name" class="col-sm-2 control-label">Name</label>\n' +
     '              <div class="col-sm-10">\n' +
-    '                <input type="text" class="form-control" ng-model="vm.usereditdata.data.name" name="name" placeholder="Name" required>\n' +
+    '                <input id="name" type="text" class="form-control" ng-model="vm.usereditdata.data.user.name" name="name" placeholder="Name" required>\n' +
     '                <p ng-show="userForm.name.$error.required && ( vm.formSubmitted || userForm.name.$touched)" class="help-block">Name is required.</p>\n' +
     '              </div>\n' +
     '            </div>\n' +
     '            <div class="form-group" ng-class="{ \'has-error\': userForm.email.$invalid && ( vm.formSubmitted || userForm.email.$touched) }">\n' +
-    '              <label for="inputEmail3" class="col-sm-2 control-label">Email</label>\n' +
+    '              <label for="email" class="col-sm-2 control-label">Email</label>\n' +
     '              <div class="col-sm-10">\n' +
-    '                <input type="email" class="form-control" ng-model="vm.usereditdata.data.email" name="email" placeholder="Email" required>\n' +
+    '                <input id="email" type="email" class="form-control" ng-model="vm.usereditdata.data.user.email" name="email" placeholder="Email" required>\n' +
     '                <p ng-show="userForm.email.$error.required && ( vm.formSubmitted || userForm.email.$touched)" class="help-block">Email is required.</p>\n' +
     '                <p ng-show="userForm.email.$error.email  && ( vm.formSubmitted || userForm.email.$touched)" class="help-block">This is not a valid email.</p>\n' +
     '              </div>\n' +
     '            </div>\n' +
-    '            <div class="form-group">\n' +
-    '              <label for="inputEmail3" class="col-sm-2 control-label">Roles</label>\n' +
-    '              <div class="col-sm-10">\n' +
-    '                <div class="checkbox" ng-repeat="role in vm.systemRoles">\n' +
-    '                  <label>\n' +
-    '                    <input type="checkbox" checklist-model="vm.usereditdata.data.role" checklist-value="role.id"> {{role.name}}\n' +
-    '                  </label>\n' +
-    '                </div>\n' +
+    '              <div class="form-group" ng-class="{ \'has-error\': userForm.email.$invalid && ( vm.formSubmitted || userForm.email.$touched) }">\n' +
+    '                  <label for="is_superadmin" class="col-sm-2 control-label">Is Admin</label>\n' +
+    '                      <input id="is_superadmin" type="checkbox" ng-model="vm.usereditdata.data.user.is_superadmin" name="is_superadmin">\n' +
     '              </div>\n' +
-    '            </div>\n' +
     '          </div>\n' +
     '          <div class="box-footer">\n' +
     '            <a ui-sref="app.userlist" class="btn btn-default"><i class="fa fa-angle-double-left"></i> Back</a>\n' +
@@ -213,10 +332,10 @@ try {
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('./views/app/components/user-lists/user-lists.component.html',
     '<section class="content-header">\n' +
-    '    <h1>Users <small>Module description here</small></h1>\n' +
+    '    <h1>Users </h1>\n' +
     '    <ol class="breadcrumb">\n' +
     '        <li><a ui-sref="app.landing"><i class="fa fa-dashboard"></i> Home</a></li>\n' +
-    '        <li class="active">User Lists</li>\n' +
+    '        <li class="active">User List</li>\n' +
     '    </ol>\n' +
     '</section>\n' +
     '<section class="content">\n' +
@@ -226,9 +345,7 @@ module.run(['$templateCache', function($templateCache) {
     '                <div class="box-header with-border">\n' +
     '                    <h3 class="box-title">User List</h3>\n' +
     '                    <div class="box-tools pull-right">\n' +
-    '                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>\n' +
-    '                        </button>\n' +
-    '                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>\n' +
+    '                        <a ui-sref=\'app.useradd\' type="button" class="btn btn-success"><i class="fa fa-plus"></i> Create User</a>\n' +
     '                    </div>\n' +
     '                </div>\n' +
     '                <div class="box-body">\n' +

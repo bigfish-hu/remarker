@@ -29,9 +29,9 @@ class ProjectController extends Controller
             'users'
         ])->get();
 
-        $users = User::all();
+//        $users = User::all();
 
-        return view('projects', ['projects' => $projects, 'users' => $users]);
+        return response()->success(compact('projects'));
     }
 
     /**
@@ -154,8 +154,8 @@ class ProjectController extends Controller
                 }
             });
         } catch (ClientException $e) {
-            return redirect("/admin/projects")->withErrors("invalid credentials");
+            return $this->response->error("invalid credentials");
         }
-        return redirect("/admin/projects");
+        return $this->response->noContent();
     }
 }

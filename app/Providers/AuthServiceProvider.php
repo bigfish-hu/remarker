@@ -25,8 +25,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
-        $gate->define('admin', function ($user) {
-            return $user->is_superadmin === 1;
+        $this->app['auth']->viaRequest('api', function ($request) {
+            return \App\User::where('email', $request->input('email'))->first();
         });
+
+//        $gate->define('admin', function ($user) {
+//            return $user->is_superadmin === 1;
+//        });
     }
 }

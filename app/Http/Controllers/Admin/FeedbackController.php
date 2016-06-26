@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class FeedbackController extends Controller
 {
@@ -15,14 +16,14 @@ class FeedbackController extends Controller
     {
         $projects = Auth::user()->projects()->with('feedbacks')->get();
 
-        return view('feedbacks', ['projects' => $projects]);
+        return response()->success(compact('projects'));
     }
 
     public function deleteFeedback($id)
     {
         Feedback::destroy($id);
 
-        return redirect('admin/feedbacks');
+        return response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -53,6 +54,6 @@ class FeedbackController extends Controller
             'ext_user_id' => null,
         ]);
 
-        return $this->response->created();
+        return response('', Response::HTTP_CREATED);
     }
 }

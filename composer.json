@@ -8,9 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "guzzlehttp/guzzle": "~6.0",
-        "tymon/jwt-auth": "0.5.*",
+        "tymon/jwt-auth": "^1.0@dev",
         "barryvdh/laravel-cors": "0.7.x",
-        "dingo/api": "1.0.x@dev",
         "laravelangular/generators": "2.3.x"
     },
     "require-dev": {

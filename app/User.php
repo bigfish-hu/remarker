@@ -2,10 +2,17 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
+    use Authenticatable, Authorizable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,8 +30,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'pivot'
     ];
-
-
 
     public function isSuperAdmin()
     {
@@ -66,5 +71,15 @@ class User extends Authenticatable
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = \Hash::make($password);
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

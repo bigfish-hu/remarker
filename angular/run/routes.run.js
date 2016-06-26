@@ -1,10 +1,10 @@
-export function RoutesRun ($rootScope, $state, $auth, $timeout, API, ContextService) {
+export function RoutesRun ($rootScope, $state, $auth, $timeout, ContextService) {
   'ngInject';
 
   /*eslint-disable */
   let deregisterationCallback = $rootScope.$on('$stateChangeStart', function (event, toState) {
     if (toState.data && toState.data.auth) {
-      if (!$auth.isAuthenticated()) {
+      if (!$auth.isAuthenticated() && !localStorage.getItem('satellizer_token')) {
         event.preventDefault();
         return $state.go('login')
       }

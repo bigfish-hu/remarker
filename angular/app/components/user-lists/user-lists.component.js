@@ -17,10 +17,10 @@ class UserListsController {
           .withBootstrap();
 
         this.dtColumns = [
-          DTColumnBuilder.newColumn('id').withTitle('ID'),
-          DTColumnBuilder.newColumn('name').withTitle('Name'),
-          DTColumnBuilder.newColumn('email').withTitle('Email'),
-          DTColumnBuilder.newColumn('is_superadmin').withTitle('Is admin').renderWith(isAdminHtml),
+          DTColumnBuilder.newColumn('id').withTitle('ID').withClass('numberSort'),
+          DTColumnBuilder.newColumn('name').withTitle('Name').withClass('letterSort'),
+          DTColumnBuilder.newColumn('email').withTitle('Email').withClass('letterSort'),
+          DTColumnBuilder.newColumn('is_superadmin').withTitle('Is admin').renderWith(isAdminHtml).withClass('letterSort'),
           DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
         ];

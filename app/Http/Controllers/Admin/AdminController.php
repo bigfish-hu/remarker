@@ -7,19 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminController extends Controller
 {
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('home');
-    }
-
     /**
      * Show all users
      *
@@ -28,7 +20,6 @@ class AdminController extends Controller
     public function getUsers()
     {
         $users = User::with('projects')->get();
-
         return response()->success(compact('users'));
     }
 
@@ -72,9 +63,9 @@ class AdminController extends Controller
             $userData['is_superadmin'] = $input['data']['user']['is_superadmin'];
         }
 
-        User::create($userData);
+        $user = User::create($userData);
 
-        return $this->response->created('success');
+        return response()->success(compact('user'));
     }
 
     /**
@@ -113,7 +104,7 @@ class AdminController extends Controller
 
         $affectedRows = User::where('id', '=', $userId)->update($userData);
 
-        return response()->success('success');
+        return response()->success(compact('affectedRows'));
     }
 
     /**
@@ -126,6 +117,6 @@ class AdminController extends Controller
     {
         User::destroy($id);
 
-        return response()->success('success');
+        return response('', Response::HTTP_NO_CONTENT);
     }
 }

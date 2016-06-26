@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Authorize
 {
@@ -17,14 +17,9 @@ class Authorize
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest('/admin');
-            }
+        if (JWTAuth::parseToken()->authenticate()->is_superadmin !== 1) {
+            return response('Unauthorized.', 401);
         }
-
         return $next($request);
     }
 }

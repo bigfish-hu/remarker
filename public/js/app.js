@@ -52,13 +52,13 @@
 
 	__webpack_require__(4);
 
-	__webpack_require__(8);
+	__webpack_require__(9);
 
-	__webpack_require__(16);
+	__webpack_require__(17);
 
-	__webpack_require__(23);
+	__webpack_require__(27);
 
-	__webpack_require__(25);
+	__webpack_require__(29);
 
 /***/ },
 /* 1 */
@@ -91,19 +91,19 @@
 
 	'use strict';
 
-	RoutesRun.$inject = ["$rootScope", "$state", "$auth", "$timeout", "API", "ContextService"];
+	RoutesRun.$inject = ["$rootScope", "$state", "$auth", "$timeout", "ContextService"];
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.RoutesRun = RoutesRun;
-	function RoutesRun($rootScope, $state, $auth, $timeout, API, ContextService) {
+	function RoutesRun($rootScope, $state, $auth, $timeout, ContextService) {
 	  'ngInject';
 
 	  /*eslint-disable */
 
 	  var deregisterationCallback = $rootScope.$on('$stateChangeStart', function (event, toState) {
 	    if (toState.data && toState.data.auth) {
-	      if (!$auth.isAuthenticated()) {
+	      if (!$auth.isAuthenticated() && !localStorage.getItem('satellizer_token')) {
 	        event.preventDefault();
 	        return $state.go('login');
 	      }
@@ -156,7 +156,9 @@
 
 	var _satellizer = __webpack_require__(7);
 
-	angular.module('app.config').config(_routes.RoutesConfig).config(_loading_bar.LoadingBarConfig).config(_satellizer.SatellizerConfig);
+	var _interceptor = __webpack_require__(8);
+
+	angular.module('app.config').config(_routes.RoutesConfig).config(_loading_bar.LoadingBarConfig).config(_satellizer.SatellizerConfig).config(_interceptor.InterceptorConfig);
 
 /***/ },
 /* 5 */
@@ -209,19 +211,6 @@
 	        templateUrl: getView('landing')
 	      }
 	    }
-	  }).state('app.profile', {
-	    url: '/profile',
-	    data: {
-	      auth: true
-	    },
-	    views: {
-	      'main@app': {
-	        template: '<user-profile></user-profile>'
-	      }
-	    },
-	    params: {
-	      alerts: null
-	    }
 	  }).state('app.userlist', {
 	    url: '/user-lists',
 	    data: {
@@ -245,6 +234,29 @@
 	    params: {
 	      alerts: null,
 	      userId: null
+	    }
+	  }).state('app.useradd', {
+	    url: '/user-add/',
+	    data: {
+	      auth: true
+	    },
+	    views: {
+	      'main@app': {
+	        template: '<user-add></user-add>'
+	      }
+	    },
+	    params: {
+	      alerts: null
+	    }
+	  }).state('app.projectlist', {
+	    url: '/project-list',
+	    data: {
+	      auth: true
+	    },
+	    views: {
+	      'main@app': {
+	        template: '<project-list></project-list>'
+	      }
 	    }
 	  }).state('login', {
 	    url: '/login',
@@ -330,28 +342,54 @@
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	InterceptorConfig.$inject = ["$httpProvider"];
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.InterceptorConfig = InterceptorConfig;
+	function InterceptorConfig($httpProvider) {
+	    'ngInject';
+
+	    $httpProvider.interceptors.push(function () {
+	        return {
+	            'response': function response(_response) {
+	                if (_response.headers('Authorization')) {
+	                    localStorage.setItem('satellizer_token', _response.headers('Authorization').replace('Bearer ', ''));
+	                }
+	                return _response;
+	            }
+	        };
+	    });
+	}
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _date_millis = __webpack_require__(9);
+	var _date_millis = __webpack_require__(10);
 
-	var _capitalize = __webpack_require__(10);
+	var _capitalize = __webpack_require__(11);
 
-	var _human_readable = __webpack_require__(11);
+	var _human_readable = __webpack_require__(12);
 
-	var _truncate_characters = __webpack_require__(12);
+	var _truncate_characters = __webpack_require__(13);
 
-	var _truncate_words = __webpack_require__(13);
+	var _truncate_words = __webpack_require__(14);
 
-	var _trust_html = __webpack_require__(14);
+	var _trust_html = __webpack_require__(15);
 
-	var _ucfirst = __webpack_require__(15);
+	var _ucfirst = __webpack_require__(16);
 
 	angular.module('app.filters').filter('datemillis', _date_millis.DateMillisFilter).filter('capitalize', _capitalize.CapitalizeFilter).filter('humanreadable', _human_readable.HumanReadableFilter).filter('truncateCharacters', _truncate_characters.TruncatCharactersFilter).filter('truncateWords', _truncate_words.TruncateWordsFilter).filter('trustHtml', _trust_html.TrustHtmlFilter).filter('ucfirst', _ucfirst.UcFirstFilter);
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -369,7 +407,7 @@
 	}
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -387,7 +425,7 @@
 	}
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -410,7 +448,7 @@
 	}
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -448,7 +486,7 @@
 	}
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -476,7 +514,7 @@
 	}
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -492,7 +530,7 @@
 	}
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -511,27 +549,33 @@
 	}
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _userLists = __webpack_require__(17);
+	var _userLists = __webpack_require__(18);
 
-	var _dashboard = __webpack_require__(18);
+	var _userEdit = __webpack_require__(19);
 
-	var _navSidebar = __webpack_require__(19);
+	var _userAdd = __webpack_require__(20);
 
-	var _navHeader = __webpack_require__(20);
+	var _dashboard = __webpack_require__(21);
 
-	var _loginLoader = __webpack_require__(21);
+	var _navSidebar = __webpack_require__(22);
 
-	var _loginForm = __webpack_require__(22);
+	var _navHeader = __webpack_require__(23);
 
-	angular.module('app.components').component('userLists', _userLists.UserListsComponent).component('dashboard', _dashboard.DashboardComponent).component('navSidebar', _navSidebar.NavSidebarComponent).component('navHeader', _navHeader.NavHeaderComponent).component('loginLoader', _loginLoader.LoginLoaderComponent).component('loginForm', _loginForm.LoginFormComponent);
+	var _loginLoader = __webpack_require__(24);
+
+	var _loginForm = __webpack_require__(25);
+
+	var _projectList = __webpack_require__(26);
+
+	angular.module('app.components').component('userLists', _userLists.UserListsComponent).component('userEdit', _userEdit.UserEditComponent).component('userAdd', _userAdd.UserAddComponent).component('dashboard', _dashboard.DashboardComponent).component('navSidebar', _navSidebar.NavSidebarComponent).component('navHeader', _navHeader.NavHeaderComponent).component('loginLoader', _loginLoader.LoginLoaderComponent).component('loginForm', _loginForm.LoginFormComponent).component('projectList', _projectList.ProjectListComponent);
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -563,13 +607,17 @@
 
 	      _this.dtOptions = DTOptionsBuilder.newOptions().withOption('data', dataSet).withOption('createdRow', createdRow).withOption('responsive', true).withBootstrap();
 
-	      _this.dtColumns = [DTColumnBuilder.newColumn('id').withTitle('ID'), DTColumnBuilder.newColumn('name').withTitle('Name'), DTColumnBuilder.newColumn('email').withTitle('Email'), DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().renderWith(actionsHtml)];
+	      _this.dtColumns = [DTColumnBuilder.newColumn('id').withTitle('ID').withClass('numberSort'), DTColumnBuilder.newColumn('name').withTitle('Name').withClass('letterSort'), DTColumnBuilder.newColumn('email').withTitle('Email').withClass('letterSort'), DTColumnBuilder.newColumn('is_superadmin').withTitle('Is admin').renderWith(isAdminHtml).withClass('letterSort'), DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().renderWith(actionsHtml)];
 
 	      _this.displayTable = true;
 	    });
 
 	    var createdRow = function createdRow(row) {
 	      $compile(angular.element(row).contents())($scope);
+	    };
+
+	    var isAdminHtml = function isAdminHtml(data) {
+	      return data ? 'Yes' : 'No';
 	    };
 
 	    var actionsHtml = function actionsHtml(data) {
@@ -594,10 +642,10 @@
 	        showLoaderOnConfirm: true,
 	        html: false
 	      }, function () {
-	        API.one('users').one('user', userId).remove().then(function () {
+	        API.service('users').one(userId).remove().then(function () {
 	          swal({
 	            title: 'Deleted!',
-	            text: 'User Permission has been deleted.',
+	            text: 'User has been deleted.',
 	            type: 'success',
 	            confirmButtonText: 'OK',
 	            closeOnConfirm: true
@@ -623,7 +671,157 @@
 	};
 
 /***/ },
-/* 18 */
+/* 19 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var UserEditController = function () {
+	  UserEditController.$inject = ["$stateParams", "$state", "API"];
+	  function UserEditController($stateParams, $state, API) {
+	    'ngInject';
+
+	    var _this = this;
+
+	    _classCallCheck(this, UserEditController);
+
+	    this.$state = $state;
+	    this.formSubmitted = false;
+	    this.alerts = [];
+
+	    if ($stateParams.alerts) {
+	      this.alerts.push($stateParams.alerts);
+	    }
+
+	    var userId = $stateParams.userId;
+
+	    var UserData = API.service('users');
+
+	    UserData.one(userId).get().then(function (response) {
+	      _this.usereditdata = API.copy(response);
+	      _this.usereditdata.id = _this.usereditdata.data.user.id;
+	      if (_this.usereditdata.data.user.is_superadmin === 0) {
+	        _this.usereditdata.data.user.is_superadmin = false;
+	      } else if (_this.usereditdata.data.user.is_superadmin === 1) {
+	        _this.usereditdata.data.user.is_superadmin = true;
+	      }
+	    });
+	  }
+
+	  _createClass(UserEditController, [{
+	    key: 'save',
+	    value: function save(isValid) {
+	      var _this2 = this;
+
+	      if (isValid) {
+	        (function () {
+	          var $state = _this2.$state;
+	          _this2.usereditdata.put().then(function () {
+	            var alert = { type: 'success', 'title': 'Success!', msg: 'User has been updated.' };
+	            $state.go($state.current, { alerts: alert });
+	          }, function (response) {
+	            var alert = { type: 'error', 'title': 'Error!', msg: response.data.message };
+	            $state.go($state.current, { alerts: alert });
+	          });
+	        })();
+	      } else {
+	        this.formSubmitted = true;
+	      }
+	    }
+	  }, {
+	    key: '$onInit',
+	    value: function $onInit() {}
+	  }]);
+
+	  return UserEditController;
+	}();
+
+	var UserEditComponent = exports.UserEditComponent = {
+	  templateUrl: './views/app/components/user-edit/user-edit.component.html',
+	  controller: UserEditController,
+	  controllerAs: 'vm',
+	  bindings: {}
+	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var UserAddController = function () {
+	    UserAddController.$inject = ["$stateParams", "$state", "API"];
+	    function UserAddController($stateParams, $state, API) {
+	        'ngInject';
+
+	        _classCallCheck(this, UserAddController);
+
+	        this.$state = $state;
+	        this.formSubmitted = false;
+	        this.alerts = [];
+
+	        if ($stateParams.alerts) {
+	            this.alerts.push($stateParams.alerts);
+	        }
+
+	        this.UserData = API.service('users');
+
+	        this.usereditdata = {};
+	    }
+
+	    _createClass(UserAddController, [{
+	        key: 'save',
+	        value: function save(isValid) {
+	            var _this = this;
+
+	            if (isValid) {
+	                (function () {
+	                    var $state = _this.$state;
+	                    _this.UserData.post(_this.usereditdata).then(function () {
+	                        var alert = { type: 'success', 'title': 'Success!', msg: 'User has been updated.' };
+	                        $state.go($state.current, { alerts: alert });
+	                    }, function (response) {
+	                        var alert = { type: 'error', 'title': 'Error!', msg: response.data.message };
+	                        $state.go($state.current, { alerts: alert });
+	                    });
+	                })();
+	            } else {
+	                this.formSubmitted = true;
+	            }
+	        }
+	    }, {
+	        key: '$onInit',
+	        value: function $onInit() {}
+	    }]);
+
+	    return UserAddController;
+	}();
+
+	var UserAddComponent = exports.UserAddComponent = {
+	    templateUrl: './views/app/components/user-add/user-add.component.html',
+	    controller: UserAddController,
+	    controllerAs: 'vm',
+	    bindings: {}
+	};
+
+/***/ },
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -648,7 +846,7 @@
 	};
 
 /***/ },
-/* 19 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -671,7 +869,11 @@
 	    var navSideBar = this;
 
 	    ContextService.me(function (data) {
-	      navSideBar.userData = data;
+	      if (data.user) {
+	        navSideBar.userData = data.user;
+	        navSideBar.avatarUrl = '//placeholdit.imgix.net/~text?txtfont=monospace,bold&bg=DD4B39&txtclr=ffffff&txt=' + data.user.name.charAt(0).toUpperCase() + '&w=45&h=45&txtsize=16';
+	        navSideBar.role = data.user.is_superadmin === 1 ? 'Admin' : 'User';
+	      }
 	    });
 	  }
 
@@ -691,7 +893,7 @@
 	};
 
 /***/ },
-/* 20 */
+/* 23 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -734,7 +936,7 @@
 	};
 
 /***/ },
-/* 21 */
+/* 24 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -769,7 +971,7 @@
 	};
 
 /***/ },
-/* 22 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -849,17 +1051,115 @@
 	};
 
 /***/ },
-/* 23 */
+/* 26 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var ProjectListController = function () {
+	    ProjectListController.$inject = ["$scope", "$state", "$compile", "DTOptionsBuilder", "DTColumnBuilder", "API"];
+	    function ProjectListController($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API) {
+	        'ngInject';
+
+	        var _this = this;
+
+	        _classCallCheck(this, ProjectListController);
+
+	        this.API = API;
+	        this.$state = $state;
+
+	        var Projects = this.API.service('projects');
+
+	        Projects.getList().then(function (response) {
+	            var dataSet = response.plain();
+
+	            _this.dtOptions = DTOptionsBuilder.newOptions().withOption('data', dataSet).withOption('createdRow', createdRow).withOption('responsive', true).withBootstrap();
+
+	            _this.dtColumns = [DTColumnBuilder.newColumn('id').withTitle('ID').withClass('numberSort'), DTColumnBuilder.newColumn('name').withTitle('Name').withClass('letterSort'), DTColumnBuilder.newColumn('ext_id').withTitle('Ext id').withClass('numberSort'), DTColumnBuilder.newColumn('issue_tracker').withTitle('Issue Tracker').withClass('letterSort')];
+
+	            _this.displayTable = true;
+	        });
+
+	        var createdRow = function createdRow(row) {
+	            $compile(angular.element(row).contents())($scope);
+	        };
+	    }
+
+	    _createClass(ProjectListController, [{
+	        key: 'syncProjects',
+	        value: function syncProjects() {
+	            var API = this.API;
+	            var $state = this.$state;
+
+	            swal({
+	                title: 'Are you sure?',
+	                text: 'It might take some time.',
+	                type: 'info',
+	                showCancelButton: true,
+	                confirmButtonColor: '#DD6B55',
+	                confirmButtonText: 'Yes, sync \'em all!',
+	                closeOnConfirm: false,
+	                showLoaderOnConfirm: true,
+	                html: false
+	            }, function () {
+	                API.service('projects').one('sync').get().then(function () {
+	                    swal({
+	                        title: 'Synchronized!',
+	                        text: 'All projects have been synchronized.',
+	                        type: 'success',
+	                        confirmButtonText: 'OK',
+	                        closeOnConfirm: true
+	                    }, function () {
+	                        $state.reload();
+	                    });
+	                }, function (response) {
+	                    swal({
+	                        title: 'Ooops!',
+	                        text: response,
+	                        type: 'error',
+	                        confirmButtonText: 'OK',
+	                        closeOnConfirm: true
+	                    }, function () {
+	                        $state.reload();
+	                    });
+	                });
+	            });
+	        }
+	    }, {
+	        key: '$onInit',
+	        value: function $onInit() {}
+	    }]);
+
+	    return ProjectListController;
+	}();
+
+	var ProjectListComponent = exports.ProjectListComponent = {
+	    templateUrl: './views/app/components/project-list/project-list.component.html',
+	    controller: ProjectListController,
+	    controllerAs: 'vm',
+	    bindings: {}
+	};
+
+/***/ },
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _routeBodyclass = __webpack_require__(24);
+	var _routeBodyclass = __webpack_require__(28);
 
 	angular.module('app.components').directive('routeBodyclass', _routeBodyclass.RouteBodyClassComponent);
 
 /***/ },
-/* 24 */
+/* 28 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -895,19 +1195,19 @@
 	var RouteBodyClassComponent = exports.RouteBodyClassComponent = routeBodyClass;
 
 /***/ },
-/* 25 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _context = __webpack_require__(26);
+	var _context = __webpack_require__(30);
 
-	var _API = __webpack_require__(27);
+	var _API = __webpack_require__(31);
 
 	angular.module('app.services').service('ContextService', _context.ContextService).service('API', _API.APIService);
 
 /***/ },
-/* 26 */
+/* 30 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -936,8 +1236,9 @@
 	    key: 'getContext',
 	    value: function getContext() {
 	      var $auth = this.$auth;
+	      var $rootScope = this.$rootScope;
 
-	      if ($auth.isAuthenticated()) {
+	      if ($auth.isAuthenticated() && !$rootScope.me) {
 	        var API = this.API;
 	        var UserData = API.service('me', API.all('users'));
 
@@ -959,7 +1260,7 @@
 	}();
 
 /***/ },
-/* 27 */
+/* 31 */
 /***/ function(module, exports) {
 
 	'use strict';

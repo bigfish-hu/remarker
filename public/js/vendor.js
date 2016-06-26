@@ -9815,7 +9815,7 @@ return jQuery;
 
 
 /**
- * @license AngularJS v1.5.7
+ * @license AngularJS v1.5.6
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -9873,7 +9873,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-    message += '\nhttp://errors.angularjs.org/1.5.7/' +
+    message += '\nhttp://errors.angularjs.org/1.5.6/' +
       (module ? module + '/' : '') + code;
 
     for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
@@ -9942,6 +9942,7 @@ function minErr(module, ErrorConstructor) {
   includes: true,
   arrayRemove: true,
   copy: true,
+  shallowCopy: true,
   equals: true,
   csp: true,
   jq: true,
@@ -10817,6 +10818,31 @@ function copy(source, destination) {
       return source.cloneNode(true);
     }
   }
+}
+
+/**
+ * Creates a shallow copy of an object, an array or a primitive.
+ *
+ * Assumes that there are no proto properties for objects.
+ */
+function shallowCopy(src, dst) {
+  if (isArray(src)) {
+    dst = dst || [];
+
+    for (var i = 0, ii = src.length; i < ii; i++) {
+      dst[i] = src[i];
+    }
+  } else if (isObject(src)) {
+    dst = dst || {};
+
+    for (var key in src) {
+      if (!(key.charAt(0) === '$' && key.charAt(1) === '$')) {
+        dst[key] = src[key];
+      }
+    }
+  }
+
+  return dst || src;
 }
 
 
@@ -12159,34 +12185,7 @@ function setupModuleLoader(window) {
 
 }
 
-/* global shallowCopy: true */
-
-/**
- * Creates a shallow copy of an object, an array or a primitive.
- *
- * Assumes that there are no proto properties for objects.
- */
-function shallowCopy(src, dst) {
-  if (isArray(src)) {
-    dst = dst || [];
-
-    for (var i = 0, ii = src.length; i < ii; i++) {
-      dst[i] = src[i];
-    }
-  } else if (isObject(src)) {
-    dst = dst || {};
-
-    for (var key in src) {
-      if (!(key.charAt(0) === '$' && key.charAt(1) === '$')) {
-        dst[key] = src[key];
-      }
-    }
-  }
-
-  return dst || src;
-}
-
-/* global toDebugString: true */
+/* global: toDebugString: true */
 
 function serializeObject(obj) {
   var seen = [];
@@ -12327,11 +12326,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.5.7',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.5.6',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 5,
-  dot: 7,
-  codeName: 'hexagonal-circumvolution'
+  dot: 6,
+  codeName: 'arrow-stringification'
 };
 
 
@@ -12527,7 +12526,7 @@ function publishExternalAPI(angular) {
  * ## Angular's jqLite
  * jqLite provides only the following jQuery methods:
  *
- * - [`addClass()`](http://api.jquery.com/addClass/) - Does not support a function as first argument
+ * - [`addClass()`](http://api.jquery.com/addClass/)
  * - [`after()`](http://api.jquery.com/after/)
  * - [`append()`](http://api.jquery.com/append/)
  * - [`attr()`](http://api.jquery.com/attr/) - Does not support functions as parameters
@@ -12554,7 +12553,7 @@ function publishExternalAPI(angular) {
  * - [`ready()`](http://api.jquery.com/ready/)
  * - [`remove()`](http://api.jquery.com/remove/)
  * - [`removeAttr()`](http://api.jquery.com/removeAttr/)
- * - [`removeClass()`](http://api.jquery.com/removeClass/) - Does not support a function as first argument
+ * - [`removeClass()`](http://api.jquery.com/removeClass/)
  * - [`removeData()`](http://api.jquery.com/removeData/)
  * - [`replaceWith()`](http://api.jquery.com/replaceWith/)
  * - [`text()`](http://api.jquery.com/text/)
@@ -15246,13 +15245,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} parent the parent element which will append the element as
        *   a child (so long as the after element is not present)
        * @param {DOMElement=} after the sibling element after which the element will be appended
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -15278,13 +15271,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} parent the parent element which will append the element as
        *   a child (so long as the after element is not present)
        * @param {DOMElement=} after the sibling element after which the element will be appended
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -15305,13 +15292,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * digest once the animation has completed.
        *
        * @param {DOMElement} element the element which will be removed from the DOM
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -15335,13 +15316,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        *
        * @param {DOMElement} element the element which the CSS classes will be applied to
        * @param {string} className the CSS class(es) that will be added (multiple classes are separated via spaces)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -15365,13 +15340,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        *
        * @param {DOMElement} element the element which the CSS classes will be applied to
        * @param {string} className the CSS class(es) that will be removed (multiple classes are separated via spaces)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -15396,13 +15365,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {DOMElement} element the element which the CSS classes will be applied to
        * @param {string} add the CSS class(es) that will be added (multiple classes are separated via spaces)
        * @param {string} remove the CSS class(es) that will be removed (multiple classes are separated via spaces)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -15443,13 +15406,7 @@ var $AnimateProvider = ['$provide', function($provide) {
        * @param {string=} className an optional CSS class that will be applied to the element for the duration of the animation. If
        *    this value is left as empty then a CSS class of `ng-inline-animate` will be applied to the element.
        *    (Note that if no animation is detected then this value will not be applied to the element.)
-       * @param {object=} options an optional collection of options/styles that will be applied to the element.
-       *   The object can have the following properties:
-       *
-       *   - **addClass** - `{string}` - space-separated CSS classes to add to element
-       *   - **from** - `{Object}` - CSS properties & values at the beginning of animation. Must have matching `to`
-       *   - **removeClass** - `{string}` - space-separated CSS classes to remove from element
-       *   - **to** - `{Object}` - CSS properties & values at end of animation. Must have matching `from`
+       * @param {object=} options an optional collection of options/styles that will be applied to the element
        *
        * @return {Promise} the animation callback promise
        */
@@ -17796,19 +17753,11 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         }
         // We must run this hook in an apply since the $$postDigest runs outside apply
         $rootScope.$apply(function() {
-          var errors = [];
           for (var i = 0, ii = onChangesQueue.length; i < ii; ++i) {
-            try {
-              onChangesQueue[i]();
-            } catch (e) {
-              errors.push(e);
-            }
+            onChangesQueue[i]();
           }
           // Reset the queue to trigger a new schedule next time there is a change
           onChangesQueue = undefined;
-          if (errors.length) {
-            throw errors;
-          }
         });
       } finally {
         onChangesTtl++;
@@ -18984,18 +18933,10 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         forEach(elementControllers, function(controller) {
           var controllerInstance = controller.instance;
           if (isFunction(controllerInstance.$onChanges)) {
-            try {
-              controllerInstance.$onChanges(controller.bindingInfo.initialChanges);
-            } catch (e) {
-              $exceptionHandler(e);
-            }
+            controllerInstance.$onChanges(controller.bindingInfo.initialChanges);
           }
           if (isFunction(controllerInstance.$onInit)) {
-            try {
-              controllerInstance.$onInit();
-            } catch (e) {
-              $exceptionHandler(e);
-            }
+            controllerInstance.$onInit();
           }
           if (isFunction(controllerInstance.$onDestroy)) {
             controllerScope.$on('$destroy', function callOnDestroyHook() {
@@ -19259,16 +19200,18 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
       // copy the new attributes on the old attrs object
       forEach(src, function(value, key) {
-        // Check if we already set this attribute in the loop above.
-        // `dst` will never contain hasOwnProperty as DOM parser won't let it.
-        // You will get an "InvalidCharacterError: DOM Exception 5" error if you
-        // have an attribute like "has-own-property" or "data-has-own-property", etc.
-        if (!dst.hasOwnProperty(key) && key.charAt(0) !== '$') {
+        if (key == 'class') {
+          safeAddClass($element, value);
+          dst['class'] = (dst['class'] ? dst['class'] + ' ' : '') + value;
+        } else if (key == 'style') {
+          $element.attr('style', $element.attr('style') + ';' + value);
+          dst['style'] = (dst['style'] ? dst['style'] + ';' : '') + value;
+          // `dst` will never contain hasOwnProperty as DOM parser won't let it.
+          // You will get an "InvalidCharacterError: DOM Exception 5" error if you
+          // have an attribute like "has-own-property" or "data-has-own-property", etc.
+        } else if (key.charAt(0) != '$' && !dst.hasOwnProperty(key)) {
           dst[key] = value;
-
-          if (key !== 'class' && key !== 'style') {
-            dstAttr[key] = srcAttr[key];
-          }
+          dstAttr[key] = srcAttr[key];
         }
       });
     }
@@ -20129,20 +20072,17 @@ function $DocumentProvider() {
  *
  * ## Example:
  *
- * The example below will overwrite the default `$exceptionHandler` in order to (a) log uncaught
- * errors to the backend for later inspection by the developers and (b) to use `$log.warn()` instead
- * of `$log.error()`.
- *
  * ```js
- *   angular.
- *     module('exceptionOverwrite', []).
- *     factory('$exceptionHandler', ['$log', 'logErrorsToBackend', function($log, logErrorsToBackend) {
- *       return function myExceptionHandler(exception, cause) {
- *         logErrorsToBackend(exception, cause);
- *         $log.warn(exception, cause);
- *       };
- *     });
+ *   angular.module('exceptionOverride', []).factory('$exceptionHandler', function() {
+ *     return function(exception, cause) {
+ *       exception.message += ' (caused by "' + cause + '")';
+ *       throw exception;
+ *     };
+ *   });
  * ```
+ *
+ * This example will override the normal action of `$exceptionHandler`, to make angular
+ * exceptions fail hard when they happen, instead of just logging to the console.
  *
  * <hr />
  * Note, that code executed in event-listeners (even those registered using jqLite's `on`/`bind`
@@ -20153,7 +20093,7 @@ function $DocumentProvider() {
  * `try { ... } catch(e) { $exceptionHandler(e); }`
  *
  * @param {Error} exception Exception associated with the error.
- * @param {string=} cause Optional information about the context in which
+ * @param {string=} cause optional information about the context in which
  *       the error was thrown.
  *
  */
@@ -22701,12 +22641,6 @@ function LocationHashbangInHtml5Url(appBase, appBaseNoFile, hashPrefix) {
 var locationPrototype = {
 
   /**
-   * Ensure absolute url is initialized.
-   * @private
-   */
-  $$absUrl:'',
-
-  /**
    * Are we in html5 mode?
    * @private
    */
@@ -24079,7 +24013,7 @@ AST.prototype = {
     var args = [];
     if (this.peekToken().text !== ')') {
       do {
-        args.push(this.filterChain());
+        args.push(this.expression());
       } while (this.expect(','));
     }
     return args;
@@ -30562,22 +30496,21 @@ var uppercaseFilter = valueFn(uppercase);
  * @kind function
  *
  * @description
- * Creates a new array or string containing only a specified number of elements. The elements are
- * taken from either the beginning or the end of the source array, string or number, as specified by
- * the value and sign (positive or negative) of `limit`. Other array-like objects are also supported
- * (e.g. array subclasses, NodeLists, jqLite/jQuery collections etc). If a number is used as input,
- * it is converted to a string.
+ * Creates a new array or string containing only a specified number of elements. The elements
+ * are taken from either the beginning or the end of the source array, string or number, as specified by
+ * the value and sign (positive or negative) of `limit`. If a number is used as input, it is
+ * converted to a string.
  *
- * @param {Array|ArrayLike|string|number} input - Array/array-like, string or number to be limited.
- * @param {string|number} limit - The length of the returned array or string. If the `limit` number
+ * @param {Array|string|number} input Source array, string or number to be limited.
+ * @param {string|number} limit The length of the returned array or string. If the `limit` number
  *     is positive, `limit` number of items from the beginning of the source array/string are copied.
  *     If the number is negative, `limit` number  of items from the end of the source array/string
  *     are copied. The `limit` will be trimmed if it exceeds `array.length`. If `limit` is undefined,
  *     the input will be returned unchanged.
- * @param {(string|number)=} begin - Index at which to begin limitation. As a negative index,
- *     `begin` indicates an offset from the end of `input`. Defaults to `0`.
- * @returns {Array|string} A new sub-array or substring of length `limit` or less if the input had
- *     less than `limit` elements.
+ * @param {(string|number)=} begin Index at which to begin limitation. As a negative index, `begin`
+ *     indicates an offset from the end of `input`. Defaults to `0`.
+ * @returns {Array|string} A new sub-array or substring of length `limit` or less if input array
+ *     had less than `limit` elements.
  *
  * @example
    <example module="limitToExample">
@@ -30665,27 +30598,21 @@ function limitToFilter() {
     if (isNaN(limit)) return input;
 
     if (isNumber(input)) input = input.toString();
-    if (!isArrayLike(input)) return input;
+    if (!isArray(input) && !isString(input)) return input;
 
     begin = (!begin || isNaN(begin)) ? 0 : toInt(begin);
     begin = (begin < 0) ? Math.max(0, input.length + begin) : begin;
 
     if (limit >= 0) {
-      return sliceFn(input, begin, begin + limit);
+      return input.slice(begin, begin + limit);
     } else {
       if (begin === 0) {
-        return sliceFn(input, limit, input.length);
+        return input.slice(limit, input.length);
       } else {
-        return sliceFn(input, Math.max(0, begin + limit), begin);
+        return input.slice(Math.max(0, begin + limit), begin);
       }
     }
   };
-}
-
-function sliceFn(input, begin, end) {
-  if (isString(input)) return input.slice(begin, end);
-
-  return slice.call(input, begin, end);
 }
 
 /**
@@ -30694,128 +30621,44 @@ function sliceFn(input, begin, end) {
  * @kind function
  *
  * @description
- * Returns an array containing the items from the specified `collection`, ordered by a `comparator`
- * function based on the values computed using the `expression` predicate.
+ * Orders a specified `array` by the `expression` predicate. It is ordered alphabetically
+ * for strings and numerically for numbers. Note: if you notice numbers are not being sorted
+ * as expected, make sure they are actually being saved as numbers and not strings.
+ * Array-like values (e.g. NodeLists, jQuery objects, TypedArrays, Strings, etc) are also supported.
  *
- * For example, `[{id: 'foo'}, {id: 'bar'}] | orderBy:'id'` would result in
- * `[{id: 'bar'}, {id: 'foo'}]`.
- *
- * The `collection` can be an Array or array-like object (e.g. NodeList, jQuery object, TypedArray,
- * String, etc).
- *
- * The `expression` can be a single predicate, or a list of predicates each serving as a tie-breaker
- * for the preceeding one. The `expression` is evaluated against each item and the output is used
- * for comparing with other items.
- *
- * You can change the sorting order by setting `reverse` to `true`. By default, items are sorted in
- * ascending order.
- *
- * The comparison is done using the `comparator` function. If none is specified, a default, built-in
- * comparator is used (see below for details - in a nutshell, it compares numbers numerically and
- * strings alphabetically).
- *
- * ### Under the hood
- *
- * Ordering the specified `collection` happens in two phases:
- *
- * 1. All items are passed through the predicate (or predicates), and the returned values are saved
- *    along with their type (`string`, `number` etc). For example, an item `{label: 'foo'}`, passed
- *    through a predicate that extracts the value of the `label` property, would be transformed to:
- *    ```
- *    {
- *      value: 'foo',
- *      type: 'string',
- *      index: ...
- *    }
- *    ```
- * 2. The comparator function is used to sort the items, based on the derived values, types and
- *    indices.
- *
- * If you use a custom comparator, it will be called with pairs of objects of the form
- * `{value: ..., type: '...', index: ...}` and is expected to return `0` if the objects are equal
- * (as far as the comparator is concerned), `-1` if the 1st one should be ranked higher than the
- * second, or `1` otherwise.
- *
- * In order to ensure that the sorting will be deterministic across platforms, if none of the
- * specified predicates can distinguish between two items, `orderBy` will automatically introduce a
- * dummy predicate that returns the item's index as `value`.
- * (If you are using a custom comparator, make sure it can handle this predicate as well.)
- *
- * Finally, in an attempt to simplify things, if a predicate returns an object as the extracted
- * value for an item, `orderBy` will try to convert that object to a primitive value, before passing
- * it to the comparator. The following rules govern the conversion:
- *
- * 1. If the object has a `valueOf()` method that returns a primitive, its return value will be
- *    used instead.<br />
- *    (If the object has a `valueOf()` method that returns another object, then the returned object
- *    will be used in subsequent steps.)
- * 2. If the object has a custom `toString()` method (i.e. not the one inherited from `Object`) that
- *    returns a primitive, its return value will be used instead.<br />
- *    (If the object has a `toString()` method that returns another object, then the returned object
- *    will be used in subsequent steps.)
- * 3. No conversion; the object itself is used.
- *
- * ### The default comparator
- *
- * The default, built-in comparator should be sufficient for most usecases. In short, it compares
- * numbers numerically, strings alphabetically (and case-insensitively), for objects falls back to
- * using their index in the original collection, and sorts values of different types by type.
- *
- * More specifically, it follows these steps to determine the relative order of items:
- *
- * 1. If the compared values are of different types, compare the types themselves alphabetically.
- * 2. If both values are of type `string`, compare them alphabetically in a case- and
- *    locale-insensitive way.
- * 3. If both values are objects, compare their indices instead.
- * 4. Otherwise, return:
- *    -  `0`, if the values are equal (by strict equality comparison, i.e. using `===`).
- *    - `-1`, if the 1st value is "less than" the 2nd value (compared using the `<` operator).
- *    -  `1`, otherwise.
- *
- * **Note:** If you notice numbers not being sorted as expected, make sure they are actually being
- *           saved as numbers and not strings.
- *
- * @param {Array|ArrayLike} collection - The collection (array or array-like object) to sort.
- * @param {(Function|string|Array.<Function|string>)=} expression - A predicate (or list of
- *    predicates) to be used by the comparator to determine the order of elements.
+ * @param {Array} array The array (or array-like object) to sort.
+ * @param {function(*)|string|Array.<(function(*)|string)>=} expression A predicate to be
+ *    used by the comparator to determine the order of elements.
  *
  *    Can be one of:
  *
- *    - `Function`: A getter function. This function will be called with each item as argument and
- *      the return value will be used for sorting.
- *    - `string`: An Angular expression. This expression will be evaluated against each item and the
- *      result will be used for sorting. For example, use `'label'` to sort by a property called
- *      `label` or `'label.substring(0, 3)'` to sort by the first 3 characters of the `label`
- *      property.<br />
- *      (The result of a constant expression is interpreted as a property name to be used for
- *      comparison. For example, use `'"special name"'` (note the extra pair of quotes) to sort by a
- *      property called `special name`.)<br />
- *      An expression can be optionally prefixed with `+` or `-` to control the sorting direction,
- *      ascending or descending. For example, `'+label'` or `'-label'`. If no property is provided,
- *      (e.g. `'+'` or `'-'`), the collection element itself is used in comparisons.
- *    - `Array`: An array of function and/or string predicates. If a predicate cannot determine the
- *      relative order of two items, the next predicate is used as a tie-breaker.
+ *    - `function`: Getter function. The result of this function will be sorted using the
+ *      `<`, `===`, `>` operator.
+ *    - `string`: An Angular expression. The result of this expression is used to compare elements
+ *      (for example `name` to sort by a property called `name` or `name.substr(0, 3)` to sort by
+ *      3 first characters of a property called `name`). The result of a constant expression
+ *      is interpreted as a property name to be used in comparisons (for example `"special name"`
+ *      to sort object by the value of their `special name` property). An expression can be
+ *      optionally prefixed with `+` or `-` to control ascending or descending sort order
+ *      (for example, `+name` or `-name`). If no property is provided, (e.g. `'+'`) then the array
+ *      element itself is used to compare where sorting.
+ *    - `Array`: An array of function or string predicates. The first predicate in the array
+ *      is used for sorting, but when two items are equivalent, the next predicate is used.
  *
- * **Note:** If the predicate is missing or empty then it defaults to `'+'`.
+ *    If the predicate is missing or empty then it defaults to `'+'`.
  *
- * @param {boolean=} reverse - If `true`, reverse the sorting order.
- * @param {(Function)=} comparator - The comparator function used to determine the relative order of
- *    value pairs. If omitted, the built-in comparator will be used.
- *
- * @returns {Array} - The sorted array.
+ * @param {boolean=} reverse Reverse the order of the array.
+ * @returns {Array} Sorted copy of the source array.
  *
  *
  * @example
- * ### Ordering a table with `ngRepeat`
- *
- * The example below demonstrates a simple {@link ngRepeat ngRepeat}, where the data is sorted by
- * age in descending order (expression is set to `'-age'`). The `comparator` is not set, which means
- * it defaults to the built-in comparator.
- *
-   <example name="orderBy-static" module="orderByExample1">
+ * The example below demonstrates a simple ngRepeat, where the data is sorted
+ * by age in descending order (predicate is set to `'-age'`).
+ * `reverse` is not set, which means it defaults to `false`.
+   <example module="orderByExample">
      <file name="index.html">
        <div ng-controller="ExampleController">
-         <table class="friends">
+         <table class="friend">
            <tr>
              <th>Name</th>
              <th>Phone Number</th>
@@ -30830,77 +30673,43 @@ function sliceFn(input, begin, end) {
        </div>
      </file>
      <file name="script.js">
-       angular.module('orderByExample1', [])
+       angular.module('orderByExample', [])
          .controller('ExampleController', ['$scope', function($scope) {
-           $scope.friends = [
-             {name: 'John',   phone: '555-1212',  age: 10},
-             {name: 'Mary',   phone: '555-9876',  age: 19},
-             {name: 'Mike',   phone: '555-4321',  age: 21},
-             {name: 'Adam',   phone: '555-5678',  age: 35},
-             {name: 'Julie',  phone: '555-8765',  age: 29}
-           ];
+           $scope.friends =
+               [{name:'John', phone:'555-1212', age:10},
+                {name:'Mary', phone:'555-9876', age:19},
+                {name:'Mike', phone:'555-4321', age:21},
+                {name:'Adam', phone:'555-5678', age:35},
+                {name:'Julie', phone:'555-8765', age:29}];
          }]);
      </file>
-     <file name="style.css">
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var names = element.all(by.repeater('friends').column('friend.name'));
-
-       it('should sort friends by age in reverse order', function() {
-         expect(names.get(0).getText()).toBe('Adam');
-         expect(names.get(1).getText()).toBe('Julie');
-         expect(names.get(2).getText()).toBe('Mike');
-         expect(names.get(3).getText()).toBe('Mary');
-         expect(names.get(4).getText()).toBe('John');
-       });
-     </file>
    </example>
- * <hr />
  *
+ * The predicate and reverse parameters can be controlled dynamically through scope properties,
+ * as shown in the next example.
  * @example
- * ### Changing parameters dynamically
- *
- * All parameters can be changed dynamically. The next example shows how you can make the columns of
- * a table sortable, by binding the `expression` and `reverse` parameters to scope properties.
- *
-   <example name="orderBy-dynamic" module="orderByExample2">
+   <example module="orderByExample">
      <file name="index.html">
        <div ng-controller="ExampleController">
-         <pre>Sort by = {{propertyName}}; reverse = {{reverse}}</pre>
+         <pre>Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>
          <hr/>
-         <button ng-click="propertyName = null; reverse = false">Set to unsorted</button>
-         <hr/>
-         <table class="friends">
+         <button ng-click="predicate=''">Set to unsorted</button>
+         <table class="friend">
            <tr>
-             <th>
-               <button ng-click="sortBy('name')">Name</button>
-               <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('phone')">Phone Number</button>
-               <span class="sortorder" ng-show="propertyName === 'phone'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('age')">Age</button>
-               <span class="sortorder" ng-show="propertyName === 'age'" ng-class="{reverse: reverse}"></span>
-             </th>
+            <th>
+                <button ng-click="order('name')">Name</button>
+                <span class="sortorder" ng-show="predicate === 'name'" ng-class="{reverse:reverse}"></span>
+            </th>
+            <th>
+                <button ng-click="order('phone')">Phone Number</button>
+                <span class="sortorder" ng-show="predicate === 'phone'" ng-class="{reverse:reverse}"></span>
+            </th>
+            <th>
+                <button ng-click="order('age')">Age</button>
+                <span class="sortorder" ng-show="predicate === 'age'" ng-class="{reverse:reverse}"></span>
+            </th>
            </tr>
-           <tr ng-repeat="friend in friends | orderBy:propertyName:reverse">
+           <tr ng-repeat="friend in friends | orderBy:predicate:reverse">
              <td>{{friend.name}}</td>
              <td>{{friend.phone}}</td>
              <td>{{friend.age}}</td>
@@ -30909,335 +30718,100 @@ function sliceFn(input, begin, end) {
        </div>
      </file>
      <file name="script.js">
-       angular.module('orderByExample2', [])
+       angular.module('orderByExample', [])
          .controller('ExampleController', ['$scope', function($scope) {
-           var friends = [
-             {name: 'John',   phone: '555-1212',  age: 10},
-             {name: 'Mary',   phone: '555-9876',  age: 19},
-             {name: 'Mike',   phone: '555-4321',  age: 21},
-             {name: 'Adam',   phone: '555-5678',  age: 35},
-             {name: 'Julie',  phone: '555-8765',  age: 29}
-           ];
-
-           $scope.propertyName = 'age';
+           $scope.friends =
+               [{name:'John', phone:'555-1212', age:10},
+                {name:'Mary', phone:'555-9876', age:19},
+                {name:'Mike', phone:'555-4321', age:21},
+                {name:'Adam', phone:'555-5678', age:35},
+                {name:'Julie', phone:'555-8765', age:29}];
+           $scope.predicate = 'age';
            $scope.reverse = true;
-           $scope.friends = friends;
-
-           $scope.sortBy = function(propertyName) {
-             $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-             $scope.propertyName = propertyName;
+           $scope.order = function(predicate) {
+             $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+             $scope.predicate = predicate;
            };
          }]);
-     </file>
+      </file>
      <file name="style.css">
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-
        .sortorder:after {
-         content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+         content: '\25b2';
        }
        .sortorder.reverse:after {
-         content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
+         content: '\25bc';
        }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var unsortButton = element(by.partialButtonText('unsorted'));
-       var nameHeader = element(by.partialButtonText('Name'));
-       var phoneHeader = element(by.partialButtonText('Phone'));
-       var ageHeader = element(by.partialButtonText('Age'));
-       var firstName = element(by.repeater('friends').column('friend.name').row(0));
-       var lastName = element(by.repeater('friends').column('friend.name').row(4));
-
-       it('should sort friends by some property, when clicking on the column header', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         phoneHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Mary');
-
-         nameHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('Mike');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-       });
-
-       it('should sort friends in reverse order, when clicking on the same column', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-       });
-
-       it('should restore the original order, when clicking "Set to unsorted"', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         unsortButton.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Julie');
-       });
      </file>
    </example>
- * <hr />
+ *
+ * It's also possible to call the orderBy filter manually, by injecting `$filter`, retrieving the
+ * filter routine with `$filter('orderBy')`, and calling the returned filter routine with the
+ * desired parameters.
+ *
+ * Example:
  *
  * @example
- * ### Using `orderBy` inside a controller
- *
- * It is also possible to call the `orderBy` filter manually, by injecting `orderByFilter`, and
- * calling it with the desired parameters. (Alternatively, you could inject the `$filter` factory
- * and retrieve the `orderBy` filter with `$filter('orderBy')`.)
- *
-   <example name="orderBy-call-manually" module="orderByExample3">
-     <file name="index.html">
-       <div ng-controller="ExampleController">
-         <pre>Sort by = {{propertyName}}; reverse = {{reverse}}</pre>
-         <hr/>
-         <button ng-click="sortBy(null)">Set to unsorted</button>
-         <hr/>
-         <table class="friends">
-           <tr>
-             <th>
-               <button ng-click="sortBy('name')">Name</button>
-               <span class="sortorder" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('phone')">Phone Number</button>
-               <span class="sortorder" ng-show="propertyName === 'phone'" ng-class="{reverse: reverse}"></span>
-             </th>
-             <th>
-               <button ng-click="sortBy('age')">Age</button>
-               <span class="sortorder" ng-show="propertyName === 'age'" ng-class="{reverse: reverse}"></span>
-             </th>
-           </tr>
-           <tr ng-repeat="friend in friends">
-             <td>{{friend.name}}</td>
-             <td>{{friend.phone}}</td>
-             <td>{{friend.age}}</td>
-           </tr>
-         </table>
-       </div>
-     </file>
-     <file name="script.js">
-       angular.module('orderByExample3', [])
-         .controller('ExampleController', ['$scope', 'orderByFilter', function($scope, orderBy) {
-           var friends = [
-             {name: 'John',   phone: '555-1212',  age: 10},
-             {name: 'Mary',   phone: '555-9876',  age: 19},
-             {name: 'Mike',   phone: '555-4321',  age: 21},
-             {name: 'Adam',   phone: '555-5678',  age: 35},
-             {name: 'Julie',  phone: '555-8765',  age: 29}
-           ];
+  <example module="orderByExample">
+    <file name="index.html">
+    <div ng-controller="ExampleController">
+      <pre>Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>
+      <table class="friend">
+        <tr>
+          <th>
+              <button ng-click="order('name')">Name</button>
+              <span class="sortorder" ng-show="predicate === 'name'" ng-class="{reverse:reverse}"></span>
+          </th>
+          <th>
+              <button ng-click="order('phone')">Phone Number</button>
+              <span class="sortorder" ng-show="predicate === 'phone'" ng-class="{reverse:reverse}"></span>
+          </th>
+          <th>
+              <button ng-click="order('age')">Age</button>
+              <span class="sortorder" ng-show="predicate === 'age'" ng-class="{reverse:reverse}"></span>
+          </th>
+        </tr>
+        <tr ng-repeat="friend in friends">
+          <td>{{friend.name}}</td>
+          <td>{{friend.phone}}</td>
+          <td>{{friend.age}}</td>
+        </tr>
+      </table>
+    </div>
+    </file>
 
-           $scope.propertyName = 'age';
-           $scope.reverse = true;
-           $scope.friends = orderBy(friends, $scope.propertyName, $scope.reverse);
+    <file name="script.js">
+      angular.module('orderByExample', [])
+        .controller('ExampleController', ['$scope', '$filter', function($scope, $filter) {
+          var orderBy = $filter('orderBy');
+          $scope.friends = [
+            { name: 'John',    phone: '555-1212',    age: 10 },
+            { name: 'Mary',    phone: '555-9876',    age: 19 },
+            { name: 'Mike',    phone: '555-4321',    age: 21 },
+            { name: 'Adam',    phone: '555-5678',    age: 35 },
+            { name: 'Julie',   phone: '555-8765',    age: 29 }
+          ];
+          $scope.order = function(predicate) {
+            $scope.predicate = predicate;
+            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+            $scope.friends = orderBy($scope.friends, predicate, $scope.reverse);
+          };
+          $scope.order('age', true);
+        }]);
+    </file>
 
-           $scope.sortBy = function(propertyName) {
-             $scope.reverse = (propertyName !== null && $scope.propertyName === propertyName)
-                 ? !$scope.reverse : false;
-             $scope.propertyName = propertyName;
-             $scope.friends = orderBy(friends, $scope.propertyName, $scope.reverse);
-           };
-         }]);
-     </file>
-     <file name="style.css">
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-
+    <file name="style.css">
        .sortorder:after {
-         content: '\25b2';   // BLACK UP-POINTING TRIANGLE
+         content: '\25b2';
        }
        .sortorder.reverse:after {
-         content: '\25bc';   // BLACK DOWN-POINTING TRIANGLE
+         content: '\25bc';
        }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var unsortButton = element(by.partialButtonText('unsorted'));
-       var nameHeader = element(by.partialButtonText('Name'));
-       var phoneHeader = element(by.partialButtonText('Phone'));
-       var ageHeader = element(by.partialButtonText('Age'));
-       var firstName = element(by.repeater('friends').column('friend.name').row(0));
-       var lastName = element(by.repeater('friends').column('friend.name').row(4));
-
-       it('should sort friends by some property, when clicking on the column header', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         phoneHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Mary');
-
-         nameHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('Mike');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-       });
-
-       it('should sort friends in reverse order, when clicking on the same column', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Adam');
-
-         ageHeader.click();
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-       });
-
-       it('should restore the original order, when clicking "Set to unsorted"', function() {
-         expect(firstName.getText()).toBe('Adam');
-         expect(lastName.getText()).toBe('John');
-
-         unsortButton.click();
-         expect(firstName.getText()).toBe('John');
-         expect(lastName.getText()).toBe('Julie');
-       });
-     </file>
-   </example>
- * <hr />
- *
- * @example
- * ### Using a custom comparator
- *
- * If you have very specific requirements about the way items are sorted, you can pass your own
- * comparator function. For example, you might need to compare some strings in a locale-sensitive
- * way. (When specifying a custom comparator, you also need to pass a value for the `reverse`
- * argument - passing `false` retains the default sorting order, i.e. ascending.)
- *
-   <example name="orderBy-custom-comparator" module="orderByExample4">
-     <file name="index.html">
-       <div ng-controller="ExampleController">
-         <div class="friends-container custom-comparator">
-           <h3>Locale-sensitive Comparator</h3>
-           <table class="friends">
-             <tr>
-               <th>Name</th>
-               <th>Favorite Letter</th>
-             </tr>
-             <tr ng-repeat="friend in friends | orderBy:'favoriteLetter':false:localeSensitiveComparator">
-               <td>{{friend.name}}</td>
-               <td>{{friend.favoriteLetter}}</td>
-             </tr>
-           </table>
-         </div>
-         <div class="friends-container default-comparator">
-           <h3>Default Comparator</h3>
-           <table class="friends">
-             <tr>
-               <th>Name</th>
-               <th>Favorite Letter</th>
-             </tr>
-             <tr ng-repeat="friend in friends | orderBy:'favoriteLetter'">
-               <td>{{friend.name}}</td>
-               <td>{{friend.favoriteLetter}}</td>
-             </tr>
-           </table>
-         </div>
-       </div>
-     </file>
-     <file name="script.js">
-       angular.module('orderByExample4', [])
-         .controller('ExampleController', ['$scope', function($scope) {
-           $scope.friends = [
-             {name: 'John',   favoriteLetter: 'Ä'},
-             {name: 'Mary',   favoriteLetter: 'Ü'},
-             {name: 'Mike',   favoriteLetter: 'Ö'},
-             {name: 'Adam',   favoriteLetter: 'H'},
-             {name: 'Julie',  favoriteLetter: 'Z'}
-           ];
-
-           $scope.localeSensitiveComparator = function(v1, v2) {
-             // If we don't get strings, just compare by index
-             if (v1.type !== 'string' || v2.type !== 'string') {
-               return (v1.index < v2.index) ? -1 : 1;
-             }
-
-             // Compare strings alphabetically, taking locale into account
-             return v1.value.localeCompare(v2.value);
-           };
-         }]);
-     </file>
-     <file name="style.css">
-       .friends-container {
-         display: inline-block;
-         margin: 0 30px;
-       }
-
-       .friends {
-         border-collapse: collapse;
-       }
-
-       .friends th {
-         border-bottom: 1px solid;
-       }
-       .friends td, .friends th {
-         border-left: 1px solid;
-         padding: 5px 10px;
-       }
-       .friends td:first-child, .friends th:first-child {
-         border-left: none;
-       }
-     </file>
-     <file name="protractor.js" type="protractor">
-       // Element locators
-       var container = element(by.css('.custom-comparator'));
-       var names = container.all(by.repeater('friends').column('friend.name'));
-
-       it('should sort friends by favorite letter (in correct alphabetical order)', function() {
-         expect(names.get(0).getText()).toBe('John');
-         expect(names.get(1).getText()).toBe('Adam');
-         expect(names.get(2).getText()).toBe('Mike');
-         expect(names.get(3).getText()).toBe('Mary');
-         expect(names.get(4).getText()).toBe('Julie');
-       });
-     </file>
-   </example>
- *
+    </file>
+</example>
  */
 orderByFilter.$inject = ['$parse'];
 function orderByFilter($parse) {
-  return function(array, sortPredicate, reverseOrder, compareFn) {
+  return function(array, sortPredicate, reverseOrder) {
 
     if (array == null) return array;
     if (!isArrayLike(array)) {
@@ -31247,12 +30821,11 @@ function orderByFilter($parse) {
     if (!isArray(sortPredicate)) { sortPredicate = [sortPredicate]; }
     if (sortPredicate.length === 0) { sortPredicate = ['+']; }
 
-    var predicates = processPredicates(sortPredicate);
-
-    var descending = reverseOrder ? -1 : 1;
-
-    // Define the `compare()` function. Use a default comparator if none is specified.
-    var compare = isFunction(compareFn) ? compareFn : defaultCompare;
+    var predicates = processPredicates(sortPredicate, reverseOrder);
+    // Add a predicate at the end that evaluates to the element index. This makes the
+    // sort stable as it works as a tie-breaker when all the input predicates cannot
+    // distinguish between two elements.
+    predicates.push({ get: function() { return {}; }, descending: reverseOrder ? -1 : 1});
 
     // The next three lines are a version of a Swartzian Transform idiom from Perl
     // (sometimes called the Decorate-Sort-Undecorate idiom)
@@ -31264,12 +30837,8 @@ function orderByFilter($parse) {
     return array;
 
     function getComparisonObject(value, index) {
-      // NOTE: We are adding an extra `tieBreaker` value based on the element's index.
-      // This will be used to keep the sort stable when none of the input predicates can
-      // distinguish between two elements.
       return {
         value: value,
-        tieBreaker: {value: index, type: 'number', index: index},
         predicateValues: predicates.map(function(predicate) {
           return getPredicateValue(predicate.get(value), index);
         })
@@ -31277,19 +30846,18 @@ function orderByFilter($parse) {
     }
 
     function doComparison(v1, v2) {
-      for (var i = 0, ii = predicates.length; i < ii; i++) {
-        var result = compare(v1.predicateValues[i], v2.predicateValues[i]);
-        if (result) {
-          return result * predicates[i].descending * descending;
-        }
+      var result = 0;
+      for (var index=0, length = predicates.length; index < length; ++index) {
+        result = compare(v1.predicateValues[index], v2.predicateValues[index]) * predicates[index].descending;
+        if (result) break;
       }
-
-      return compare(v1.tieBreaker, v2.tieBreaker) * descending;
+      return result;
     }
   };
 
-  function processPredicates(sortPredicates) {
-    return sortPredicates.map(function(predicate) {
+  function processPredicates(sortPredicate, reverseOrder) {
+    reverseOrder = reverseOrder ? -1 : 1;
+    return sortPredicate.map(function(predicate) {
       var descending = 1, get = identity;
 
       if (isFunction(predicate)) {
@@ -31307,7 +30875,7 @@ function orderByFilter($parse) {
           }
         }
       }
-      return {get: get, descending: descending};
+      return { get: get, descending: descending * reverseOrder };
     });
   }
 
@@ -31322,9 +30890,9 @@ function orderByFilter($parse) {
     }
   }
 
-  function objectValue(value) {
+  function objectValue(value, index) {
     // If `valueOf` is a valid function use that
-    if (isFunction(value.valueOf)) {
+    if (typeof value.valueOf === 'function') {
       value = value.valueOf();
       if (isPrimitive(value)) return value;
     }
@@ -31333,8 +30901,8 @@ function orderByFilter($parse) {
       value = value.toString();
       if (isPrimitive(value)) return value;
     }
-
-    return value;
+    // We have a basic object so we use the position of the object in the collection
+    return index;
   }
 
   function getPredicateValue(value, index) {
@@ -31342,39 +30910,23 @@ function orderByFilter($parse) {
     if (value === null) {
       type = 'string';
       value = 'null';
+    } else if (type === 'string') {
+      value = value.toLowerCase();
     } else if (type === 'object') {
-      value = objectValue(value);
+      value = objectValue(value, index);
     }
-    return {value: value, type: type, index: index};
+    return { value: value, type: type };
   }
 
-  function defaultCompare(v1, v2) {
+  function compare(v1, v2) {
     var result = 0;
-    var type1 = v1.type;
-    var type2 = v2.type;
-
-    if (type1 === type2) {
-      var value1 = v1.value;
-      var value2 = v2.value;
-
-      if (type1 === 'string') {
-        // Compare strings case-insensitively
-        value1 = value1.toLowerCase();
-        value2 = value2.toLowerCase();
-      } else if (type1 === 'object') {
-        // For basic objects, use the position of the object
-        // in the collection instead of the value
-        if (isObject(value1)) value1 = v1.index;
-        if (isObject(value2)) value2 = v2.index;
-      }
-
-      if (value1 !== value2) {
-        result = value1 < value2 ? -1 : 1;
+    if (v1.type === v2.type) {
+      if (v1.value !== v2.value) {
+        result = v1.value < v2.value ? -1 : 1;
       }
     } else {
-      result = type1 < type2 ? -1 : 1;
+      result = v1.type < v2.type ? -1 : 1;
     }
-
     return result;
   }
 }
@@ -32419,9 +31971,7 @@ var ISO_DATE_REGEXP = /^\d{4,}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+(?:[+-
 //   9. Fragment
 //                 1111111111111111 222   333333    44444        555555555555555555555555    666     77777777     8888888     999
 var URL_REGEXP = /^[a-z][a-z\d.+-]*:\/*(?:[^:@]+(?::[^@]+)?@)?(?:[^\s:/?#]+|\[[a-f\d:]+\])(?::\d+)?(?:\/[^?#]*)?(?:\?[^#]*)?(?:#.*)?$/i;
-/* jshint maxlen:220 */
-var EMAIL_REGEXP = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+\/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+\/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
-/* jshint maxlen:200 */
+var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 var NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/;
 var DATE_REGEXP = /^(\d{4,})-(\d{2})-(\d{2})$/;
 var DATETIMELOCAL_REGEXP = /^(\d{4,})-(\d\d)-(\d\d)T(\d\d):(\d\d)(?::(\d\d)(\.\d{1,3})?)?$/;
@@ -38942,7 +38492,7 @@ var ngPluralizeDirective = ['$locale', '$interpolate', '$log', function($locale,
  *   it's a prefix used by Angular for public (`$`) and private (`$$`) properties.
  *
  * - The built-in filters {@link ng.orderBy orderBy} and {@link ng.filter filter} do not work with
- *   objects, and will throw an error if used with one.
+ *   objects, and will throw if used with one.
  *
  * If you are hitting any of these limitations, the recommended workaround is to convert your object into an array
  * that is sorted into the order that you prefer before providing it to `ngRepeat`. You could
@@ -86175,6 +85725,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
 
 })(window, window.angular);
 
+
+!function(e,t,n){"use strict";!function o(e,t,n){function a(s,l){if(!t[s]){if(!e[s]){var i="function"==typeof require&&require;if(!l&&i)return i(s,!0);if(r)return r(s,!0);var u=new Error("Cannot find module '"+s+"'");throw u.code="MODULE_NOT_FOUND",u}var c=t[s]={exports:{}};e[s][0].call(c.exports,function(t){var n=e[s][1][t];return a(n?n:t)},c,c.exports,o,e,t,n)}return t[s].exports}for(var r="function"==typeof require&&require,s=0;s<n.length;s++)a(n[s]);return a}({1:[function(o,a,r){var s=function(e){return e&&e.__esModule?e:{"default":e}};Object.defineProperty(r,"__esModule",{value:!0});var l,i,u,c,d=o("./modules/handle-dom"),f=o("./modules/utils"),p=o("./modules/handle-swal-dom"),m=o("./modules/handle-click"),v=o("./modules/handle-key"),y=s(v),h=o("./modules/default-params"),b=s(h),g=o("./modules/set-params"),w=s(g);r["default"]=u=c=function(){function o(e){var t=a;return t[e]===n?b["default"][e]:t[e]}var a=arguments[0];if(d.addClass(t.body,"stop-scrolling"),p.resetInput(),a===n)return f.logStr("SweetAlert expects at least 1 attribute!"),!1;var r=f.extend({},b["default"]);switch(typeof a){case"string":r.title=a,r.text=arguments[1]||"",r.type=arguments[2]||"";break;case"object":if(a.title===n)return f.logStr('Missing "title" argument!'),!1;r.title=a.title;for(var s in b["default"])r[s]=o(s);r.confirmButtonText=r.showCancelButton?"Confirm":b["default"].confirmButtonText,r.confirmButtonText=o("confirmButtonText"),r.doneFunction=arguments[1]||null;break;default:return f.logStr('Unexpected type of argument! Expected "string" or "object", got '+typeof a),!1}w["default"](r),p.fixVerticalPosition(),p.openModal(arguments[1]);for(var u=p.getModal(),v=u.querySelectorAll("button"),h=["onclick","onmouseover","onmouseout","onmousedown","onmouseup","onfocus"],g=function(e){return m.handleButton(e,r,u)},C=0;C<v.length;C++)for(var S=0;S<h.length;S++){var x=h[S];v[C][x]=g}p.getOverlay().onclick=g,l=e.onkeydown;var k=function(e){return y["default"](e,r,u)};e.onkeydown=k,e.onfocus=function(){setTimeout(function(){i!==n&&(i.focus(),i=n)},0)},c.enableButtons()},u.setDefaults=c.setDefaults=function(e){if(!e)throw new Error("userParams is required");if("object"!=typeof e)throw new Error("userParams has to be a object");f.extend(b["default"],e)},u.close=c.close=function(){var o=p.getModal();d.fadeOut(p.getOverlay(),5),d.fadeOut(o,5),d.removeClass(o,"showSweetAlert"),d.addClass(o,"hideSweetAlert"),d.removeClass(o,"visible");var a=o.querySelector(".sa-icon.sa-success");d.removeClass(a,"animate"),d.removeClass(a.querySelector(".sa-tip"),"animateSuccessTip"),d.removeClass(a.querySelector(".sa-long"),"animateSuccessLong");var r=o.querySelector(".sa-icon.sa-error");d.removeClass(r,"animateErrorIcon"),d.removeClass(r.querySelector(".sa-x-mark"),"animateXMark");var s=o.querySelector(".sa-icon.sa-warning");return d.removeClass(s,"pulseWarning"),d.removeClass(s.querySelector(".sa-body"),"pulseWarningIns"),d.removeClass(s.querySelector(".sa-dot"),"pulseWarningIns"),setTimeout(function(){var e=o.getAttribute("data-custom-class");d.removeClass(o,e)},300),d.removeClass(t.body,"stop-scrolling"),e.onkeydown=l,e.previousActiveElement&&e.previousActiveElement.focus(),i=n,clearTimeout(o.timeout),!0},u.showInputError=c.showInputError=function(e){var t=p.getModal(),n=t.querySelector(".sa-input-error");d.addClass(n,"show");var o=t.querySelector(".sa-error-container");d.addClass(o,"show"),o.querySelector("p").innerHTML=e,setTimeout(function(){u.enableButtons()},1),t.querySelector("input").focus()},u.resetInputError=c.resetInputError=function(e){if(e&&13===e.keyCode)return!1;var t=p.getModal(),n=t.querySelector(".sa-input-error");d.removeClass(n,"show");var o=t.querySelector(".sa-error-container");d.removeClass(o,"show")},u.disableButtons=c.disableButtons=function(){var e=p.getModal(),t=e.querySelector("button.confirm"),n=e.querySelector("button.cancel");t.disabled=!0,n.disabled=!0},u.enableButtons=c.enableButtons=function(){var e=p.getModal(),t=e.querySelector("button.confirm"),n=e.querySelector("button.cancel");t.disabled=!1,n.disabled=!1},"undefined"!=typeof e?e.sweetAlert=e.swal=u:f.logStr("SweetAlert is a frontend module!"),a.exports=r["default"]},{"./modules/default-params":2,"./modules/handle-click":3,"./modules/handle-dom":4,"./modules/handle-key":5,"./modules/handle-swal-dom":6,"./modules/set-params":8,"./modules/utils":9}],2:[function(e,t,n){Object.defineProperty(n,"__esModule",{value:!0});var o={title:"",text:"",type:null,allowOutsideClick:!1,showConfirmButton:!0,showCancelButton:!1,closeOnConfirm:!0,closeOnCancel:!0,confirmButtonText:"OK",confirmButtonColor:"#8CD4F5",cancelButtonText:"Cancel",imageUrl:null,imageSize:null,timer:null,customClass:"",html:!1,animation:!0,allowEscapeKey:!0,inputType:"text",inputPlaceholder:"",inputValue:"",showLoaderOnConfirm:!1};n["default"]=o,t.exports=n["default"]},{}],3:[function(t,n,o){Object.defineProperty(o,"__esModule",{value:!0});var a=t("./utils"),r=(t("./handle-swal-dom"),t("./handle-dom")),s=function(t,n,o){function s(e){m&&n.confirmButtonColor&&(p.style.backgroundColor=e)}var u,c,d,f=t||e.event,p=f.target||f.srcElement,m=-1!==p.className.indexOf("confirm"),v=-1!==p.className.indexOf("sweet-overlay"),y=r.hasClass(o,"visible"),h=n.doneFunction&&"true"===o.getAttribute("data-has-done-function");switch(m&&n.confirmButtonColor&&(u=n.confirmButtonColor,c=a.colorLuminance(u,-.04),d=a.colorLuminance(u,-.14)),f.type){case"mouseover":s(c);break;case"mouseout":s(u);break;case"mousedown":s(d);break;case"mouseup":s(c);break;case"focus":var b=o.querySelector("button.confirm"),g=o.querySelector("button.cancel");m?g.style.boxShadow="none":b.style.boxShadow="none";break;case"click":var w=o===p,C=r.isDescendant(o,p);if(!w&&!C&&y&&!n.allowOutsideClick)break;m&&h&&y?l(o,n):h&&y||v?i(o,n):r.isDescendant(o,p)&&"BUTTON"===p.tagName&&sweetAlert.close()}},l=function(e,t){var n=!0;r.hasClass(e,"show-input")&&(n=e.querySelector("input").value,n||(n="")),t.doneFunction(n),t.closeOnConfirm&&sweetAlert.close(),t.showLoaderOnConfirm&&sweetAlert.disableButtons()},i=function(e,t){var n=String(t.doneFunction).replace(/\s/g,""),o="function("===n.substring(0,9)&&")"!==n.substring(9,10);o&&t.doneFunction(!1),t.closeOnCancel&&sweetAlert.close()};o["default"]={handleButton:s,handleConfirm:l,handleCancel:i},n.exports=o["default"]},{"./handle-dom":4,"./handle-swal-dom":6,"./utils":9}],4:[function(n,o,a){Object.defineProperty(a,"__esModule",{value:!0});var r=function(e,t){return new RegExp(" "+t+" ").test(" "+e.className+" ")},s=function(e,t){r(e,t)||(e.className+=" "+t)},l=function(e,t){var n=" "+e.className.replace(/[\t\r\n]/g," ")+" ";if(r(e,t)){for(;n.indexOf(" "+t+" ")>=0;)n=n.replace(" "+t+" "," ");e.className=n.replace(/^\s+|\s+$/g,"")}},i=function(e){var n=t.createElement("div");return n.appendChild(t.createTextNode(e)),n.innerHTML},u=function(e){e.style.opacity="",e.style.display="block"},c=function(e){if(e&&!e.length)return u(e);for(var t=0;t<e.length;++t)u(e[t])},d=function(e){e.style.opacity="",e.style.display="none"},f=function(e){if(e&&!e.length)return d(e);for(var t=0;t<e.length;++t)d(e[t])},p=function(e,t){for(var n=t.parentNode;null!==n;){if(n===e)return!0;n=n.parentNode}return!1},m=function(e){e.style.left="-9999px",e.style.display="block";var t,n=e.clientHeight;return t="undefined"!=typeof getComputedStyle?parseInt(getComputedStyle(e).getPropertyValue("padding-top"),10):parseInt(e.currentStyle.padding),e.style.left="",e.style.display="none","-"+parseInt((n+t)/2)+"px"},v=function(e,t){if(+e.style.opacity<1){t=t||16,e.style.opacity=0,e.style.display="block";var n=+new Date,o=function(e){function t(){return e.apply(this,arguments)}return t.toString=function(){return e.toString()},t}(function(){e.style.opacity=+e.style.opacity+(new Date-n)/100,n=+new Date,+e.style.opacity<1&&setTimeout(o,t)});o()}e.style.display="block"},y=function(e,t){t=t||16,e.style.opacity=1;var n=+new Date,o=function(e){function t(){return e.apply(this,arguments)}return t.toString=function(){return e.toString()},t}(function(){e.style.opacity=+e.style.opacity-(new Date-n)/100,n=+new Date,+e.style.opacity>0?setTimeout(o,t):e.style.display="none"});o()},h=function(n){if("function"==typeof MouseEvent){var o=new MouseEvent("click",{view:e,bubbles:!1,cancelable:!0});n.dispatchEvent(o)}else if(t.createEvent){var a=t.createEvent("MouseEvents");a.initEvent("click",!1,!1),n.dispatchEvent(a)}else t.createEventObject?n.fireEvent("onclick"):"function"==typeof n.onclick&&n.onclick()},b=function(t){"function"==typeof t.stopPropagation?(t.stopPropagation(),t.preventDefault()):e.event&&e.event.hasOwnProperty("cancelBubble")&&(e.event.cancelBubble=!0)};a.hasClass=r,a.addClass=s,a.removeClass=l,a.escapeHtml=i,a._show=u,a.show=c,a._hide=d,a.hide=f,a.isDescendant=p,a.getTopMargin=m,a.fadeIn=v,a.fadeOut=y,a.fireClick=h,a.stopEventPropagation=b},{}],5:[function(t,o,a){Object.defineProperty(a,"__esModule",{value:!0});var r=t("./handle-dom"),s=t("./handle-swal-dom"),l=function(t,o,a){var l=t||e.event,i=l.keyCode||l.which,u=a.querySelector("button.confirm"),c=a.querySelector("button.cancel"),d=a.querySelectorAll("button[tabindex]");if(-1!==[9,13,32,27].indexOf(i)){for(var f=l.target||l.srcElement,p=-1,m=0;m<d.length;m++)if(f===d[m]){p=m;break}9===i?(f=-1===p?u:p===d.length-1?d[0]:d[p+1],r.stopEventPropagation(l),f.focus(),o.confirmButtonColor&&s.setFocusStyle(f,o.confirmButtonColor)):13===i?("INPUT"===f.tagName&&(f=u,u.focus()),f=-1===p?u:n):27===i&&o.allowEscapeKey===!0?(f=c,r.fireClick(f,l)):f=n}};a["default"]=l,o.exports=a["default"]},{"./handle-dom":4,"./handle-swal-dom":6}],6:[function(n,o,a){var r=function(e){return e&&e.__esModule?e:{"default":e}};Object.defineProperty(a,"__esModule",{value:!0});var s=n("./utils"),l=n("./handle-dom"),i=n("./default-params"),u=r(i),c=n("./injected-html"),d=r(c),f=".sweet-alert",p=".sweet-overlay",m=function(){var e=t.createElement("div");for(e.innerHTML=d["default"];e.firstChild;)t.body.appendChild(e.firstChild)},v=function(e){function t(){return e.apply(this,arguments)}return t.toString=function(){return e.toString()},t}(function(){var e=t.querySelector(f);return e||(m(),e=v()),e}),y=function(){var e=v();return e?e.querySelector("input"):void 0},h=function(){return t.querySelector(p)},b=function(e,t){var n=s.hexToRgb(t);e.style.boxShadow="0 0 2px rgba("+n+", 0.8), inset 0 0 0 1px rgba(0, 0, 0, 0.05)"},g=function(n){var o=v();l.fadeIn(h(),10),l.show(o),l.addClass(o,"showSweetAlert"),l.removeClass(o,"hideSweetAlert"),e.previousActiveElement=t.activeElement;var a=o.querySelector("button.confirm");a.focus(),setTimeout(function(){l.addClass(o,"visible")},500);var r=o.getAttribute("data-timer");if("null"!==r&&""!==r){var s=n;o.timeout=setTimeout(function(){var e=(s||null)&&"true"===o.getAttribute("data-has-done-function");e?s(null):sweetAlert.close()},r)}},w=function(){var e=v(),t=y();l.removeClass(e,"show-input"),t.value=u["default"].inputValue,t.setAttribute("type",u["default"].inputType),t.setAttribute("placeholder",u["default"].inputPlaceholder),C()},C=function(e){if(e&&13===e.keyCode)return!1;var t=v(),n=t.querySelector(".sa-input-error");l.removeClass(n,"show");var o=t.querySelector(".sa-error-container");l.removeClass(o,"show")},S=function(){var e=v();e.style.marginTop=l.getTopMargin(v())};a.sweetAlertInitialize=m,a.getModal=v,a.getOverlay=h,a.getInput=y,a.setFocusStyle=b,a.openModal=g,a.resetInput=w,a.resetInputError=C,a.fixVerticalPosition=S},{"./default-params":2,"./handle-dom":4,"./injected-html":7,"./utils":9}],7:[function(e,t,n){Object.defineProperty(n,"__esModule",{value:!0});var o='<div class="sweet-overlay" tabIndex="-1"></div><div class="sweet-alert"><div class="sa-icon sa-error">\n      <span class="sa-x-mark">\n        <span class="sa-line sa-left"></span>\n        <span class="sa-line sa-right"></span>\n      </span>\n    </div><div class="sa-icon sa-warning">\n      <span class="sa-body"></span>\n      <span class="sa-dot"></span>\n    </div><div class="sa-icon sa-info"></div><div class="sa-icon sa-success">\n      <span class="sa-line sa-tip"></span>\n      <span class="sa-line sa-long"></span>\n\n      <div class="sa-placeholder"></div>\n      <div class="sa-fix"></div>\n    </div><div class="sa-icon sa-custom"></div><h2>Title</h2>\n    <p>Text</p>\n    <fieldset>\n      <input type="text" tabIndex="3" />\n      <div class="sa-input-error"></div>\n    </fieldset><div class="sa-error-container">\n      <div class="icon">!</div>\n      <p>Not valid!</p>\n    </div><div class="sa-button-container">\n      <button class="cancel" tabIndex="2">Cancel</button>\n      <div class="sa-confirm-button-container">\n        <button class="confirm" tabIndex="1">OK</button><div class="la-ball-fall">\n          <div></div>\n          <div></div>\n          <div></div>\n        </div>\n      </div>\n    </div></div>';n["default"]=o,t.exports=n["default"]},{}],8:[function(e,t,o){Object.defineProperty(o,"__esModule",{value:!0});var a=e("./utils"),r=e("./handle-swal-dom"),s=e("./handle-dom"),l=["error","warning","info","success","input","prompt"],i=function(e){var t=r.getModal(),o=t.querySelector("h2"),i=t.querySelector("p"),u=t.querySelector("button.cancel"),c=t.querySelector("button.confirm");if(o.innerHTML=e.html?e.title:s.escapeHtml(e.title).split("\n").join("<br>"),i.innerHTML=e.html?e.text:s.escapeHtml(e.text||"").split("\n").join("<br>"),e.text&&s.show(i),e.customClass)s.addClass(t,e.customClass),t.setAttribute("data-custom-class",e.customClass);else{var d=t.getAttribute("data-custom-class");s.removeClass(t,d),t.setAttribute("data-custom-class","")}if(s.hide(t.querySelectorAll(".sa-icon")),e.type&&!a.isIE8()){var f=function(){for(var o=!1,a=0;a<l.length;a++)if(e.type===l[a]){o=!0;break}if(!o)return logStr("Unknown alert type: "+e.type),{v:!1};var i=["success","error","warning","info"],u=n;-1!==i.indexOf(e.type)&&(u=t.querySelector(".sa-icon.sa-"+e.type),s.show(u));var c=r.getInput();switch(e.type){case"success":s.addClass(u,"animate"),s.addClass(u.querySelector(".sa-tip"),"animateSuccessTip"),s.addClass(u.querySelector(".sa-long"),"animateSuccessLong");break;case"error":s.addClass(u,"animateErrorIcon"),s.addClass(u.querySelector(".sa-x-mark"),"animateXMark");break;case"warning":s.addClass(u,"pulseWarning"),s.addClass(u.querySelector(".sa-body"),"pulseWarningIns"),s.addClass(u.querySelector(".sa-dot"),"pulseWarningIns");break;case"input":case"prompt":c.setAttribute("type",e.inputType),c.value=e.inputValue,c.setAttribute("placeholder",e.inputPlaceholder),s.addClass(t,"show-input"),setTimeout(function(){c.focus(),c.addEventListener("keyup",swal.resetInputError)},400)}}();if("object"==typeof f)return f.v}if(e.imageUrl){var p=t.querySelector(".sa-icon.sa-custom");p.style.backgroundImage="url("+e.imageUrl+")",s.show(p);var m=80,v=80;if(e.imageSize){var y=e.imageSize.toString().split("x"),h=y[0],b=y[1];h&&b?(m=h,v=b):logStr("Parameter imageSize expects value with format WIDTHxHEIGHT, got "+e.imageSize)}p.setAttribute("style",p.getAttribute("style")+"width:"+m+"px; height:"+v+"px")}t.setAttribute("data-has-cancel-button",e.showCancelButton),e.showCancelButton?u.style.display="inline-block":s.hide(u),t.setAttribute("data-has-confirm-button",e.showConfirmButton),e.showConfirmButton?c.style.display="inline-block":s.hide(c),e.cancelButtonText&&(u.innerHTML=s.escapeHtml(e.cancelButtonText)),e.confirmButtonText&&(c.innerHTML=s.escapeHtml(e.confirmButtonText)),e.confirmButtonColor&&(c.style.backgroundColor=e.confirmButtonColor,c.style.borderLeftColor=e.confirmLoadingButtonColor,c.style.borderRightColor=e.confirmLoadingButtonColor,r.setFocusStyle(c,e.confirmButtonColor)),t.setAttribute("data-allow-outside-click",e.allowOutsideClick);var g=e.doneFunction?!0:!1;t.setAttribute("data-has-done-function",g),e.animation?"string"==typeof e.animation?t.setAttribute("data-animation",e.animation):t.setAttribute("data-animation","pop"):t.setAttribute("data-animation","none"),t.setAttribute("data-timer",e.timer)};o["default"]=i,t.exports=o["default"]},{"./handle-dom":4,"./handle-swal-dom":6,"./utils":9}],9:[function(t,n,o){Object.defineProperty(o,"__esModule",{value:!0});var a=function(e,t){for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);return e},r=function(e){var t=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(e);return t?parseInt(t[1],16)+", "+parseInt(t[2],16)+", "+parseInt(t[3],16):null},s=function(){return e.attachEvent&&!e.addEventListener},l=function(t){e.console&&e.console.log("SweetAlert: "+t)},i=function(e,t){e=String(e).replace(/[^0-9a-f]/gi,""),e.length<6&&(e=e[0]+e[0]+e[1]+e[1]+e[2]+e[2]),t=t||0;var n,o,a="#";for(o=0;3>o;o++)n=parseInt(e.substr(2*o,2),16),n=Math.round(Math.min(Math.max(0,n+n*t),255)).toString(16),a+=("00"+n).substr(n.length);return a};o.extend=a,o.hexToRgb=r,o.isIE8=s,o.logStr=l,o.colorLuminance=i},{}]},{},[1]),"function"==typeof define&&define.amd?define(function(){return sweetAlert}):"undefined"!=typeof module&&module.exports&&(module.exports=sweetAlert)}(window,document);
 
 /*!
  * angular-datatables - v0.5.4

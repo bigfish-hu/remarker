@@ -8,8 +8,9 @@ export class ContextService {
 
   getContext () {
     let $auth = this.$auth;
+    let $rootScope = this.$rootScope;
 
-    if ($auth.isAuthenticated()) {
+    if ($auth.isAuthenticated() && !$rootScope.me) {
       let API = this.API;
       let UserData = API.service('me', API.all('users'));
 
@@ -21,7 +22,7 @@ export class ContextService {
 
   me (cb) {
     this.$rootScope.$watch('me', function (nv) {
-      cb(nv);
+        cb(nv);
     });
   }
 }

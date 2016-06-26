@@ -81,6 +81,17 @@ export function RoutesConfig ($stateProvider, $urlRouterProvider) {
               alerts: null
           }
       })
+      .state('app.projectlist', {
+        url: '/project-list',
+        data: {
+          auth: true
+        },
+        views: {
+          'main@app': {
+            template: '<project-list></project-list>'
+          }
+        }
+      })
     .state('login', {
       url: '/login',
       views: {

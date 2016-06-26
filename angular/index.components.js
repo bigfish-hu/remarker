@@ -6,6 +6,7 @@ import { NavSidebarComponent } from './app/components/nav-sidebar/nav-sidebar.co
 import { NavHeaderComponent } from './app/components/nav-header/nav-header.component';
 import { LoginLoaderComponent } from './app/components/login-loader/login-loader.component';
 import { LoginFormComponent } from './app/components/login-form/login-form.component';
+import { ProjectListComponent } from './app/components/project-list/project-list.component';
 
 angular.module('app.components')
   .component('userLists', UserListsComponent)
@@ -15,4 +16,5 @@ angular.module('app.components')
   .component('navSidebar', NavSidebarComponent)
   .component('navHeader', NavHeaderComponent)
   .component('loginLoader', LoginLoaderComponent)
-  .component('loginForm', LoginFormComponent);
+  .component('loginForm', LoginFormComponent)
+  .component('projectList', ProjectListComponent);

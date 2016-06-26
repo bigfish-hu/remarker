@@ -3,7 +3,7 @@
 
             var settings = $.extend({
                 project_id: {{ $id }},
-                ajaxURL: '/api/feedbacks',
+                ajaxURL: 'createFeedback',
                 postBrowserInfo: true,
                 postHTML: false,
                 postURL: true,

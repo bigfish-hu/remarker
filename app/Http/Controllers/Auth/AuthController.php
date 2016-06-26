@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Tymon\JWTAuth\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
+    /**
+     * @var \Tymon\JWTAuth\JWTAuth
+     */
+    protected $jwt;
+
+    public function __construct(JWTAuth $jwt)
+    {
+        $this->jwt = $jwt;
+    }
 
     /**
      * Authorize user.
@@ -41,15 +41,16 @@ class AuthController extends Controller
         $user = User::whereEmail($credentials['email'])->first();
 
         try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->error('Invalid credentials', 401);
+            if (! $token = $this->jwt->attempt($credentials)) {
+                return response()->json(['user_not_found'], 404);
             }
-        } catch (\JWTException $e) {
-            return response()->error('Could not create token', 500);
+        } catch (TokenExpiredException $e) {
+            return response()->json(['token_expired'], 401);
+        } catch (TokenInvalidException $e) {
+            return response()->json(['token_invalid'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['token_absent' => $e->getMessage()], 500);
         }
-
-        $user = Auth::user();
-        $token = JWTAuth::fromUser($user);
 
         return response()->success(compact('user', 'token'));
     }
@@ -61,8 +62,18 @@ class AuthController extends Controller
      */
     public function getAuthenticatedUser()
     {
-        $user = Auth::user();
+        try {
+            if (! $user = $this->jwt->parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+        } catch (TokenExpiredException $e) {
+            return response()->json(['token_expired'], 401);
+        } catch (TokenInvalidException $e) {
+            return response()->json(['token_invalid'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['token_absent'], 400);
+        }
 
-        return response()->success($user);
+        return response()->success(compact('user'));
     }
 }
