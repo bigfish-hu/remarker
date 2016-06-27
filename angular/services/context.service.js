@@ -7,17 +7,10 @@ export class ContextService {
   }
 
   getContext () {
-    let $auth = this.$auth;
-    let $rootScope = this.$rootScope;
-
-    if ($auth.isAuthenticated() && !$rootScope.me) {
       let API = this.API;
       let UserData = API.service('me', API.all('users'));
 
       return UserData.one().get();
-    } else {
-      return null;
-    }
   }
 
   me (cb) {

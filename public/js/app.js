@@ -105,6 +105,7 @@
 	    if (toState.data && toState.data.auth) {
 	      if (!$auth.isAuthenticated() && !localStorage.getItem('satellizer_token')) {
 	        event.preventDefault();
+	        delete $rootScope.me;
 	        return $state.go('login');
 	      }
 	    }
@@ -112,7 +113,7 @@
 	    $rootScope.bodyClass = 'hold-transition login-page';
 	  });
 
-	  function stateChange() {
+	  function stateChange(event, toState) {
 	    $timeout(function () {
 	      // fix sidebar
 	      var neg = $('.main-header').outerHeight() + $('.main-footer').outerHeight();
@@ -130,7 +131,7 @@
 	      }
 
 	      // get user current context
-	      if ($auth.isAuthenticated() && !$rootScope.me) {
+	      if (toState.name !== 'login' && !$rootScope.me) {
 	        ContextService.getContext().then(function (response) {
 	          response = response.plain();
 	          $rootScope.me = response.data;
@@ -354,16 +355,27 @@
 	function InterceptorConfig($httpProvider) {
 	    'ngInject';
 
-	    $httpProvider.interceptors.push(function () {
+	    $httpProvider.interceptors.push(["$q", "$injector", function ($q, $injector) {
 	        return {
 	            'response': function response(_response) {
 	                if (_response.headers('Authorization')) {
 	                    localStorage.setItem('satellizer_token', _response.headers('Authorization').replace('Bearer ', ''));
 	                }
 	                return _response;
+	            },
+	            'responseError': function responseError(response) {
+	                var $state = $injector.get('$state'),
+	                    deferred = $q.defer();
+
+	                if (response.status === 401) {
+	                    $state.go('login');
+	                    deferred.reject(response);
+	                }
+
+	                return $q.reject(response);
 	            }
 	        };
-	    });
+	    }]);
 	}
 
 /***/ },
@@ -869,7 +881,7 @@
 	    var navSideBar = this;
 
 	    ContextService.me(function (data) {
-	      if (data.user) {
+	      if (data && data.user) {
 	        navSideBar.userData = data.user;
 	        navSideBar.avatarUrl = '//placeholdit.imgix.net/~text?txtfont=monospace,bold&bg=DD4B39&txtclr=ffffff&txt=' + data.user.name.charAt(0).toUpperCase() + '&w=45&h=45&txtsize=16';
 	        navSideBar.role = data.user.is_superadmin === 1 ? 'Admin' : 'User';
@@ -1235,17 +1247,10 @@
 	  _createClass(ContextService, [{
 	    key: 'getContext',
 	    value: function getContext() {
-	      var $auth = this.$auth;
-	      var $rootScope = this.$rootScope;
+	      var API = this.API;
+	      var UserData = API.service('me', API.all('users'));
 
-	      if ($auth.isAuthenticated() && !$rootScope.me) {
-	        var API = this.API;
-	        var UserData = API.service('me', API.all('users'));
-
-	        return UserData.one().get();
-	      } else {
-	        return null;
-	      }
+	      return UserData.one().get();
 	    }
 	  }, {
 	    key: 'me',

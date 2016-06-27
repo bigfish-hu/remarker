@@ -6,14 +6,15 @@ export function RoutesRun ($rootScope, $state, $auth, $timeout, ContextService) 
     if (toState.data && toState.data.auth) {
       if (!$auth.isAuthenticated() && !localStorage.getItem('satellizer_token')) {
         event.preventDefault();
-        return $state.go('login')
+        delete $rootScope.me;
+        return $state.go('login');
       }
     }
 
     $rootScope.bodyClass = 'hold-transition login-page'
   });
 
-  function stateChange () {
+  function stateChange (event, toState) {
     $timeout(function () {
       // fix sidebar
       var neg = $('.main-header').outerHeight() + $('.main-footer').outerHeight();
@@ -31,7 +32,7 @@ export function RoutesRun ($rootScope, $state, $auth, $timeout, ContextService) 
       }
 
       // get user current context
-      if ($auth.isAuthenticated() && !$rootScope.me) {
+      if (toState.name !== 'login' && !$rootScope.me) {
         ContextService.getContext()
           .then((response) => {
             response = response.plain();
