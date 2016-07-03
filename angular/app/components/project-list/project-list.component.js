@@ -1,10 +1,14 @@
 class ProjectListController{
-    constructor($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API){
+    constructor($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API, ContextService){
         'ngInject';
         this.API = API;
         this.$state = $state;
 
         let Projects = this.API.service('projects');
+
+        ContextService.me((data) => {
+            this.me = data || {};
+        });
 
         Projects.getList()
             .then((response) => {

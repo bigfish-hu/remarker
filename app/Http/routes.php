@@ -22,6 +22,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::get('/feedbacks', 'Admin\FeedbackController@getFeedbacks');
         Route::get('/feedbacks/{feedback}', 'Admin\FeedbackController@getFeedback');
+        Route::put('/feedbacks/{feedback}', 'Admin\FeedbackController@updateFeedback');
         Route::delete('/feedbacks/{id}', 'Admin\FeedbackController@deleteFeedback');
 
         Route::group(['middleware' => 'admin'], function () {

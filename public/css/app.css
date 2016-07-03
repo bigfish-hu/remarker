@@ -21,12 +21,6 @@ md-toast[md-theme=warn] .md-toast-content {
   text-align: center; }
 
 
-
-
-
-
-
-
 .Footer {
   text-align: center;
   background-color: #F6F9FA;
@@ -283,6 +277,16 @@ table.table thead th.sorting:after,
 table.table thead th.sorting_asc:after,
 table.table thead th.sorting_desc:after {
   top: 8px; }
+
+th {
+  width: auto !important; }
+
+.remarker-ui-select {
+  margin: 0 !important; }
+
+textarea {
+  width: 100%;
+  min-height: 100px; }
 
 .Login-formContainer {
   margin-top: 80px;

@@ -17,5 +17,7 @@ angular.module('app.components', [
   'ui.router', 'angular-loading-bar',
   'restangular', 'satellizer',
   'ui.bootstrap', 'datatables',
-  'datatables.bootstrap'
+  'datatables.bootstrap', 'ui.select',
+  'ngSanitize', 'ngAnimate',
+  'toastr', 'chart.js'
 ]);

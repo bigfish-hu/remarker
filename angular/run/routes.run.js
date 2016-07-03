@@ -36,7 +36,9 @@ export function RoutesRun ($rootScope, $state, $auth, $timeout, ContextService) 
         ContextService.getContext()
           .then((response) => {
             response = response.plain();
-            $rootScope.me = response.data
+            $rootScope.me = response.data.user;
+            $rootScope.me.avatarUrl = `//placeholdit.imgix.net/~text?txtfont=monospace,bold&bg=DD4B39&txtclr=ffffff&txt=${response.data.user.name.charAt(0).toUpperCase()}&w=45&h=45&txtsize=16`;
+            $rootScope.me.role = response.data.user.is_superadmin === 1 ? 'Admin' : 'User';
           })
       }
     })

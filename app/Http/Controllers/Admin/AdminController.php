@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Project;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminController extends Controller
 {
@@ -19,7 +18,7 @@ class AdminController extends Controller
      */
     public function getUsers()
     {
-        $users = User::with('projects')->get();
+        $users = User::get();
         return response()->success(compact('users'));
     }
 
@@ -31,7 +30,10 @@ class AdminController extends Controller
      */
     public function getUser($id)
     {
-        $user = User::find($id);
+        $user = User::with(array('projects' => function ($query) {
+            $query->select('id', 'name');
+
+        }))->find($id);
 
         return response()->success(compact('user'));
     }
@@ -77,34 +79,26 @@ class AdminController extends Controller
      */
     public function updateUser(Request $request, $id)
     {
-        $userForm = array_dot(
-            app('request')->only(
-                'data.user.name',
-                'data.user.email',
-                'data.user.id',
-                'data.user.is_superadmin'
-            )
-        );
-
-        $userId = intval($userForm['data.user.id']);
-
-        $user = User::find($userId);
+        $user = User::find($id);
 
         $this->validate($request, [
             'data.user.id' => 'required|integer',
             'data.user.name' => 'required|min:3',
             'data.user.email' => 'required|email|unique:users,email,'.$user->id,
+            'data.user.projects.*.id' => 'required|integer'
         ]);
 
-        $userData = [
-            'name' => $userForm['data.user.name'],
-            'email' => $userForm['data.user.email'],
-            'is_superadmin' => $userForm['data.user.is_superadmin'],
-        ];
+        $request = $request->all();
+        $userData = $request['data']['user'];
 
-        $affectedRows = User::where('id', '=', $userId)->update($userData);
+        $projectIds = array_map(function ($project) {
+            return $project['id'];
+        }, $userData['projects']);
 
-        return response()->success(compact('affectedRows'));
+        $user->update($userData);
+        $user->projects()->sync($projectIds);
+
+        return response('', Response::HTTP_NO_CONTENT);
     }
 
     /**

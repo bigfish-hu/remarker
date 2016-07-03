@@ -1,0 +1,76 @@
+<section class="content-header">
+    <h1>Feedbacks </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="app.landing"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a ui-sref="app.feedbacklist">Feedbacks</a></li>
+        <li class="active">Edit Feedback</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Edit Feedback</h3>
+                </div>
+                <form class="form-horizontal" name="feedbackForm" ng-submit="vm.save()" novalidate>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td><b>URL:</b></td>
+                                <td>{{vm.feedback.data.feedback.url}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Platform:</b></td>
+                                <td>{{vm.feedback.data.feedback.platform}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Browser:</b></td>
+                                <td>{{vm.feedback.data.feedback.browser}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>User Agent:</b></td>
+                                <td>{{vm.feedback.data.feedback.user_agent}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Cookie Enabled:</b></td>
+                                <td>{{vm.feedback.data.feedback.cookie_enabled}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Reporter Name:</b></td>
+                                <td>{{vm.feedback.data.feedback.reporter_name}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Reporter Email:</b></td>
+                                <td>{{vm.feedback.data.feedback.reporter_email}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Description:</b></td>
+                                <td><textarea ng-model="vm.feedback.data.feedback.description">
+                                        {{vm.feedback.data.feedback.description}}
+                                    </textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Screen Resolution:</b></td>
+                                <td>{{vm.feedback.data.feedback.screen_resolution}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Screenshot:</b></td>
+                                <td>
+                                    <a target="_blank" href="{{vm.feedback.data.feedback.screenshot}}" class="thumbnail">
+                                        <img src="{{vm.feedback.data.feedback.screenshot}}">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+                        <a ui-sref="app.feedbacklist" class="btn btn-default"><i class="fa fa-angle-double-left"></i> Back</a>
+                        <button type="submit" class="btn btn-primary pull-right">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

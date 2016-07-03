@@ -1,18 +1,19 @@
 class UserEditController {
-  constructor ($stateParams, $state, API) {
+  constructor ($stateParams, $state, API, toastr) {
     'ngInject';
 
     this.$state = $state;
     this.formSubmitted = false;
-    this.alerts = [];
-
-    if ($stateParams.alerts) {
-      this.alerts.push($stateParams.alerts);
-    }
+    this.toastr = toastr;
 
     let userId = $stateParams.userId;
 
     let UserData = API.service('users');
+    let Projects = API.service('projects');
+
+    Projects.getList({fields: 'id,name'}).then((response) => {
+      this.projects = response.plain();
+    });
 
     UserData.one(userId).get()
       .then((response) => {
@@ -31,11 +32,10 @@ class UserEditController {
       let $state = this.$state;
       this.usereditdata.put()
         .then(() => {
-          let alert = { type: 'success', 'title': 'Success!', msg: 'User has been updated.' };
-          $state.go($state.current, { alerts: alert});
-        }, (response) => {
-          let alert = { type: 'error', 'title': 'Error!', msg: response.data.message };
-          $state.go($state.current, { alerts: alert});
+            this.toastr.success('The user has been updated!', 'Succes!');
+            $state.go($state.current);
+        }, () => {
+          $state.go($state.current);
         });
     } else {
       this.formSubmitted = true;

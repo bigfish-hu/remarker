@@ -41,6 +41,28 @@ export function RoutesConfig ($stateProvider, $urlRouterProvider) {
         }
       }
     })
+      .state('app.feedbacklist', {
+        url: '/feedback-list',
+        data: {
+          auth: true
+        },
+        views: {
+          'main@app': {
+            template: '<feedback-list></feedback-list>'
+          }
+        }
+      })
+      .state('app.feedbackedit', {
+        url: '/feedback-edit/:feedbackId',
+        data: {
+          auth: true
+        },
+        views: {
+          'main@app': {
+            template: '<feedback-edit></feedback-edit>'
+          }
+        }
+      })
     .state('app.userlist', {
       url: '/user-lists',
       data: {

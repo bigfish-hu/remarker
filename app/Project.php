@@ -39,6 +39,6 @@ class Project extends Model
      */
     public function feedbacks()
     {
-        return $this->hasMany('App\Feedback', 'project_id', 'id');
+        return $this->hasMany('App\Feedback');
     }
 }

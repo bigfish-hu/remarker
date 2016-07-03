@@ -65,3 +65,16 @@ table.table thead th.sorting_asc:after,
 table.table thead th.sorting_desc:after {
     top: 8px;
 }
+
+th {
+    width: auto !important;
+}
+
+.remarker-ui-select {
+    margin: 0 !important;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+}

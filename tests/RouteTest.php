@@ -14,7 +14,7 @@ class RouteTest extends TestCase
     {
         $response = $this->call('GET', '/');
 
-        $this->assertEquals(404, $response->status());
+        $this->assertEquals(200, $response->status());
     }
 
     /**

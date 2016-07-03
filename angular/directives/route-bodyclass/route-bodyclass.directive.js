@@ -1,5 +1,5 @@
-routeBodyClass.$inject = ['$rootScope'];
 function routeBodyClass ($rootScope) {
+  'ngInject';
   return {
     scope: {ngModel: '=ngModel'},
     link: function routeBodyClassLink (scope, elem) {
@@ -22,4 +22,4 @@ function routeBodyClass ($rootScope) {
   };
 }
 
-export const RouteBodyClassComponent = routeBodyClass;
+export const RouteBodyClassDirective = routeBodyClass;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Symfony\Component\HttpFoundation\Response;
 
 class FeedbackController extends Controller
@@ -14,9 +15,19 @@ class FeedbackController extends Controller
 
     public function getFeedbacks()
     {
-        $projects = Auth::user()->projects()->with('feedbacks')->get();
+        $params = Input::all();
 
-        return response()->success(compact('projects'));
+        $fields = ['*'];
+
+        if (array_key_exists('fields', $params) && $params['fields']) {
+            $fields = explode(',', $params['fields']);
+        }
+
+        Auth::user()->load(['projects.feedbacks' => function ($q) use (&$feedbacks, $fields) {
+            $feedbacks = $q->get($fields);
+        }]);
+//        ['id', 'title', 'project_id', 'created_at']
+        return response()->success(compact('feedbacks'));
     }
 
     public function deleteFeedback($id)
@@ -26,10 +37,28 @@ class FeedbackController extends Controller
         return response('', Response::HTTP_NO_CONTENT);
     }
 
+    public function getFeedback($id)
+    {
+        $feedback = Feedback::find($id);
+
+        return response()->success(compact('feedback'));
+    }
+
+    public function updateFeedback(Request $request, $id)
+    {
+        $feedback = Feedback::find($id);
+
+        $request = $request->all();
+        $description = $request['data']['feedback']['description'];
+
+        $feedback->update(['description' => $description]);
+
+        return response('', Response::HTTP_NO_CONTENT);
+    }
+
     /**
      * @param Request $request
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function createFeedback(Request $request)
     {

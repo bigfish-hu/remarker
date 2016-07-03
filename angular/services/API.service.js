@@ -25,7 +25,7 @@ export class APIService {
           }
         })
         .addResponseInterceptor(function (response, operation, what) {
-          if (operation === 'getList') {
+          if (operation === 'getList' && response.data[what]) {
             var newResponse = response.data[what];
             newResponse.errors = response.errors;
             return newResponse;

@@ -56,9 +56,9 @@
 
 	__webpack_require__(17);
 
-	__webpack_require__(27);
-
 	__webpack_require__(29);
+
+	__webpack_require__(31);
 
 /***/ },
 /* 1 */
@@ -73,7 +73,7 @@
 	angular.module('app.filters', []);
 	angular.module('app.services', []);
 	angular.module('app.config', []);
-	angular.module('app.components', ['ui.router', 'angular-loading-bar', 'restangular', 'satellizer', 'ui.bootstrap', 'datatables', 'datatables.bootstrap']);
+	angular.module('app.components', ['ui.router', 'angular-loading-bar', 'restangular', 'satellizer', 'ui.bootstrap', 'datatables', 'datatables.bootstrap', 'ui.select', 'ngSanitize', 'ngAnimate', 'toastr', 'chart.js']);
 
 /***/ },
 /* 2 */
@@ -134,7 +134,9 @@
 	      if (toState.name !== 'login' && !$rootScope.me) {
 	        ContextService.getContext().then(function (response) {
 	          response = response.plain();
-	          $rootScope.me = response.data;
+	          $rootScope.me = response.data.user;
+	          $rootScope.me.avatarUrl = '//placeholdit.imgix.net/~text?txtfont=monospace,bold&bg=DD4B39&txtclr=ffffff&txt=' + response.data.user.name.charAt(0).toUpperCase() + '&w=45&h=45&txtsize=16';
+	          $rootScope.me.role = response.data.user.is_superadmin === 1 ? 'Admin' : 'User';
 	        });
 	      }
 	    });
@@ -210,6 +212,26 @@
 	    views: {
 	      'main@app': {
 	        templateUrl: getView('landing')
+	      }
+	    }
+	  }).state('app.feedbacklist', {
+	    url: '/feedback-list',
+	    data: {
+	      auth: true
+	    },
+	    views: {
+	      'main@app': {
+	        template: '<feedback-list></feedback-list>'
+	      }
+	    }
+	  }).state('app.feedbackedit', {
+	    url: '/feedback-edit/:feedbackId',
+	    data: {
+	      auth: true
+	    },
+	    views: {
+	      'main@app': {
+	        template: '<feedback-edit></feedback-edit>'
 	      }
 	    }
 	  }).state('app.userlist', {
@@ -364,6 +386,14 @@
 	                return _response;
 	            },
 	            'responseError': function responseError(response) {
+	                var toastr = $injector.get('toastr');
+
+	                toastr.error(response.status + ' ' + response.statusText, response.data);
+
+	                if (response.headers('Authorization')) {
+	                    localStorage.setItem('satellizer_token', response.headers('Authorization').replace('Bearer ', ''));
+	                }
+
 	                var $state = $injector.get('$state'),
 	                    deferred = $q.defer();
 
@@ -584,7 +614,11 @@
 
 	var _projectList = __webpack_require__(26);
 
-	angular.module('app.components').component('userLists', _userLists.UserListsComponent).component('userEdit', _userEdit.UserEditComponent).component('userAdd', _userAdd.UserAddComponent).component('dashboard', _dashboard.DashboardComponent).component('navSidebar', _navSidebar.NavSidebarComponent).component('navHeader', _navHeader.NavHeaderComponent).component('loginLoader', _loginLoader.LoginLoaderComponent).component('loginForm', _loginForm.LoginFormComponent).component('projectList', _projectList.ProjectListComponent);
+	var _feedbackList = __webpack_require__(27);
+
+	var _feedbackEdit = __webpack_require__(28);
+
+	angular.module('app.components').component('userLists', _userLists.UserListsComponent).component('userEdit', _userEdit.UserEditComponent).component('userAdd', _userAdd.UserAddComponent).component('dashboard', _dashboard.DashboardComponent).component('navSidebar', _navSidebar.NavSidebarComponent).component('navHeader', _navHeader.NavHeaderComponent).component('loginLoader', _loginLoader.LoginLoaderComponent).component('loginForm', _loginForm.LoginFormComponent).component('feedbackList', _feedbackList.FeedbackListComponent).component('feedbackEdit', _feedbackEdit.FeedbackEditComponent).component('projectList', _projectList.ProjectListComponent);
 
 /***/ },
 /* 18 */
@@ -697,8 +731,8 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var UserEditController = function () {
-	  UserEditController.$inject = ["$stateParams", "$state", "API"];
-	  function UserEditController($stateParams, $state, API) {
+	  UserEditController.$inject = ["$stateParams", "$state", "API", "toastr"];
+	  function UserEditController($stateParams, $state, API, toastr) {
 	    'ngInject';
 
 	    var _this = this;
@@ -707,15 +741,16 @@
 
 	    this.$state = $state;
 	    this.formSubmitted = false;
-	    this.alerts = [];
-
-	    if ($stateParams.alerts) {
-	      this.alerts.push($stateParams.alerts);
-	    }
+	    this.toastr = toastr;
 
 	    var userId = $stateParams.userId;
 
 	    var UserData = API.service('users');
+	    var Projects = API.service('projects');
+
+	    Projects.getList({ fields: 'id,name' }).then(function (response) {
+	      _this.projects = response.plain();
+	    });
 
 	    UserData.one(userId).get().then(function (response) {
 	      _this.usereditdata = API.copy(response);
@@ -737,11 +772,10 @@
 	        (function () {
 	          var $state = _this2.$state;
 	          _this2.usereditdata.put().then(function () {
-	            var alert = { type: 'success', 'title': 'Success!', msg: 'User has been updated.' };
-	            $state.go($state.current, { alerts: alert });
-	          }, function (response) {
-	            var alert = { type: 'error', 'title': 'Error!', msg: response.data.message };
-	            $state.go($state.current, { alerts: alert });
+	            _this2.toastr.success('The user has been updated!', 'Succes!');
+	            $state.go($state.current);
+	          }, function () {
+	            $state.go($state.current);
 	          });
 	        })();
 	      } else {
@@ -842,13 +876,43 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var DashboardController = function DashboardController() {
-	  'ngInject';
+	var DashboardController = function () {
+	  DashboardController.$inject = ["$scope"];
+	  function DashboardController($scope) {
+	    'ngInject';
 
-	  _classCallCheck(this, DashboardController);
-	};
+	    _classCallCheck(this, DashboardController);
+	  }
+
+	  _createClass(DashboardController, [{
+	    key: '$onInit',
+	    value: function $onInit() {
+	      this.feedbackBarChartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+	      this.feedbackBarChartData = [[28, 48, 40, 19, 86, 27, 90]];
+	      this.feedbackBarChartColours = [{
+	        fillColor: '#D2D6DE',
+	        strokeColor: '#D2D6DE',
+	        pointColor: 'rgba(148,159,177,1)',
+	        pointStrokeColor: '#fff',
+	        pointHighlightFill: '#fff',
+	        pointHighlightStroke: 'rgba(148,159,177,0.8)'
+	      }, {
+	        fillColor: '#00A65A',
+	        strokeColor: '#00A65A',
+	        pointColor: '#2980b9',
+	        pointStrokeColor: '#fff',
+	        pointHighlightFill: '#fff',
+	        pointHighlightStroke: 'rgba(77,83,96,1)'
+	      }];
+	    }
+	  }]);
+
+	  return DashboardController;
+	}();
 
 	var DashboardComponent = exports.DashboardComponent = {
 	  templateUrl: './views/app/components/dashboard/dashboard.component.html',
@@ -876,16 +940,12 @@
 	  function NavSidebarController(ContextService) {
 	    'ngInject';
 
+	    var _this = this;
+
 	    _classCallCheck(this, NavSidebarController);
 
-	    var navSideBar = this;
-
 	    ContextService.me(function (data) {
-	      if (data && data.user) {
-	        navSideBar.userData = data.user;
-	        navSideBar.avatarUrl = '//placeholdit.imgix.net/~text?txtfont=monospace,bold&bg=DD4B39&txtclr=ffffff&txt=' + data.user.name.charAt(0).toUpperCase() + '&w=45&h=45&txtsize=16';
-	        navSideBar.role = data.user.is_superadmin === 1 ? 'Admin' : 'User';
-	      }
+	      _this.me = data || {};
 	    });
 	  }
 
@@ -919,17 +979,10 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var NavHeaderController = function () {
-	  NavHeaderController.$inject = ["$rootScope", "ContextService"];
-	  function NavHeaderController($rootScope, ContextService) {
+	  function NavHeaderController() {
 	    'ngInject';
 
 	    _classCallCheck(this, NavHeaderController);
-
-	    var navHeader = this;
-
-	    ContextService.me(function (data) {
-	      navHeader.userData = data;
-	    });
 	  }
 
 	  _createClass(NavHeaderController, [{
@@ -1077,8 +1130,8 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var ProjectListController = function () {
-	    ProjectListController.$inject = ["$scope", "$state", "$compile", "DTOptionsBuilder", "DTColumnBuilder", "API"];
-	    function ProjectListController($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API) {
+	    ProjectListController.$inject = ["$scope", "$state", "$compile", "DTOptionsBuilder", "DTColumnBuilder", "API", "ContextService"];
+	    function ProjectListController($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API, ContextService) {
 	        'ngInject';
 
 	        var _this = this;
@@ -1089,6 +1142,10 @@
 	        this.$state = $state;
 
 	        var Projects = this.API.service('projects');
+
+	        ContextService.me(function (data) {
+	            _this.me = data || {};
+	        });
 
 	        Projects.getList().then(function (response) {
 	            var dataSet = response.plain();
@@ -1162,13 +1219,155 @@
 
 /***/ },
 /* 27 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
-	var _routeBodyclass = __webpack_require__(28);
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 
-	angular.module('app.components').directive('routeBodyclass', _routeBodyclass.RouteBodyClassComponent);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var FeedbackListController = function () {
+	    FeedbackListController.$inject = ["$scope", "$state", "$compile", "DTOptionsBuilder", "DTColumnBuilder", "API"];
+	    function FeedbackListController($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API) {
+	        'ngInject';
+
+	        var _this = this;
+
+	        _classCallCheck(this, FeedbackListController);
+
+	        this.API = API;
+	        this.$state = $state;
+	        this.dtInstance = null;
+
+	        var Feedbacks = this.API.service('feedbacks');
+	        var Projects = this.API.service('projects');
+
+	        Projects.getList({ fields: 'id,name' }).then(function (response) {
+	            _this.projects = response.plain();
+	        });
+
+	        Feedbacks.getList({ fields: 'id,title,project_id,created_at' }).then(function (response) {
+	            var dataSet = response.plain();
+
+	            _this.dtOptions = DTOptionsBuilder.newOptions().withOption('data', dataSet).withOption('createdRow', createdRow).withOption('responsive', true).withOption('rowCallback', rowCallback).withBootstrap();
+
+	            _this.dtColumns = [DTColumnBuilder.newColumn('id').withTitle('ID').withClass('numberSort'), DTColumnBuilder.newColumn('title').withTitle('Title').withClass('letterSort'), DTColumnBuilder.newColumn('project_id').withTitle('Project').renderWith(projectNameHtml).withClass('letterSort'), DTColumnBuilder.newColumn('created_at').withTitle('Created').withClass('numberSort'), DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().renderWith(actionsHtml)];
+
+	            _this.displayTable = true;
+	        });
+
+	        this.dtIntanceCallback = function (instance) {
+	            _this.dtInstance = instance;
+	            _this.dtInstance.reloadData();
+	        };
+
+	        var rowCallback = function rowCallback(nRow, aData) {
+	            angular.element('td', nRow).unbind('click');
+	            angular.element('td', nRow).bind('click', function (event) {
+	                $scope.$apply(function () {
+	                    rowClickHandler(aData, event);
+	                });
+	            });
+	            return nRow;
+	        };
+
+	        var subRow = function subRow(feedback) {
+	            return '\n                    <table class="table table-bordered">\n                        <tr>\n                            <td><b>URL:</b></td>\n                            <td>' + feedback.data.feedback.url + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Platform:</b></td>\n                            <td>' + feedback.data.feedback.platform + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Browser:</b></td>\n                            <td>' + feedback.data.feedback.browser + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>User Agent:</b></td>\n                            <td>' + feedback.data.feedback.user_agent + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Cookie Enabled:</b></td>\n                            <td>' + feedback.data.feedback.cookie_enabled + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Reporter Name:</b></td>\n                            <td>' + feedback.data.feedback.reporter_name + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Reporter Email:</b></td>\n                            <td>' + feedback.data.feedback.reporter_email + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Description:</b></td>\n                            <td>' + feedback.data.feedback.description + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Screen Resolution:</b></td>\n                            <td>' + feedback.data.feedback.screen_resolution + '</td>\n                        </tr>\n                        <tr>\n                            <td><b>Screenshot:</b></td>\n                            <td>\n                                <a target="_blank" href="' + feedback.data.feedback.screenshot + '" class="thumbnail">\n                                    <img src="' + feedback.data.feedback.screenshot + '">\n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                ';
+	        };
+
+	        var rowClickHandler = function rowClickHandler(data, event) {
+	            var tr = angular.element(event.currentTarget).parent(),
+	                table = _this.dtInstance.DataTable,
+	                row = table.row(tr);
+
+	            if (row.child.isShown()) {
+	                row.child.hide();
+	                tr.removeClass('shown');
+	            } else {
+	                _this.API.service('feedbacks').one(data.id).get().then(function (response) {
+	                    _this.feedback = response;
+	                    _this.feedback.id = response.data.feedback.id;
+	                    row.child($compile(subRow(response))($scope)).show();
+	                    tr.addClass('shown');
+	                });
+	            }
+	        };
+
+	        var createdRow = function createdRow(row) {
+	            $compile(angular.element(row).contents())($scope);
+	        };
+
+	        var projectNameHtml = function projectNameHtml(data) {
+	            return _this.projects[data - 1].name;
+	        };
+
+	        var actionsHtml = function actionsHtml(data) {
+	            return '\n                <a class="btn btn-xs btn-warning" ui-sref="app.feedbackedit({feedbackId: ' + data.id + '})">\n                    <i class="fa fa-edit"></i>\n                </a>\n                &nbsp\n                <button class="btn btn-xs btn-danger" ng-click="vm.deleteFeedback(' + data.id + ')">\n                    <i class="fa fa-trash-o"></i>\n                </button>';
+	        };
+	    }
+
+	    _createClass(FeedbackListController, [{
+	        key: 'saveFeedback',
+	        value: function saveFeedback(feedback) {
+	            var _this2 = this;
+
+	            var $state = this.$state;
+	            feedback.put().then(function () {
+	                _this2.toastr.success('The feedback has been updated!', 'Succes!');
+	                $state.go($state.current);
+	            }, function () {
+	                $state.go($state.current);
+	            });
+	        }
+	    }, {
+	        key: 'deleteFeedback',
+	        value: function deleteFeedback(feedbackId) {
+	            var API = this.API;
+	            var $state = this.$state;
+
+	            swal({
+	                title: 'Are you sure?',
+	                text: 'You will not be able to recover this data!',
+	                type: 'warning',
+	                showCancelButton: true,
+	                confirmButtonColor: '#DD6B55',
+	                confirmButtonText: 'Yes, delete it!',
+	                closeOnConfirm: false,
+	                showLoaderOnConfirm: true,
+	                html: false
+	            }, function () {
+	                API.service('feedbacks').one(feedbackId).remove().then(function () {
+	                    swal({
+	                        title: 'Deleted!',
+	                        text: 'The feedback has been deleted.',
+	                        type: 'success',
+	                        confirmButtonText: 'OK',
+	                        closeOnConfirm: true
+	                    }, function () {
+	                        $state.reload();
+	                    });
+	                });
+	            });
+	        }
+	    }, {
+	        key: '$onInit',
+	        value: function $onInit() {}
+	    }]);
+
+	    return FeedbackListController;
+	}();
+
+	var FeedbackListComponent = exports.FeedbackListComponent = {
+	    templateUrl: './views/app/components/feedback-list/feedback-list.component.html',
+	    controller: FeedbackListController,
+	    controllerAs: 'vm',
+	    bindings: {}
+	};
 
 /***/ },
 /* 28 */
@@ -1177,10 +1376,84 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var FeedbackEditController = function () {
+	    FeedbackEditController.$inject = ["$stateParams", "$state", "API", "toastr"];
+	    function FeedbackEditController($stateParams, $state, API, toastr) {
+	        'ngInject';
+
+	        var _this = this;
+
+	        _classCallCheck(this, FeedbackEditController);
+
+	        this.$state = $state;
+	        this.toastr = toastr;
+
+	        var feedbackId = $stateParams.feedbackId;
+
+	        API.service('feedbacks').one(feedbackId).get().then(function (response) {
+	            _this.feedback = response;
+	            _this.feedback.id = feedbackId;
+	        });
+	    }
+
+	    _createClass(FeedbackEditController, [{
+	        key: 'save',
+	        value: function save() {
+	            var _this2 = this;
+
+	            var $state = this.$state;
+	            this.feedback.put().then(function () {
+	                _this2.toastr.success('The feedback has been updated!', 'Succes!');
+	                $state.go($state.current);
+	            }, function () {
+	                $state.go($state.current);
+	            });
+	        }
+	    }, {
+	        key: '$onInit',
+	        value: function $onInit() {}
+	    }]);
+
+	    return FeedbackEditController;
+	}();
+
+	var FeedbackEditComponent = exports.FeedbackEditComponent = {
+	    templateUrl: './views/app/components/feedback-edit/feedback-edit.component.html',
+	    controller: FeedbackEditController,
+	    controllerAs: 'vm',
+	    bindings: {}
+	};
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _routeBodyclass = __webpack_require__(30);
+
+	angular.module('app.components').directive('routeBodyclass', _routeBodyclass.RouteBodyClassDirective);
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	routeBodyClass.$inject = ["$rootScope"];
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	routeBodyClass.$inject = ['$rootScope'];
 	function routeBodyClass($rootScope) {
+	  'ngInject';
+
 	  return {
 	    scope: { ngModel: '=ngModel' },
 	    link: function routeBodyClassLink(scope, elem) {
@@ -1204,22 +1477,22 @@
 	  };
 	}
 
-	var RouteBodyClassComponent = exports.RouteBodyClassComponent = routeBodyClass;
+	var RouteBodyClassDirective = exports.RouteBodyClassDirective = routeBodyClass;
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _context = __webpack_require__(30);
+	var _context = __webpack_require__(32);
 
-	var _API = __webpack_require__(31);
+	var _API = __webpack_require__(33);
 
 	angular.module('app.services').service('ContextService', _context.ContextService).service('API', _API.APIService);
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1265,7 +1538,7 @@
 	}();
 
 /***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1300,7 +1573,7 @@
 	        headers.Authorization = 'Bearer ' + token;
 	      }
 	    }).addResponseInterceptor(function (response, operation, what) {
-	      if (operation === 'getList') {
+	      if (operation === 'getList' && response.data[what]) {
 	        var newResponse = response.data[what];
 	        newResponse.errors = response.errors;
 	        return newResponse;
