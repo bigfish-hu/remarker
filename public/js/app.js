@@ -881,19 +881,44 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var DashboardController = function () {
-	  DashboardController.$inject = ["$scope"];
-	  function DashboardController($scope) {
+	  DashboardController.$inject = ["$scope", "API"];
+	  function DashboardController($scope, API) {
 	    'ngInject';
 
-	    _classCallCheck(this, DashboardController);
-	  }
+	    var _this = this;
 
-	  _createClass(DashboardController, [{
-	    key: '$onInit',
-	    value: function $onInit() {
-	      this.feedbackBarChartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-	      this.feedbackBarChartData = [[28, 48, 40, 19, 86, 27, 90]];
-	      this.feedbackBarChartColours = [{
+	    _classCallCheck(this, DashboardController);
+
+	    this.API = API;
+	    this.counts = {};
+
+	    var Feedbacks = this.API.service('feedbacks');
+
+	    Feedbacks.getList({ fields: 'project_id,created_at' }).then(function (response) {
+	      var dataSet = response.plain();
+
+	      var dates = dataSet.map(function (item) {
+	        return item.created_at.split(' ')[0];
+	      });
+
+	      for (var i = 0; i < dates.length; i++) {
+	        var num = dates[i];
+	        _this.counts[num] = _this.counts[num] ? _this.counts[num] + 1 : 1;
+	      }
+
+	      console.log(_this.counts);
+	      //this.feedbackBarChartLabels = Object.keys(counts);
+	      _this.feedbackBarChartLabels = [];
+	      _this.feedbackBarChartData = [];
+	      angular.forEach(_this.counts, function (value, key) {
+	        _this.feedbackBarChartLabels.push(key);
+	        _this.feedbackBarChartData.push(value);
+	      });
+
+	      _this.feedbackBarChartData = [_this.feedbackBarChartData];
+
+	      console.log(_this.feedbackBarChartLabels, _this.feedbackBarChartData);
+	      _this.feedbackBarChartColours = [{
 	        fillColor: '#D2D6DE',
 	        strokeColor: '#D2D6DE',
 	        pointColor: 'rgba(148,159,177,1)',
@@ -908,7 +933,12 @@
 	        pointHighlightFill: '#fff',
 	        pointHighlightStroke: 'rgba(77,83,96,1)'
 	      }];
-	    }
+	    });
+	  }
+
+	  _createClass(DashboardController, [{
+	    key: '$onInit',
+	    value: function $onInit() {}
 	  }]);
 
 	  return DashboardController;
