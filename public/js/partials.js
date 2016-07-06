@@ -7,11 +7,72 @@ try {
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('./views/app/components/dashboard/dashboard.component.html',
     '<section class="content">\n' +
+    '    <!-- statistic icons -->\n' +
+    '    <!--<div class="row">\n' +
+    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
+    '            <div class="info-box">\n' +
+    '                <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>\n' +
+    '\n' +
+    '                <div class="info-box-content">\n' +
+    '                    <span class="info-box-text">Feedbacks</span>\n' +
+    '                    <span class="info-box-number">90<small>%</small></span>\n' +
+    '                </div>\n' +
+    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
+    '            </div>\n' +
+    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
+    '        </div>\n' +
+    '        &lt;!&ndash; /.col &ndash;&gt;\n' +
+    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
+    '            <div class="info-box">\n' +
+    '                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>\n' +
+    '\n' +
+    '                <div class="info-box-content">\n' +
+    '                    <span class="info-box-text">Projects</span>\n' +
+    '                    <span class="info-box-number">41,410</span>\n' +
+    '                </div>\n' +
+    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
+    '            </div>\n' +
+    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
+    '        </div>\n' +
+    '        &lt;!&ndash; /.col &ndash;&gt;\n' +
+    '\n' +
+    '        &lt;!&ndash; fix for small devices only &ndash;&gt;\n' +
+    '        <div class="clearfix visible-sm-block"></div>\n' +
+    '\n' +
+    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
+    '            <div class="info-box">\n' +
+    '                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>\n' +
+    '\n' +
+    '                <div class="info-box-content">\n' +
+    '                    <span class="info-box-text">Sales</span>\n' +
+    '                    <span class="info-box-number">760</span>\n' +
+    '                </div>\n' +
+    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
+    '            </div>\n' +
+    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
+    '        </div>\n' +
+    '        &lt;!&ndash; /.col &ndash;&gt;\n' +
+    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
+    '            <div class="info-box">\n' +
+    '                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>\n' +
+    '\n' +
+    '                <div class="info-box-content">\n' +
+    '                    <span class="info-box-text">New Members</span>\n' +
+    '                    <span class="info-box-number">2,000</span>\n' +
+    '                </div>\n' +
+    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
+    '            </div>\n' +
+    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
+    '        </div>\n' +
+    '        &lt;!&ndash; /.row &ndash;&gt;\n' +
+    '    </div>-->\n' +
+    '\n' +
+    '    <!-- charts -->\n' +
     '    <div class="row">\n' +
     '        <div class="col-md-6">\n' +
     '            <div class="box box-primary">\n' +
     '                <div class="box-header with-border">\n' +
-    '                    <h3 class="box-title">Feedbacks</h3>\n' +
+    '                    <h3 class="box-title">Feedbacks by time</h3>\n' +
     '                    <div class="box-tools pull-right">\n' +
     '                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>\n' +
     '                    </div>\n' +
@@ -21,13 +82,12 @@ module.run(['$templateCache', function($templateCache) {
     '                    <div class="row">\n' +
     '                        <div class="col-md-12">\n' +
     '                            <div class="chart">\n' +
-    '                                <!-- Sales Chart Canvas -->\n' +
     '                                <canvas id="area"\n' +
     '                                        class="chart chart-bar"\n' +
-    '                                        chart-data="vm.feedbackBarChartData"\n' +
-    '                                        chart-labels="vm.feedbackBarChartLabels"\n' +
+    '                                        chart-data="vm.feedbackTimeBarChartData"\n' +
+    '                                        chart-labels="vm.feedbackTimeBarChartLabels"\n' +
     '                                        chart-legend="false"\n' +
-    '                                        chart-colours="vm.feedbackBarChartColours"\n' +
+    '                                        chart-colours="vm.feedbackTimeBarChartColours"\n' +
     '                                        style="height: 250px;">\n' +
     '                                </canvas>\n' +
     '                            </div>\n' +
@@ -41,6 +101,38 @@ module.run(['$templateCache', function($templateCache) {
     '            <!-- /.box -->\n' +
     '        </div>\n' +
     '\n' +
+    '        <div class="col-md-6">\n' +
+    '            <div class="box box-primary">\n' +
+    '                <div class="box-header with-border">\n' +
+    '                    <h3 class="box-title">Feedbacks by project</h3>\n' +
+    '\n' +
+    '                    <div class="box-tools pull-right">\n' +
+    '                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>\n' +
+    '                    </div>\n' +
+    '                </div>\n' +
+    '                <!-- /.box-header -->\n' +
+    '                <div class="box-body">\n' +
+    '                    <div class="row">\n' +
+    '                        <div class="col-md-8">\n' +
+    '                            <div class="chart-responsive">\n' +
+    '                                <canvas id="doughnut"\n' +
+    '                                        class="chart chart-doughnut"\n' +
+    '                                        chart-data="vm.feedbackProjectBarChartData"\n' +
+    '                                        chart-labels="vm.feedbackProjectBarChartLabels"\n' +
+    '                                        chart-options="options"\n' +
+    '                                        style="height: 250px;">\n' +
+    '                                </canvas>\n' +
+    '                            </div>\n' +
+    '                        </div>\n' +
+    '\n' +
+    '                        <!-- /.col -->\n' +
+    '                    </div>\n' +
+    '                    <!-- /.row -->\n' +
+    '                </div>\n' +
+    '                <!-- /.box-body -->\n' +
+    '            </div>\n' +
+    '            <!-- /.box -->\n' +
+    '        </div>\n' +
     '    </div>\n' +
     '</section>');
 }]);

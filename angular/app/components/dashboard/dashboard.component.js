@@ -1,62 +1,69 @@
 class DashboardController {
   constructor ($scope, API) {
-    'ngInject';
-    this.API = API;
-    this.counts = {};
+      'ngInject';
+      this.API = API;
 
-    let Feedbacks = this.API.service('feedbacks');
-
-    Feedbacks.getList({fields: 'project_id,created_at'})
-        .then((response) => {
-          let dataSet = response.plain();
-
-          let dates = dataSet.map(function (item) {
-            return item.created_at.split(' ')[0];
-          });
-
-          for(let i = 0; i< dates.length; i++) {
-            let num = dates[i];
-            this.counts[num] = this.counts[num] ? this.counts[num]+1 : 1;
-          }
-
-          console.log(this.counts);
-          //this.feedbackBarChartLabels = Object.keys(counts);
-          this.feedbackBarChartLabels = [];
-          this.feedbackBarChartData = [];
-          angular.forEach(this.counts, (value, key) => {
-            this.feedbackBarChartLabels.push(key);
-            this.feedbackBarChartData.push(value);
-          });
-
-          this.feedbackBarChartData = [this.feedbackBarChartData];
-
-          console.log(this.feedbackBarChartLabels, this.feedbackBarChartData);
-          this.feedbackBarChartColours = [
-            {
-              fillColor: '#D2D6DE',
-              strokeColor: '#D2D6DE',
-              pointColor: 'rgba(148,159,177,1)',
-              pointStrokeColor: '#fff',
-              pointHighlightFill: '#fff',
-              pointHighlightStroke: 'rgba(148,159,177,0.8)'
-            },
-            {
-              fillColor: '#00A65A',
-              strokeColor: '#00A65A',
-              pointColor: '#2980b9',
+      this.options = { legend: { display: true } };
+      this.feedbackTimeBarChartColours = [
+          {
+              fillColor: '#3c8dbc',
+              strokeColor: '#3c8dbc',
+              pointColor: '#3c8dbc',
               pointStrokeColor: '#fff',
               pointHighlightFill: '#fff',
               pointHighlightStroke: 'rgba(77,83,96,1)'
-            }
-          ];
+          }
+      ];
+
+      let Feedbacks = this.API.service('feedbacks');
+
+      Feedbacks.getList({fields: 'created_at'})
+          .then((response) => {
+              let dataSet = response.plain();
+
+              let dates = dataSet.map(function (item) {
+                  return item.created_at.split(' ')[0];
+              });
+              let feedbacksByTimeGenerator = getChartData(dates);
+              this.feedbackTimeBarChartLabels = feedbacksByTimeGenerator.next().value;
+              this.feedbackTimeBarChartData = [feedbacksByTimeGenerator.next().value];
 
 
-        });
+              let projects = dataSet.map(function (item) {
+                  return item.project_name;
+              });
+              let feedbacksByProjectGenerator = getChartData(projects);
+              this.feedbackProjectBarChartLabels = feedbacksByProjectGenerator.next().value;
+              this.feedbackProjectBarChartData = feedbacksByProjectGenerator.next().value;
+
+              $scope.ngGridFIx = function() {
+                  window.dispatchEvent(new Event('resize'));
+              }
+          });
+
+      function* getChartData(dataSet) {
+
+          let counts = {},
+              labels = [],
+              data = [];
+
+          for(let i = 0; i< dataSet.length; i++) {
+              let num = dataSet[i];
+              counts[num] = counts[num] ? counts[num]+1 : 1;
+          }
+
+          angular.forEach(counts, (value, key) => {
+              labels.push(key);
+              data.push(value);
+          });
+
+          yield labels;
+          yield data;
+
+      }
 
   }
-    $onInit () {
 
-    }
 }
 
 export const DashboardComponent = {

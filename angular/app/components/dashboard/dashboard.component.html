@@ -1,9 +1,70 @@
 <section class="content">
+    <!-- statistic icons -->
+    <!--<div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Feedbacks</span>
+                    <span class="info-box-number">90<small>%</small></span>
+                </div>
+                &lt;!&ndash; /.info-box-content &ndash;&gt;
+            </div>
+            &lt;!&ndash; /.info-box &ndash;&gt;
+        </div>
+        &lt;!&ndash; /.col &ndash;&gt;
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Projects</span>
+                    <span class="info-box-number">41,410</span>
+                </div>
+                &lt;!&ndash; /.info-box-content &ndash;&gt;
+            </div>
+            &lt;!&ndash; /.info-box &ndash;&gt;
+        </div>
+        &lt;!&ndash; /.col &ndash;&gt;
+
+        &lt;!&ndash; fix for small devices only &ndash;&gt;
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Sales</span>
+                    <span class="info-box-number">760</span>
+                </div>
+                &lt;!&ndash; /.info-box-content &ndash;&gt;
+            </div>
+            &lt;!&ndash; /.info-box &ndash;&gt;
+        </div>
+        &lt;!&ndash; /.col &ndash;&gt;
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">New Members</span>
+                    <span class="info-box-number">2,000</span>
+                </div>
+                &lt;!&ndash; /.info-box-content &ndash;&gt;
+            </div>
+            &lt;!&ndash; /.info-box &ndash;&gt;
+        </div>
+        &lt;!&ndash; /.row &ndash;&gt;
+    </div>-->
+
+    <!-- charts -->
     <div class="row">
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Feedbacks</h3>
+                    <h3 class="box-title">Feedbacks by time</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
@@ -13,13 +74,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="chart">
-                                <!-- Sales Chart Canvas -->
                                 <canvas id="area"
                                         class="chart chart-bar"
-                                        chart-data="vm.feedbackBarChartData"
-                                        chart-labels="vm.feedbackBarChartLabels"
+                                        chart-data="vm.feedbackTimeBarChartData"
+                                        chart-labels="vm.feedbackTimeBarChartLabels"
                                         chart-legend="false"
-                                        chart-colours="vm.feedbackBarChartColours"
+                                        chart-colours="vm.feedbackTimeBarChartColours"
                                         style="height: 250px;">
                                 </canvas>
                             </div>
@@ -33,5 +93,37 @@
             <!-- /.box -->
         </div>
 
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Feedbacks by project</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="chart-responsive">
+                                <canvas id="doughnut"
+                                        class="chart chart-doughnut"
+                                        chart-data="vm.feedbackProjectBarChartData"
+                                        chart-labels="vm.feedbackProjectBarChartLabels"
+                                        chart-options="options"
+                                        style="height: 250px;">
+                                </canvas>
+                            </div>
+                        </div>
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
     </div>
 </section>

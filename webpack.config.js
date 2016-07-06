@@ -11,6 +11,7 @@ module.exports = {
       loader: 'babel', // 'babel-loader' is also a legal name to reference
       query: {
         presets: ['es2015'],
+        plugins: ['transform-runtime'],
         cacheDirectory: true
       }
     }]

@@ -23,10 +23,16 @@ class FeedbackController extends Controller
             $fields = explode(',', $params['fields']);
         }
 
-        Auth::user()->load(['projects.feedbacks' => function ($q) use (&$feedbacks, $fields) {
-            $feedbacks = $q->get($fields);
+        $allFields = array_map(function ($item) {
+            return 'feedbacks.'.$item;
+        }, $fields);
+
+        $allFields[] = 'projects.name as project_name';
+
+        Auth::user()->load(['projects.feedbacks' => function ($q) use (&$feedbacks, $allFields) {
+            $feedbacks = $q->join('projects', 'feedbacks.project_id', '=', 'projects.id')->select($allFields)->get();
         }]);
-//        ['id', 'title', 'project_id', 'created_at']
+
         return response()->success(compact('feedbacks'));
     }
 
