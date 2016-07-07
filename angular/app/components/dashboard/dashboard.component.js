@@ -1,9 +1,9 @@
 class DashboardController {
-  constructor ($scope, API) {
+  constructor ($scope, API, $timeout) {
       'ngInject';
       this.API = API;
 
-      this.options = { legend: { display: true } };
+      $scope.options = { legend: { display: true } };
       this.feedbackTimeBarChartColours = [
           {
               fillColor: '#3c8dbc',
@@ -35,10 +35,10 @@ class DashboardController {
               let feedbacksByProjectGenerator = getChartData(projects);
               this.feedbackProjectBarChartLabels = feedbacksByProjectGenerator.next().value;
               this.feedbackProjectBarChartData = feedbacksByProjectGenerator.next().value;
-
-              $scope.ngGridFIx = function() {
+          }).then(function(){
+              $timeout(function(){
                   window.dispatchEvent(new Event('resize'));
-              }
+              }, 300);
           });
 
       function* getChartData(dataSet) {

@@ -27,7 +27,7 @@ class ProjectController extends Controller
 
         return response()->success(compact('projects'));
     }
-    
+
     public function getProjectsFromIssueTrackers(IssueTrackerApiConnectionService $apiService)
     {
         try {

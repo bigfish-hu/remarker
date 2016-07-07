@@ -61,9 +61,6 @@ Elixir.extend('bower', function (jsOutputFile, jsOutputFolder, cssOutputFile, cs
             './dist/css/bootstrap.min.css'
           ]
         },
-        'angular-chart.js': {
-          'ignore': true
-        },
         'angular-datatables': {
           'ignore': true
         },

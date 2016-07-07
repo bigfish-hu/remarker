@@ -77,28 +77,19 @@ module.run(['$templateCache', function($templateCache) {
     '                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>\n' +
     '                    </div>\n' +
     '                </div>\n' +
-    '                <!-- /.box-header -->\n' +
     '                <div class="box-body">\n' +
-    '                    <div class="row">\n' +
-    '                        <div class="col-md-12">\n' +
-    '                            <div class="chart">\n' +
-    '                                <canvas id="area"\n' +
-    '                                        class="chart chart-bar"\n' +
-    '                                        chart-data="vm.feedbackTimeBarChartData"\n' +
-    '                                        chart-labels="vm.feedbackTimeBarChartLabels"\n' +
-    '                                        chart-legend="false"\n' +
-    '                                        chart-colours="vm.feedbackTimeBarChartColours"\n' +
-    '                                        style="height: 250px;">\n' +
-    '                                </canvas>\n' +
-    '                            </div>\n' +
-    '                            <!-- /.chart-responsive -->\n' +
-    '                        </div>\n' +
+    '                    <div class="chart-responsive">\n' +
+    '                        <canvas id="bar"\n' +
+    '                                class="chart chart-bar"\n' +
+    '                                chart-data="vm.feedbackTimeBarChartData"\n' +
+    '                                chart-labels="vm.feedbackTimeBarChartLabels"\n' +
+    '                                chart-legend="false"\n' +
+    '                                chart-colours="vm.feedbackTimeBarChartColours"\n' +
+    '                                >\n' +
+    '                        </canvas>\n' +
     '                    </div>\n' +
-    '                    <!-- /.row -->\n' +
     '                </div>\n' +
-    '                <!-- ./box-body -->\n' +
     '            </div>\n' +
-    '            <!-- /.box -->\n' +
     '        </div>\n' +
     '\n' +
     '        <div class="col-md-6">\n' +
@@ -110,28 +101,18 @@ module.run(['$templateCache', function($templateCache) {
     '                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>\n' +
     '                    </div>\n' +
     '                </div>\n' +
-    '                <!-- /.box-header -->\n' +
     '                <div class="box-body">\n' +
-    '                    <div class="row">\n' +
-    '                        <div class="col-md-8">\n' +
-    '                            <div class="chart-responsive">\n' +
-    '                                <canvas id="doughnut"\n' +
-    '                                        class="chart chart-doughnut"\n' +
-    '                                        chart-data="vm.feedbackProjectBarChartData"\n' +
-    '                                        chart-labels="vm.feedbackProjectBarChartLabels"\n' +
-    '                                        chart-options="options"\n' +
-    '                                        style="height: 250px;">\n' +
-    '                                </canvas>\n' +
-    '                            </div>\n' +
-    '                        </div>\n' +
-    '\n' +
-    '                        <!-- /.col -->\n' +
+    '                    <div class="chart-responsive">\n' +
+    '                        <canvas id="pie"\n' +
+    '                                class="chart chart-pie"\n' +
+    '                                chart-data="vm.feedbackProjectBarChartData"\n' +
+    '                                chart-labels="vm.feedbackProjectBarChartLabels"\n' +
+    '                                chart-legend="true"\n' +
+    '                                >\n' +
+    '                        </canvas>\n' +
     '                    </div>\n' +
-    '                    <!-- /.row -->\n' +
     '                </div>\n' +
-    '                <!-- /.box-body -->\n' +
     '            </div>\n' +
-    '            <!-- /.box -->\n' +
     '        </div>\n' +
     '    </div>\n' +
     '</section>');

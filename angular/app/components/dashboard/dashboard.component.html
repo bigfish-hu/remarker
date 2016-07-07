@@ -69,28 +69,19 @@
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="chart">
-                                <canvas id="area"
-                                        class="chart chart-bar"
-                                        chart-data="vm.feedbackTimeBarChartData"
-                                        chart-labels="vm.feedbackTimeBarChartLabels"
-                                        chart-legend="false"
-                                        chart-colours="vm.feedbackTimeBarChartColours"
-                                        style="height: 250px;">
-                                </canvas>
-                            </div>
-                            <!-- /.chart-responsive -->
-                        </div>
+                    <div class="chart-responsive">
+                        <canvas id="bar"
+                                class="chart chart-bar"
+                                chart-data="vm.feedbackTimeBarChartData"
+                                chart-labels="vm.feedbackTimeBarChartLabels"
+                                chart-legend="false"
+                                chart-colours="vm.feedbackTimeBarChartColours"
+                                >
+                        </canvas>
                     </div>
-                    <!-- /.row -->
                 </div>
-                <!-- ./box-body -->
             </div>
-            <!-- /.box -->
         </div>
 
         <div class="col-md-6">
@@ -102,28 +93,18 @@
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="chart-responsive">
-                                <canvas id="doughnut"
-                                        class="chart chart-doughnut"
-                                        chart-data="vm.feedbackProjectBarChartData"
-                                        chart-labels="vm.feedbackProjectBarChartLabels"
-                                        chart-options="options"
-                                        style="height: 250px;">
-                                </canvas>
-                            </div>
-                        </div>
-
-                        <!-- /.col -->
+                    <div class="chart-responsive">
+                        <canvas id="pie"
+                                class="chart chart-pie"
+                                chart-data="vm.feedbackProjectBarChartData"
+                                chart-labels="vm.feedbackProjectBarChartLabels"
+                                chart-legend="true"
+                                >
+                        </canvas>
                     </div>
-                    <!-- /.row -->
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
     </div>
 </section>
