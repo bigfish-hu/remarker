@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Response;
 
 class ProjectController extends Controller
 {

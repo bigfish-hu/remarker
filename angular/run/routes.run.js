@@ -4,7 +4,7 @@ export function RoutesRun ($rootScope, $state, $auth, $timeout, ContextService) 
   /*eslint-disable */
   let deregisterationCallback = $rootScope.$on('$stateChangeStart', function (event, toState) {
     if (toState.data && toState.data.auth) {
-      if (!$auth.isAuthenticated() && !localStorage.getItem('satellizer_token')) {
+      if (!ContextService.canRefreshToken()) {
         event.preventDefault();
         delete $rootScope.me;
         return $state.go('login');
@@ -32,7 +32,7 @@ export function RoutesRun ($rootScope, $state, $auth, $timeout, ContextService) 
       }
 
       // get user current context
-      if (toState.name !== 'login' && !$rootScope.me) {
+      if (toState.name !== 'login' && toState.name !== 'app.logout' && !$rootScope.me) {
         ContextService.getContext()
           .then((response) => {
             response = response.plain();

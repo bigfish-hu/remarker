@@ -7,66 +7,6 @@ try {
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('./views/app/components/dashboard/dashboard.component.html',
     '<section class="content">\n' +
-    '    <!-- statistic icons -->\n' +
-    '    <!--<div class="row">\n' +
-    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
-    '            <div class="info-box">\n' +
-    '                <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>\n' +
-    '\n' +
-    '                <div class="info-box-content">\n' +
-    '                    <span class="info-box-text">Feedbacks</span>\n' +
-    '                    <span class="info-box-number">90<small>%</small></span>\n' +
-    '                </div>\n' +
-    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
-    '            </div>\n' +
-    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
-    '        </div>\n' +
-    '        &lt;!&ndash; /.col &ndash;&gt;\n' +
-    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
-    '            <div class="info-box">\n' +
-    '                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>\n' +
-    '\n' +
-    '                <div class="info-box-content">\n' +
-    '                    <span class="info-box-text">Projects</span>\n' +
-    '                    <span class="info-box-number">41,410</span>\n' +
-    '                </div>\n' +
-    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
-    '            </div>\n' +
-    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
-    '        </div>\n' +
-    '        &lt;!&ndash; /.col &ndash;&gt;\n' +
-    '\n' +
-    '        &lt;!&ndash; fix for small devices only &ndash;&gt;\n' +
-    '        <div class="clearfix visible-sm-block"></div>\n' +
-    '\n' +
-    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
-    '            <div class="info-box">\n' +
-    '                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>\n' +
-    '\n' +
-    '                <div class="info-box-content">\n' +
-    '                    <span class="info-box-text">Sales</span>\n' +
-    '                    <span class="info-box-number">760</span>\n' +
-    '                </div>\n' +
-    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
-    '            </div>\n' +
-    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
-    '        </div>\n' +
-    '        &lt;!&ndash; /.col &ndash;&gt;\n' +
-    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
-    '            <div class="info-box">\n' +
-    '                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>\n' +
-    '\n' +
-    '                <div class="info-box-content">\n' +
-    '                    <span class="info-box-text">New Members</span>\n' +
-    '                    <span class="info-box-number">2,000</span>\n' +
-    '                </div>\n' +
-    '                &lt;!&ndash; /.info-box-content &ndash;&gt;\n' +
-    '            </div>\n' +
-    '            &lt;!&ndash; /.info-box &ndash;&gt;\n' +
-    '        </div>\n' +
-    '        &lt;!&ndash; /.row &ndash;&gt;\n' +
-    '    </div>-->\n' +
-    '\n' +
     '    <!-- charts -->\n' +
     '    <div class="row">\n' +
     '        <div class="col-md-6">\n' +
@@ -115,6 +55,21 @@ module.run(['$templateCache', function($templateCache) {
     '            </div>\n' +
     '        </div>\n' +
     '    </div>\n' +
+    '\n' +
+    '    <!-- statistic icons -->\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-md-3 col-sm-6 col-xs-12">\n' +
+    '            <div class="info-box">\n' +
+    '                <span class="info-box-icon bg-red"><i class="fa fa-bug"></i></span>\n' +
+    '\n' +
+    '                <div class="info-box-content">\n' +
+    '                    <span class="info-box-text">Feedbacks</span>\n' +
+    '                    <span class="info-box-number">{{vm.feedbacksNumber}}</span>\n' +
+    '                </div>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
     '</section>');
 }]);
 })();
@@ -255,14 +210,6 @@ try {
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('./views/app/components/login-form/login-form.component.html',
     '<form ng-submit="vm.login()" method="post">\n' +
-    '    <div class="callout callout-danger" ng-if="vm.loginfailed">\n' +
-    '        <h4>Login Failed</h4>\n' +
-    '        <p>Incorrect Email/Username or Password.</p>\n' +
-    '    </div>\n' +
-    '    <div class="callout callout-success" ng-if="vm.successMsg">\n' +
-    '        <h4>Success!</h4>\n' +
-    '        <p>{{ vm.successMsg }}</p>\n' +
-    '    </div>\n' +
     '    <div class="form-group has-feedback">\n' +
     '        <input type="email" class="form-control" placeholder="Email" ng-model="vm.email">\n' +
     '        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>\n' +

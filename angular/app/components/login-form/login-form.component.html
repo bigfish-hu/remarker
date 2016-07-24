@@ -1,12 +1,4 @@
 <form ng-submit="vm.login()" method="post">
-    <div class="callout callout-danger" ng-if="vm.loginfailed">
-        <h4>Login Failed</h4>
-        <p>Incorrect Email/Username or Password.</p>
-    </div>
-    <div class="callout callout-success" ng-if="vm.successMsg">
-        <h4>Success!</h4>
-        <p>{{ vm.successMsg }}</p>
-    </div>
     <div class="form-group has-feedback">
         <input type="email" class="form-control" placeholder="Email" ng-model="vm.email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

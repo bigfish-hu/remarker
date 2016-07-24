@@ -1,17 +1,12 @@
 class LoginFormController {
-  constructor ($rootScope, $auth, $state, $stateParams) {
+  constructor ($rootScope, $auth, $state, toastr) {
     'ngInject';
 
     delete $rootScope.me;
 
     this.$auth = $auth;
     this.$state = $state;
-    this.$stateParams = $stateParams;
-
-    this.registerSuccess = $stateParams.registerSuccess;
-    this.successMsg = $stateParams.successMsg;
-    this.loginfailed = false;
-    this.unverified = false;
+    this.toastr = toastr;
   }
 
   $onInit () {
@@ -20,9 +15,6 @@ class LoginFormController {
   }
 
   login () {
-    this.loginfailed = false;
-    this.unverified = false;
-
     let user = {
       email: this.email,
       password: this.password
@@ -32,18 +24,10 @@ class LoginFormController {
       .then((response) => {
         this.$auth.setToken(response.data);
         this.$state.go('app.landing');
-      })
-      .catch(this.failedLogin.bind(this));
-  }
+      }, (response) => {
+          this.toastr.error(response.data || '', response.status + ' ' + response.statusText);
+        });
 
-  failedLogin (res) {
-    if (res.status == 401) {
-      this.loginfailed = true;
-    } else {
-      if (res.data.errors.message[0] == 'Email Unverified') {
-        this.unverified = true;
-      }
-    }
   }
 }
 

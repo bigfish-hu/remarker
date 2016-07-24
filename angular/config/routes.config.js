@@ -125,10 +125,6 @@ export function RoutesConfig ($stateProvider, $urlRouterProvider) {
       },
       data: {
         bodyClass: 'hold-transition login-page'
-      },
-      params: {
-        registerSuccess: null,
-        successMsg: null
       }
     })
     .state('loginloader', {

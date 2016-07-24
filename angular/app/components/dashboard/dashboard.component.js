@@ -1,5 +1,5 @@
 class DashboardController {
-  constructor ($scope, API, $timeout) {
+  constructor ($scope, API, $timeout, $window) {
       'ngInject';
       this.API = API;
 
@@ -21,6 +21,8 @@ class DashboardController {
           .then((response) => {
               let dataSet = response.plain();
 
+              this.feedbacksNumber = dataSet.length;
+
               let dates = dataSet.map(function (item) {
                   return item.created_at.split(' ')[0];
               });
@@ -35,9 +37,10 @@ class DashboardController {
               let feedbacksByProjectGenerator = getChartData(projects);
               this.feedbackProjectBarChartLabels = feedbacksByProjectGenerator.next().value;
               this.feedbackProjectBarChartData = feedbacksByProjectGenerator.next().value;
+
           }).then(function(){
               $timeout(function(){
-                  window.dispatchEvent(new Event('resize'));
+                  $window.dispatchEvent(new Event('resize'));
               }, 300);
           });
 

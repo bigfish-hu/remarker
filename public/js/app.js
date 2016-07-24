@@ -52,13 +52,13 @@
 
 	__webpack_require__(4);
 
-	__webpack_require__(9);
+	__webpack_require__(8);
 
-	__webpack_require__(17);
+	__webpack_require__(16);
 
-	__webpack_require__(53);
+	__webpack_require__(52);
 
-	__webpack_require__(55);
+	__webpack_require__(54);
 
 /***/ },
 /* 1 */
@@ -103,7 +103,7 @@
 
 	  var deregisterationCallback = $rootScope.$on('$stateChangeStart', function (event, toState) {
 	    if (toState.data && toState.data.auth) {
-	      if (!$auth.isAuthenticated() && !localStorage.getItem('satellizer_token')) {
+	      if (!ContextService.canRefreshToken()) {
 	        event.preventDefault();
 	        delete $rootScope.me;
 	        return $state.go('login');
@@ -131,7 +131,7 @@
 	      }
 
 	      // get user current context
-	      if (toState.name !== 'login' && !$rootScope.me) {
+	      if (toState.name !== 'login' && toState.name !== 'app.logout' && !$rootScope.me) {
 	        ContextService.getContext().then(function (response) {
 	          response = response.plain();
 	          $rootScope.me = response.data.user;
@@ -159,9 +159,7 @@
 
 	var _satellizer = __webpack_require__(7);
 
-	var _interceptor = __webpack_require__(8);
-
-	angular.module('app.config').config(_routes.RoutesConfig).config(_loading_bar.LoadingBarConfig).config(_satellizer.SatellizerConfig).config(_interceptor.InterceptorConfig);
+	angular.module('app.config').config(_routes.RoutesConfig).config(_loading_bar.LoadingBarConfig).config(_satellizer.SatellizerConfig);
 
 /***/ },
 /* 5 */
@@ -292,10 +290,6 @@
 	    },
 	    data: {
 	      bodyClass: 'hold-transition login-page'
-	    },
-	    params: {
-	      registerSuccess: null,
-	      successMsg: null
 	    }
 	  }).state('loginloader', {
 	    url: '/login-loader',
@@ -355,83 +349,34 @@
 	function SatellizerConfig($authProvider) {
 	  'ngInject';
 
-	  $authProvider.httpInterceptor = function () {
-	    return true;
-	  };
-
 	  $authProvider.loginUrl = 'api/auth/login';
 	  $authProvider.tokenRoot = 'data'; // compensates success response macro
 	}
 
 /***/ },
 /* 8 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	InterceptorConfig.$inject = ["$httpProvider"];
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.InterceptorConfig = InterceptorConfig;
-	function InterceptorConfig($httpProvider) {
-	    'ngInject';
-
-	    $httpProvider.interceptors.push(["$q", "$injector", function ($q, $injector) {
-	        return {
-	            'response': function response(_response) {
-	                if (_response.headers('Authorization')) {
-	                    localStorage.setItem('satellizer_token', _response.headers('Authorization').replace('Bearer ', ''));
-	                }
-	                return _response;
-	            },
-	            'responseError': function responseError(response) {
-	                var toastr = $injector.get('toastr');
-
-	                toastr.error(response.status + ' ' + response.statusText, response.data);
-
-	                if (response.headers('Authorization')) {
-	                    localStorage.setItem('satellizer_token', response.headers('Authorization').replace('Bearer ', ''));
-	                }
-
-	                var $state = $injector.get('$state'),
-	                    deferred = $q.defer();
-
-	                if (response.status === 401) {
-	                    $state.go('login');
-	                    deferred.reject(response);
-	                }
-
-	                return $q.reject(response);
-	            }
-	        };
-	    }]);
-	}
-
-/***/ },
-/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _date_millis = __webpack_require__(10);
+	var _date_millis = __webpack_require__(9);
 
-	var _capitalize = __webpack_require__(11);
+	var _capitalize = __webpack_require__(10);
 
-	var _human_readable = __webpack_require__(12);
+	var _human_readable = __webpack_require__(11);
 
-	var _truncate_characters = __webpack_require__(13);
+	var _truncate_characters = __webpack_require__(12);
 
-	var _truncate_words = __webpack_require__(14);
+	var _truncate_words = __webpack_require__(13);
 
-	var _trust_html = __webpack_require__(15);
+	var _trust_html = __webpack_require__(14);
 
-	var _ucfirst = __webpack_require__(16);
+	var _ucfirst = __webpack_require__(15);
 
 	angular.module('app.filters').filter('datemillis', _date_millis.DateMillisFilter).filter('capitalize', _capitalize.CapitalizeFilter).filter('humanreadable', _human_readable.HumanReadableFilter).filter('truncateCharacters', _truncate_characters.TruncatCharactersFilter).filter('truncateWords', _truncate_words.TruncateWordsFilter).filter('trustHtml', _trust_html.TrustHtmlFilter).filter('ucfirst', _ucfirst.UcFirstFilter);
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -449,7 +394,7 @@
 	}
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -467,7 +412,7 @@
 	}
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -490,7 +435,7 @@
 	}
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -528,7 +473,7 @@
 	}
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -556,7 +501,7 @@
 	}
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -572,7 +517,7 @@
 	}
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -591,37 +536,37 @@
 	}
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _userLists = __webpack_require__(18);
+	var _userLists = __webpack_require__(17);
 
-	var _userEdit = __webpack_require__(39);
+	var _userEdit = __webpack_require__(38);
 
-	var _userAdd = __webpack_require__(40);
+	var _userAdd = __webpack_require__(39);
 
-	var _dashboard = __webpack_require__(41);
+	var _dashboard = __webpack_require__(40);
 
-	var _navSidebar = __webpack_require__(46);
+	var _navSidebar = __webpack_require__(45);
 
-	var _navHeader = __webpack_require__(47);
+	var _navHeader = __webpack_require__(46);
 
-	var _loginLoader = __webpack_require__(48);
+	var _loginLoader = __webpack_require__(47);
 
-	var _loginForm = __webpack_require__(49);
+	var _loginForm = __webpack_require__(48);
 
-	var _projectList = __webpack_require__(50);
+	var _projectList = __webpack_require__(49);
 
-	var _feedbackList = __webpack_require__(51);
+	var _feedbackList = __webpack_require__(50);
 
-	var _feedbackEdit = __webpack_require__(52);
+	var _feedbackEdit = __webpack_require__(51);
 
 	angular.module('app.components').component('userLists', _userLists.UserListsComponent).component('userEdit', _userEdit.UserEditComponent).component('userAdd', _userAdd.UserAddComponent).component('dashboard', _dashboard.DashboardComponent).component('navSidebar', _navSidebar.NavSidebarComponent).component('navHeader', _navHeader.NavHeaderComponent).component('loginLoader', _loginLoader.LoginLoaderComponent).component('loginForm', _loginForm.LoginFormComponent).component('feedbackList', _feedbackList.FeedbackListComponent).component('feedbackEdit', _feedbackEdit.FeedbackEditComponent).component('projectList', _projectList.ProjectListComponent);
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -631,11 +576,11 @@
 	});
 	exports.UserListsComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -722,7 +667,7 @@
 	};
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -736,14 +681,14 @@
 	};
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _defineProperty = __webpack_require__(21);
+	var _defineProperty = __webpack_require__(20);
 
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -768,37 +713,37 @@
 	}();
 
 /***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(21), __esModule: true };
+
+/***/ },
 /* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(22), __esModule: true };
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(23);
-	var $Object = __webpack_require__(26).Object;
+	__webpack_require__(22);
+	var $Object = __webpack_require__(25).Object;
 	module.exports = function defineProperty(it, key, desc){
 	  return $Object.defineProperty(it, key, desc);
 	};
 
 /***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $export = __webpack_require__(23);
+	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+	$export($export.S + $export.F * !__webpack_require__(33), 'Object', {defineProperty: __webpack_require__(29).f});
+
+/***/ },
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $export = __webpack_require__(24);
-	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-	$export($export.S + $export.F * !__webpack_require__(34), 'Object', {defineProperty: __webpack_require__(30).f});
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var global    = __webpack_require__(25)
-	  , core      = __webpack_require__(26)
-	  , ctx       = __webpack_require__(27)
-	  , hide      = __webpack_require__(29)
+	var global    = __webpack_require__(24)
+	  , core      = __webpack_require__(25)
+	  , ctx       = __webpack_require__(26)
+	  , hide      = __webpack_require__(28)
 	  , PROTOTYPE = 'prototype';
 
 	var $export = function(type, name, source){
@@ -858,7 +803,7 @@
 	module.exports = $export;
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports) {
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -867,18 +812,18 @@
 	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports) {
 
 	var core = module.exports = {version: '2.4.0'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(28);
+	var aFunction = __webpack_require__(27);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -899,7 +844,7 @@
 	};
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -908,12 +853,12 @@
 	};
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP         = __webpack_require__(30)
-	  , createDesc = __webpack_require__(38);
-	module.exports = __webpack_require__(34) ? function(object, key, value){
+	var dP         = __webpack_require__(29)
+	  , createDesc = __webpack_require__(37);
+	module.exports = __webpack_require__(33) ? function(object, key, value){
 	  return dP.f(object, key, createDesc(1, value));
 	} : function(object, key, value){
 	  object[key] = value;
@@ -921,15 +866,15 @@
 	};
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject       = __webpack_require__(31)
-	  , IE8_DOM_DEFINE = __webpack_require__(33)
-	  , toPrimitive    = __webpack_require__(37)
+	var anObject       = __webpack_require__(30)
+	  , IE8_DOM_DEFINE = __webpack_require__(32)
+	  , toPrimitive    = __webpack_require__(36)
 	  , dP             = Object.defineProperty;
 
-	exports.f = __webpack_require__(34) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	exports.f = __webpack_require__(33) ? Object.defineProperty : function defineProperty(O, P, Attributes){
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
@@ -942,17 +887,17 @@
 	};
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(32);
+	var isObject = __webpack_require__(31);
 	module.exports = function(it){
 	  if(!isObject(it))throw TypeError(it + ' is not an object!');
 	  return it;
 	};
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -960,24 +905,24 @@
 	};
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = !__webpack_require__(34) && !__webpack_require__(35)(function(){
-	  return Object.defineProperty(__webpack_require__(36)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	module.exports = !__webpack_require__(33) && !__webpack_require__(34)(function(){
+	  return Object.defineProperty(__webpack_require__(35)('div'), 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(35)(function(){
+	module.exports = !__webpack_require__(34)(function(){
 	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = function(exec){
@@ -989,11 +934,11 @@
 	};
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(32)
-	  , document = __webpack_require__(25).document
+	var isObject = __webpack_require__(31)
+	  , document = __webpack_require__(24).document
 	  // in old IE typeof document.createElement is 'object'
 	  , is = isObject(document) && isObject(document.createElement);
 	module.exports = function(it){
@@ -1001,11 +946,11 @@
 	};
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
-	var isObject = __webpack_require__(32);
+	var isObject = __webpack_require__(31);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
 	module.exports = function(it, S){
@@ -1018,7 +963,7 @@
 	};
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = function(bitmap, value){
@@ -1031,7 +976,7 @@
 	};
 
 /***/ },
-/* 39 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1041,11 +986,11 @@
 	});
 	exports.UserEditComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -1117,7 +1062,7 @@
 	};
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1127,11 +1072,11 @@
 	});
 	exports.UserAddComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -1191,7 +1136,7 @@
 	};
 
 /***/ },
-/* 41 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1201,17 +1146,17 @@
 	});
 	exports.DashboardComponent = undefined;
 
-	var _regenerator = __webpack_require__(42);
+	var _regenerator = __webpack_require__(41);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var DashboardController = function DashboardController($scope, API, $timeout) {
+	var DashboardController = function DashboardController($scope, API, $timeout, $window) {
 	    'ngInject';
 
 	    var _this = this;
@@ -1236,6 +1181,8 @@
 	    Feedbacks.getList({ fields: 'created_at' }).then(function (response) {
 	        var dataSet = response.plain();
 
+	        _this.feedbacksNumber = dataSet.length;
+
 	        var dates = dataSet.map(function (item) {
 	            return item.created_at.split(' ')[0];
 	        });
@@ -1251,7 +1198,7 @@
 	        _this.feedbackProjectBarChartData = feedbacksByProjectGenerator.next().value;
 	    }).then(function () {
 	        $timeout(function () {
-	            window.dispatchEvent(new Event('resize'));
+	            $window.dispatchEvent(new Event('resize'));
 	        }, 300);
 	    });
 
@@ -1290,7 +1237,7 @@
 	        }, _marked[0], this);
 	    }
 	};
-	DashboardController.$inject = ["$scope", "API", "$timeout"];
+	DashboardController.$inject = ["$scope", "API", "$timeout", "$window"];
 
 	var DashboardComponent = exports.DashboardComponent = {
 	    templateUrl: './views/app/components/dashboard/dashboard.component.html',
@@ -1300,14 +1247,14 @@
 	};
 
 /***/ },
-/* 42 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(43);
+	module.exports = __webpack_require__(42);
 
 
 /***/ },
-/* 43 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {// This method of obtaining a reference to the global object needs to be
@@ -1328,7 +1275,7 @@
 	// Force reevalutation of runtime.js.
 	g.regeneratorRuntime = undefined;
 
-	module.exports = __webpack_require__(44);
+	module.exports = __webpack_require__(43);
 
 	if (hadRuntime) {
 	  // Restore the original runtime.
@@ -1345,7 +1292,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 44 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {/**
@@ -2017,10 +1964,10 @@
 	  typeof self === "object" ? self : this
 	);
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(45)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(44)))
 
 /***/ },
-/* 45 */
+/* 44 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -2125,7 +2072,7 @@
 
 
 /***/ },
-/* 46 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2135,11 +2082,11 @@
 	});
 	exports.NavSidebarComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -2173,7 +2120,7 @@
 	};
 
 /***/ },
-/* 47 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2183,11 +2130,11 @@
 	});
 	exports.NavHeaderComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -2215,7 +2162,7 @@
 	};
 
 /***/ },
-/* 48 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2225,7 +2172,7 @@
 	});
 	exports.LoginLoaderComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
@@ -2254,7 +2201,7 @@
 	};
 
 /***/ },
-/* 49 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2264,19 +2211,19 @@
 	});
 	exports.LoginFormComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var LoginFormController = function () {
-	  LoginFormController.$inject = ["$rootScope", "$auth", "$state", "$stateParams"];
-	  function LoginFormController($rootScope, $auth, $state, $stateParams) {
+	  LoginFormController.$inject = ["$rootScope", "$auth", "$state", "toastr"];
+	  function LoginFormController($rootScope, $auth, $state, toastr) {
 	    'ngInject';
 
 	    (0, _classCallCheck3.default)(this, LoginFormController);
@@ -2284,12 +2231,7 @@
 
 	    this.$auth = $auth;
 	    this.$state = $state;
-	    this.$stateParams = $stateParams;
-
-	    this.registerSuccess = $stateParams.registerSuccess;
-	    this.successMsg = $stateParams.successMsg;
-	    this.loginfailed = false;
-	    this.unverified = false;
+	    this.toastr = toastr;
 	  }
 
 	  (0, _createClass3.default)(LoginFormController, [{
@@ -2303,9 +2245,6 @@
 	    value: function login() {
 	      var _this = this;
 
-	      this.loginfailed = false;
-	      this.unverified = false;
-
 	      var user = {
 	        email: this.email,
 	        password: this.password
@@ -2314,18 +2253,9 @@
 	      this.$auth.login(user).then(function (response) {
 	        _this.$auth.setToken(response.data);
 	        _this.$state.go('app.landing');
-	      }).catch(this.failedLogin.bind(this));
-	    }
-	  }, {
-	    key: 'failedLogin',
-	    value: function failedLogin(res) {
-	      if (res.status == 401) {
-	        this.loginfailed = true;
-	      } else {
-	        if (res.data.errors.message[0] == 'Email Unverified') {
-	          this.unverified = true;
-	        }
-	      }
+	      }, function (response) {
+	        _this.toastr.error(response.data || '', response.status + ' ' + response.statusText);
+	      });
 	    }
 	  }]);
 	  return LoginFormController;
@@ -2339,7 +2269,7 @@
 	};
 
 /***/ },
-/* 50 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2349,11 +2279,11 @@
 	});
 	exports.ProjectListComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -2446,7 +2376,7 @@
 	};
 
 /***/ },
-/* 51 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2456,11 +2386,11 @@
 	});
 	exports.FeedbackListComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -2603,7 +2533,7 @@
 	};
 
 /***/ },
-/* 52 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2613,11 +2543,11 @@
 	});
 	exports.FeedbackEditComponent = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -2670,17 +2600,17 @@
 	};
 
 /***/ },
-/* 53 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _routeBodyclass = __webpack_require__(54);
+	var _routeBodyclass = __webpack_require__(53);
 
 	angular.module('app.components').directive('routeBodyclass', _routeBodyclass.RouteBodyClassDirective);
 
 /***/ },
-/* 54 */
+/* 53 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2718,19 +2648,19 @@
 	var RouteBodyClassDirective = exports.RouteBodyClassDirective = routeBodyClass;
 
 /***/ },
-/* 55 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _context = __webpack_require__(56);
+	var _context = __webpack_require__(55);
 
-	var _API = __webpack_require__(57);
+	var _API = __webpack_require__(56);
 
 	angular.module('app.services').service('ContextService', _context.ContextService).service('API', _API.APIService);
 
 /***/ },
-/* 56 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2740,11 +2670,11 @@
 	});
 	exports.ContextService = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(20);
+	var _createClass2 = __webpack_require__(19);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -2762,6 +2692,20 @@
 	  }
 
 	  (0, _createClass3.default)(ContextService, [{
+	    key: 'canRefreshToken',
+	    value: function canRefreshToken() {
+	      if (!this.$auth.getToken()) {
+	        return false;
+	      }
+
+	      var refresh_ttl = 300;
+	      var iat = this.$auth.getPayload().iat;
+
+	      var isExpired = Math.round(new Date().getTime() / 1000) >= iat + refresh_ttl;
+
+	      return !isExpired;
+	    }
+	  }, {
 	    key: 'getContext',
 	    value: function getContext() {
 	      var API = this.API;
@@ -2781,7 +2725,7 @@
 	}();
 
 /***/ },
-/* 57 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2791,13 +2735,13 @@
 	});
 	exports.APIService = undefined;
 
-	var _classCallCheck2 = __webpack_require__(19);
+	var _classCallCheck2 = __webpack_require__(18);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var APIService = exports.APIService = ["Restangular", "$window", function APIService(Restangular, $window) {
+	var APIService = exports.APIService = ["Restangular", "toastr", "$state", function APIService(Restangular, toastr, $state) {
 	  'ngInject';
 	  // content negotiation
 
@@ -2805,21 +2749,36 @@
 	  var headers = {
 	    'Content-Type': 'application/json',
 	    'Accept': 'application/x.remarker.v1+json'
-	  };
+	  },
+	      error = false;
 
 	  return Restangular.withConfig(function (RestangularConfigurer) {
 	    RestangularConfigurer.setBaseUrl('/api/').setDefaultHeaders(headers).setErrorInterceptor(function (response) {
-	      if (response.status === 422) {
-	        //for (var error in response.data.errors) {
-	        //   return ToastService.error(response.data.errors[error][0]);
-	        //}
+	      if (!error) {
+	        toastr.error(response.data || '', response.status + ' ' + response.statusText);
 	      }
+
+	      if (response.headers.Authorization) {
+	        localStorage.setItem('satellizer_token', response.headers.Authorization.replace('Bearer ', ''));
+	      }
+
+	      if (response.status === 401) {
+	        $state.go('login');
+	        localStorage.removeItem('satellizer_token');
+	        error = true;
+	      }
+
+	      return false;
 	    }).addFullRequestInterceptor(function (element, operation, what, url, headers) {
-	      var token = $window.localStorage.satellizer_token;
+	      var token = localStorage.satellizer_token;
 	      if (token) {
 	        headers.Authorization = 'Bearer ' + token;
 	      }
-	    }).addResponseInterceptor(function (response, operation, what) {
+	    }).addResponseInterceptor(function (response, operation, what, url, headers) {
+	      if (headers.headers('Authorization')) {
+	        localStorage.setItem('satellizer_token', headers.headers('Authorization').replace('Bearer ', ''));
+	      }
+
 	      if (operation === 'getList' && response.data[what]) {
 	        var newResponse = response.data[what];
 	        newResponse.errors = response.errors;
