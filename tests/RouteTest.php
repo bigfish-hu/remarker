@@ -16,17 +16,4 @@ class RouteTest extends TestCase
 
         $this->assertEquals(200, $response->status());
     }
-
-    /**
-     * @return void
-     * @test
-     */
-    public function testAdminIndex()
-    {
-        $response = $this->call('GET', '/admin');
-
-        $this->assertEquals(200, $response->status());
-        $this->see('login');
-    }
-
 }

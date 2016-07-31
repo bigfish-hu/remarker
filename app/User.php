@@ -32,6 +32,9 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         'password', 'pivot'
     ];
 
+    /**
+     * @return boolean
+     */
     public function isSuperAdmin()
     {
         return $this->is_superadmin;
@@ -45,59 +48,13 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         return $this->belongsToMany('App\Project');
     }
 
-//
-//    /**
-//     * Get all the feedbacks belonging to the projects which have been assigned to the user.
-//     * Returns a collection of feedbacks grouped in subcollections based by the projects.
-//     * E.g. user{ project1{feedback1, feedback2, etc.}, project2{feedback3, feedback4, etc}, etc.}
-//     *
-//     * @return \Illuminate\Support\Collection
-//     */
-////       public function feedbacks($columns = ['*'])
-////    {
-////        $projects = $this->projects();
-////
-////        $feedbacks = collect([]);
-////
-////        foreach ($projects as $project) {
-////            $feedbacks->push($project->feedbacks()->get($columns));
-////        }
-////
-////        return $feedbacks;
-////    }
-//
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
-    public function feedbacks()
-    {
-        return $this->hasManyThrough('App\Feedback', 'App\Project', 'id', 'project_id');
+    public function feedbacks($fields) {
+        $this->load(['projects.feedbacks' => function ($q) use (&$feedbacks, $fields) {
+            $feedbacks = $q->join('projects', 'feedbacks.project_id', '=', 'projects.id')->select($fields)->get();
+        }]);
+
+        return $feedbacks;
     }
-
-//    public function feedbacks()
-//    {
-////        var_dump('fakka1');
-//        if ( ! array_key_exists('feedbacks', $this->relations)) $this->loadFeedbacks();
-//
-//        return $this->getRelation('feedbacks');
-//    }
-//
-//    public function loadFeedbacks()
-//    {
-////        var_dump('fakka2');
-//
-//        $feedbacks = Feedback::join('project_user', 'feedbacks.project_id', '=', 'project_user.project_id')
-//            ->where('project_user.user_id', $this->getKey())
-//            ->distinct()
-//            ->get(['feedbacks.*','user_id']);
-//
-//        $hasMany = new HasMany(Feedback::query(), $this, 'user_id', 'id');
-//
-//        $hasMany->matchMany(array($this), $feedbacks, 'feedbacks');
-//
-//        return $this;
-//    }
-
 
     /**
      * Set the password to be hashed when saved
