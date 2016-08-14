@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Feedback;
+use App\Notifications\NewFeedback;
+use App\Project;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -13,6 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
 class FeedbackController extends Controller
 {
 
+    /**
+     * @return Response
+     */
     public function getFeedbacks()
     {
         $params = Input::all();
@@ -29,6 +35,9 @@ class FeedbackController extends Controller
 
         $allFields[] = 'projects.name as project_name';
 
+        /**
+         * @var $user \App\User
+         */
         $user = Auth::user();
 
         $feedbacks = $user->feedbacks($allFields);
@@ -36,6 +45,10 @@ class FeedbackController extends Controller
         return response()->success(compact('feedbacks'));
     }
 
+    /**
+     * @param int $id
+     * @return Response
+     */
     public function deleteFeedback($id)
     {
         Feedback::destroy($id);
@@ -43,6 +56,10 @@ class FeedbackController extends Controller
         return response('', Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @param int $id
+     * @return Response
+     */
     public function getFeedback($id)
     {
         $feedback = Feedback::find($id);
@@ -50,6 +67,11 @@ class FeedbackController extends Controller
         return response()->success(compact('feedback'));
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
     public function updateFeedback(Request $request, $id)
     {
         $feedback = Feedback::find($id);
@@ -88,6 +110,17 @@ class FeedbackController extends Controller
             'project_id' => $data['project_id'],
             'ext_user_id' => null,
         ]);
+
+        $project = Project::query()->find($data['project_id'])->first();
+        $users = $project->users()->get();
+
+        /**
+         * @var User $user
+         */
+        foreach ($users as $user) {
+            $user->notify(new NewFeedback());
+        }
+
 
         return response('', Response::HTTP_CREATED);
     }

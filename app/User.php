@@ -6,13 +6,14 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Notifications\Notifiable;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
-    use Authenticatable, Authorizable;
+    use Authenticatable, Authorizable, Notifiable, HasPushSubscriptions;
 
     /**
      * The attributes that are mass assignable.
@@ -48,12 +49,13 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         return $this->belongsToMany('App\Project');
     }
 
-    public function feedbacks($fields) {
+    public function feedbacks($fields)
+    {
         $this->load(['projects.feedbacks' => function ($q) use (&$feedbacks, $fields) {
             $feedbacks = $q->join('projects', 'feedbacks.project_id', '=', 'projects.id')->select($fields)->get();
         }]);
 
-        return $feedbacks;
+        return $feedbacks ? $feedbacks : [];
     }
 
     /**

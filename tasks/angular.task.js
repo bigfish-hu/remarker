@@ -15,13 +15,7 @@ Elixir.extend('angular', function (src, output, outputFilename) {
   var baseDir = src || Elixir.config.assetsPath + '/angular/';
   new Task('angular in ' + baseDir, function () {
     return gulp.src([baseDir + 'index.main.js', baseDir + '**/*.*.js'])
-      .pipe(eslint({
-        globals: {
-          'jQuery': false,
-          '$': true,
-          'swal': true
-        }
-      }))
+      .pipe(eslint())
       .pipe(eslint.format())
       .pipe(gulpif(!config.production, sourcemaps.init()))
       .pipe(webpack(webpackConfig))

@@ -32,7 +32,6 @@ class AdminController extends Controller
     {
         $user = User::with(array('projects' => function ($query) {
             $query->select('id', 'name');
-
         }))->find($id);
 
         return response()->success(compact('user'));

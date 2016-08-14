@@ -40,17 +40,9 @@ class AuthController extends Controller
 
         $user = User::whereEmail($credentials['email'])->first();
 
-//        try {
-            if (! $token = $this->jwt->attempt($credentials)) {
-                return response()->json('user_not_found', 404);
-            }
-//        } catch (TokenExpiredException $e) {
-//            return response()->json('token_expired', 401);
-//        } catch (TokenInvalidException $e) {
-//            return response()->json('token_invalid', 401);
-//        } catch (JWTException $e) {
-//            return response()->json($e->getMessage(), 500);
-//        }
+        if (! $token = $this->jwt->attempt($credentials)) {
+            return response()->json('user_not_found', 404);
+        }
 
         return response()->success(compact('user', 'token'));
     }
@@ -62,17 +54,9 @@ class AuthController extends Controller
      */
     public function getAuthenticatedUser()
     {
-//        try {
-            if (! $user = $this->jwt->parseToken()->authenticate()) {
-                return response()->json('user_not_found', 404);
-            }
-//        } catch (TokenExpiredException $e) {
-//            return response()->json('token_expired', 401);
-//        } catch (TokenInvalidException $e) {
-//            return response()->json('token_invalid', 401);
-//        } catch (JWTException $e) {
-//            return response()->json('token_absent', 400);
-//        }
+        if (! $user = $this->jwt->parseToken()->authenticate()) {
+            return response()->json('user_not_found', 404);
+        }
 
         return response()->success(compact('user'));
     }

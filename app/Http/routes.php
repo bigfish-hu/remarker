@@ -10,6 +10,14 @@ Route::get('admin', 'AngularController@serveApp');
 
 Route::post('createFeedback', 'Admin\FeedbackController@createFeedback');
 
+// Manifest file
+Route::get('admin/manifest.json', function () {
+    return [
+        'name' => config('app.name'),
+        'gcm_sender_id' => config('services.gcm.sender_id')
+    ];
+});
+
 Route::group(['prefix' => 'api'], function () {
 
     Route::post('auth/login', 'Auth\AuthController@postLogin');
@@ -25,8 +33,11 @@ Route::group(['prefix' => 'api'], function () {
         Route::put('/feedbacks/{feedback}', 'Admin\FeedbackController@updateFeedback');
         Route::delete('/feedbacks/{id}', 'Admin\FeedbackController@deleteFeedback');
 
-        Route::group(['middleware' => 'admin'], function () {
+        // Push Subscriptions
+        Route::post('/subscriptions', 'PushSubscriptionController@update');
+        Route::delete('/subscriptions/{endpoint}', 'PushSubscriptionController@destroy');
 
+        Route::group(['middleware' => 'admin'], function () {
             Route::get('/users/{id}', 'Admin\AdminController@getUser');
             Route::get('/users', 'Admin\AdminController@getUsers');
             Route::post('/users', 'Admin\AdminController@createUser');

@@ -6,11 +6,12 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
+        "ext-gmp": "*",
+        "laravel/framework": "5.3.*",
         "guzzlehttp/guzzle": "~6.0",
         "tymon/jwt-auth": "^1.0@dev",
-        "barryvdh/laravel-cors": "0.7.x",
-        "laravelangular/generators": "2.3.x"
+        "barryvdh/laravel-cors": "0.8.*",
+        "laravel-notification-channels/web-push-notifications": "^0.0.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -52,5 +53,6 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "minimum-stability": "dev"
 }

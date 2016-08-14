@@ -1,5 +1,5 @@
 class LoginFormController {
-  constructor ($rootScope, $auth, $state, toastr) {
+  constructor ($rootScope, $auth, $state, toastr, NotificationService) {
     'ngInject';
 
     delete $rootScope.me;
@@ -7,6 +7,7 @@ class LoginFormController {
     this.$auth = $auth;
     this.$state = $state;
     this.toastr = toastr;
+    this.NotificationService = NotificationService;
   }
 
   $onInit () {
@@ -24,6 +25,8 @@ class LoginFormController {
       .then((response) => {
         this.$auth.setToken(response.data);
         this.$state.go('app.landing');
+          console.log('fakka1');
+        this.NotificationService.registerServiceWorker();
       }, (response) => {
           this.toastr.error(response.data || '', response.status + ' ' + response.statusText);
         });

@@ -56,13 +56,7 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof BadRequestHttpException) {
             return response($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
-//        } catch (TokenExpiredException $e) {
-//            return response()->json('token_expired', 401);
-//        } catch (TokenInvalidException $e) {
-//            return response()->json('token_invalid', 401);
-//        } catch (JWTException $e) {
-//            return response()->json('token_absent', 400);
-//        }
+
         return parent::render($request, $e);
     }
 }

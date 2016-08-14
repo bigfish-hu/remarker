@@ -21,8 +21,6 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
 
     public function getUsers()
     {
-
-
     }
 
     /**

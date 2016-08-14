@@ -15,12 +15,10 @@ class JiraApiRepository extends IssueTrackerApiBaseRepository implements IssueTr
 
     public function getUsers()
     {
-
     }
 
     public function getProjects()
     {
-
     }
 
 
