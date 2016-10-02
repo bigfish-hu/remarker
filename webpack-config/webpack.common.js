@@ -20,7 +20,7 @@ const HMR = helpers.hasProcessFlag('hot');
 const METADATA = {
   title: 'ng2-admin - Angular 2 Admin Template',
   description: 'Free Angular 2 and Bootstrap 4 Admin Template',
-  baseUrl: './admin',
+  baseUrl: '/admin',
   isDevServer: helpers.isWebpackDevServer()
 };
 
@@ -227,7 +227,7 @@ module.exports = function (options) {
       new ExtractTextPlugin({filename: 'initial.css', allChunks: true}),
 
       new AssetsPlugin({
-        path: helpers.root('public/admin'),
+        path: helpers.root('public/dist'),
         filename: 'webpack-assets.json',
         prettyPrint: true
       }),

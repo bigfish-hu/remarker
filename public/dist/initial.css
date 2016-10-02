@@ -85,8 +85,8 @@
 */
 @font-face {
   font-family: "Ionicons";
-  src: url(/admin/19e65b89cee273a249fba4c09b951b74.eot);
-  src: url(/admin/19e65b89cee273a249fba4c09b951b74.eot#iefix) format("embedded-opentype"), url(/admin/dd4781d1acc57ba4c4808d1b44301201.ttf) format("truetype"), url(/admin/2c159d0d05473040b53ec79df8797d32.woff) format("woff"), url(/admin/28df6ee7b407fd8a14b40bc01f4fd3ae.svg#Ionicons) format("svg");
+  src: url(/dist/19e65b89cee273a249fba4c09b951b74.eot);
+  src: url(/dist/19e65b89cee273a249fba4c09b951b74.eot#iefix) format("embedded-opentype"), url(/dist/dd4781d1acc57ba4c4808d1b44301201.ttf) format("truetype"), url(/dist/2c159d0d05473040b53ec79df8797d32.woff) format("woff"), url(/dist/28df6ee7b407fd8a14b40bc01f4fd3ae.svg#Ionicons) format("svg");
   font-weight: normal;
   font-style: normal; }
 
