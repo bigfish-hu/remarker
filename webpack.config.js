@@ -1,19 +1,11 @@
-module.exports = {
-  // configuration
-  entry: './angular/index.main.js',
-  output: {
-    filename: 'app.js'
-  },
-  module: {
-    loaders: [{
-      test: /\.js?$/,
-      exclude: /(node_modules|bower_components)/,
-      loader: 'babel', // 'babel-loader' is also a legal name to reference
-      query: {
-        presets: ['es2015'],
-        plugins: ['transform-runtime'],
-        cacheDirectory: true
-      }
-    }]
-  }
-};
+// Look in ./config folder for webpack.dev.js
+switch (process.env.NODE_ENV) {
+  case 'prod':
+  case 'production':
+    module.exports = require('./config/webpack.prod')({env: 'production'});
+    break;
+  case 'dev':
+  case 'development':
+  default:
+    module.exports = require('./config/webpack.dev')({env: 'development'});
+}

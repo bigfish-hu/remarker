@@ -1,16 +1,16 @@
+# @AngularClass
+# http://editorconfig.org
+
 root = true
 
 [*]
-end_of_line = lf
-insert_final_newline = true
-
-[*]
 charset = utf-8
-
-[*.{php,js,sh}]
-indent_style = space
-indent_size = 4
-
-[*.{json,yml,xml}]
 indent_style = space
 indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+insert_final_newline = false
+trim_trailing_whitespace = false
