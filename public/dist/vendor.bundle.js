@@ -1,5 +1,5 @@
 var ac_vendor =
-webpackJsonpac__name_([9],{
+webpackJsonpac__name_([2],{
 
 /***/ "./ng2-admin/vendor.browser.ts":
 /***/ function(module, exports, __webpack_require__) {

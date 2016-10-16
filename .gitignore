@@ -1,6 +1,7 @@
 # Excluded files
 .env
 *.bak
+npm-debug.log
 
 # Excluded folders
 vendor/

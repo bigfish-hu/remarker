@@ -37,12 +37,6 @@ import {
 } from './directives';
 
 import {
-  BaAppPicturePipe,
-  BaKameleonPicturePipe,
-  BaProfilePicturePipe
-} from './pipes';
-
-import {
   BaImageLoaderService,
   BaThemePreloader,
   BaThemeSpinner
@@ -77,12 +71,6 @@ const NGA_DIRECTIVES = [
   BaCardBlur
 ];
 
-const NGA_PIPES = [
-  BaAppPicturePipe,
-  BaKameleonPicturePipe,
-  BaProfilePicturePipe
-];
-
 const NGA_SERVICES = [
   BaImageLoaderService,
   BaThemePreloader,
@@ -96,7 +84,6 @@ const NGA_VALIDATORS = [
 
 @NgModule({
   declarations: [
-    ...NGA_PIPES,
     ...NGA_DIRECTIVES,
     ...NGA_COMPONENTS
   ],
@@ -113,7 +100,6 @@ const NGA_VALIDATORS = [
     ...NGA_SERVICES
   ],
   exports: [
-    ...NGA_PIPES,
     ...NGA_DIRECTIVES,
     ...NGA_COMPONENTS
   ]
