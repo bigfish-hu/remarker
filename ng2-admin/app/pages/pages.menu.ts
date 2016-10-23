@@ -7,7 +7,7 @@ export const PAGES_MENU = [
         data: {
           menu: {
             title: 'Dashboard',
-            icon: '',
+            icon: 'fa fa-home',
             selected: false,
             expanded: false,
             order: 0

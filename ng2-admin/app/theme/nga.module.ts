@@ -12,19 +12,15 @@ import {
 } from './theme.configProvider';
 
 import {
-  BaAmChart,
   BaBackTop,
   BaCard,
-  BaChartistChart,
   BaCheckbox,
   BaContentTop,
-  BaFullCalendar,
   BaMenuItem,
   BaMenu,
   BaMsgCenter,
   BaMultiCheckbox,
   BaPageTop,
-  BaPictureUploader,
   BaSidebar
 } from './components';
 
@@ -32,7 +28,6 @@ import { BaCardBlur } from './components/baCard/baCardBlur.directive';
 
 import {
   BaScrollPosition,
-  BaSlimScroll,
   BaThemeRun
 } from './directives';
 
@@ -48,25 +43,20 @@ import {
 } from './validators';
 
 const NGA_COMPONENTS = [
-  BaAmChart,
   BaBackTop,
   BaCard,
-  BaChartistChart,
   BaCheckbox,
   BaContentTop,
-  BaFullCalendar,
   BaMenuItem,
   BaMenu,
   BaMsgCenter,
   BaMultiCheckbox,
   BaPageTop,
-  BaPictureUploader,
   BaSidebar
 ];
 
 const NGA_DIRECTIVES = [
   BaScrollPosition,
-  BaSlimScroll,
   BaThemeRun,
   BaCardBlur
 ];

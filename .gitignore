@@ -5,6 +5,5 @@ npm-debug.log
 
 # Excluded folders
 vendor/
-.idea/
 bower_components/
 node_modules/

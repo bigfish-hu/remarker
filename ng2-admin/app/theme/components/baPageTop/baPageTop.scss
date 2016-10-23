@@ -9,7 +9,7 @@
   height: 66px;
   width: 100%;
   min-width: $resMin;
-  padding: 0 32px 0 40px;
+  padding: 0 20px 0 10px;
 
   .dropdown-toggle::after {
     display: none;
@@ -78,7 +78,7 @@ a.refresh-data {
 }
 
 a.collapse-menu-link {
-  font-size: 31px;
+  font-size: 20px;
   cursor: pointer;
   display: block;
   text-decoration: none;
