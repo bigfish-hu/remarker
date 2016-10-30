@@ -18,8 +18,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
  */
 const HMR = helpers.hasProcessFlag('hot');
 const METADATA = {
-  title: 'ng2-admin - Angular 2 Admin Template',
-  description: 'Free Angular 2 and Bootstrap 4 Admin Template',
+  title: 'Remarker Admin',
+  description: 'Admin for Remarker',
   baseUrl: '/admin',
   isDevServer: helpers.isWebpackDevServer()
 };
@@ -107,6 +107,10 @@ module.exports = function (options) {
             flags: 'g'
           },
           include: [admin]
+        },
+        {
+          test: /\.ts$/,
+          loader: 'tslint'
         }
 
       ],
@@ -227,7 +231,7 @@ module.exports = function (options) {
       new ExtractTextPlugin({filename: 'initial.css', allChunks: true}),
 
       new AssetsPlugin({
-        path: helpers.root('public/dist'),
+        path: helpers.root('public/assets'),
         filename: 'webpack-assets.json',
         prettyPrint: true
       }),
@@ -339,6 +343,18 @@ module.exports = function (options) {
       module: false,
       clearImmediate: false,
       setImmediate: false
+    },
+
+    /**
+     * Static analysis linter for TypeScript advanced options configuration
+     * Description: An extensible linter for the TypeScript language.
+     *
+     * See: https://github.com/wbuchwalter/tslint-loader
+     */
+    tslint: {
+      emitErrors: true,
+      failOnHint: false,
+      resourcePath: 'ng2-admin'
     }
 
   };

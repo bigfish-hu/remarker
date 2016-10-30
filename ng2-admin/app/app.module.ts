@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
+import { AUTH_PROVIDERS } from 'angular2-jwt';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -21,7 +22,8 @@ import { PagesModule } from './pages/pages.module';
 // Application wide providers
 const APP_PROVIDERS = [
   AppState,
-  GlobalState
+  GlobalState,
+  AUTH_PROVIDERS
 ];
 
 type StoreType = {

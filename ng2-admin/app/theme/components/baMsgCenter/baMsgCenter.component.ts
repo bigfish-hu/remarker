@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {BaMsgCenterService} from './baMsgCenter.service';
+import { BaMsgCenterService } from './baMsgCenter.service';
 
 @Component({
   selector: 'ba-msg-center',
@@ -10,10 +10,10 @@ import {BaMsgCenterService} from './baMsgCenter.service';
 })
 export class BaMsgCenter {
 
-  public notifications:Array<Object>;
-  public messages:Array<Object>;
+  public notifications: Array<Object>;
+  public messages: Array<Object>;
 
-  constructor(private _baMsgCenterService:BaMsgCenterService) {
+  constructor(private _baMsgCenterService: BaMsgCenterService) {
     this.notifications = this._baMsgCenterService.getNotifications();
     this.messages = this._baMsgCenterService.getMessages();
   }

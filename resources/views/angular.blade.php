@@ -5,9 +5,9 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>ng2-admin - Angular 2 Admin Template</title>
+  <title i18n>Remarker Admin</title>
 
-  <meta name="description" content="Free Angular 2 and Bootstrap 4 Admin Template">
+  <meta name="description" content="Admin for Remarker">
 
   
   <!-- Configured Head Tags  -->

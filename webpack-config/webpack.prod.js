@@ -197,17 +197,17 @@ module.exports = function(env) {
 
     ],
 
-    /**
-     * Static analysis linter for TypeScript advanced options configuration
-     * Description: An extensible linter for the TypeScript language.
-     *
-     * See: https://github.com/wbuchwalter/tslint-loader
-     */
-    tslint: {
-      emitErrors: true,
-      failOnHint: true,
-      resourcePath: 'src'
-    },
+    ///**
+    // * Static analysis linter for TypeScript advanced options configuration
+    // * Description: An extensible linter for the TypeScript language.
+    // *
+    // * See: https://github.com/wbuchwalter/tslint-loader
+    // */
+    //tslint: {
+    //  emitErrors: true,
+    //  failOnHint: true,
+    //  resourcePath: 'ng2-admin'
+    //},
 
     /**
      * Html loader advanced options
