@@ -1,11 +1,12 @@
-import { NgModule }      from '@angular/core';
-import { CommonModule }  from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
 import { Login } from './login.component';
 import { routing } from './login.routing';
-
+import { LoginGuard } from './login-guard.service';
+import { AuthService } from '../../auth/auth.service';
 
 @NgModule({
   imports: [
@@ -17,6 +18,10 @@ import { routing } from './login.routing';
   ],
   declarations: [
     Login
+  ],
+  providers: [
+    AuthService,
+    LoginGuard
   ]
 })
 export default class LoginModule {}

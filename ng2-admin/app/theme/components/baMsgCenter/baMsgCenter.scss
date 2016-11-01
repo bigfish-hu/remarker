@@ -216,6 +216,7 @@
       color: $dropdown-text;
       padding: 4px 16px 4px 20px;
       &.signout {
+        cursor: pointer;
         border-top: 1px solid $default;
       }
       i {

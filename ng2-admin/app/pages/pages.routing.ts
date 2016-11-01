@@ -5,7 +5,7 @@ import { AuthGuard } from '../auth/auth-guard.service';
 // noinspection TypeScriptValidateTypes
 const routes: Routes = [
   { path: 'login', loadChildren: () => System.import('./login/login.module') },
-    {path: 'not-found', loadChildren: () => System.import('./not-found/not-found.module')},
+  { path: 'not-found', loadChildren: () => System.import('./not-found/not-found.module') },
   {
     path: 'pages',
     component: Pages,

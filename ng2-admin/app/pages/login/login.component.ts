@@ -1,5 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from '../../auth/auth.service';
+import { Router } from '@angular/router';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'login',
@@ -14,7 +17,12 @@ export class Login {
   public password: AbstractControl;
   public submitted: boolean = false;
 
-  constructor(fb: FormBuilder) {
+  constructor(
+      fb: FormBuilder,
+      private authService: AuthService,
+      private router: Router,
+      public toastr: ToastsManager
+  ) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])]
@@ -27,8 +35,17 @@ export class Login {
   public onSubmit(values: Object): void {
     this.submitted = true;
     if (this.form.valid) {
-      // your code goes here
-      // console.log(values);
+      this.authService.login(values)
+          .subscribe((user) => {
+            this.authService.user = user;
+            this.router.navigate([this.authService.redirectRoute]);
+          }, (error) => {
+          this.showMessage(error);
+        });
     }
+  }
+
+  showMessage(error) {
+    this.toastr.error(error.text, error.title);
   }
 }

@@ -81,7 +81,7 @@ module.exports = function (options) {
       root: admin,
 
       // remove other default values
-      modulesDirectories: ['node_modules'],
+      modulesDirectories: ['node_modules']
 
     },
 
@@ -231,7 +231,7 @@ module.exports = function (options) {
       new ExtractTextPlugin({filename: 'initial.css', allChunks: true}),
 
       new AssetsPlugin({
-        path: helpers.root('public/assets'),
+        path: helpers.root('public/dist/assets'),
         filename: 'webpack-assets.json',
         prettyPrint: true
       }),
@@ -279,7 +279,7 @@ module.exports = function (options) {
        */
       new CopyWebpackPlugin([{
         from: admin + '/assets',
-        to: helpers.root('public/assets')
+        to: helpers.root('public/dist/assets')
       }]),
 
       /*

@@ -28,6 +28,10 @@ __webpack_require__("./node_modules/jquery/dist/jquery.js");
 __webpack_require__("./node_modules/bootstrap-loader/loader.js");
 __webpack_require__("./node_modules/font-awesome-sass-loader/index.js");
 __webpack_require__("./node_modules/lodash/lodash.js");
+__webpack_require__("./node_modules/ng2-slim-loading-bar/style.css");
+// import '../node_modules/ng2-toasty/style-bootstrap.css';
+// import '../node_modules/ng2-toastr/bundles/ng2-toastr.min.css';
+//import '../node_modules/angular2-toaster/lib/toaster.css';
 if (false) {
 }
 else {
@@ -82913,6 +82917,13 @@ return jQuery;
 }.call(this));
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js"), __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ },
+
+/***/ "./node_modules/ng2-slim-loading-bar/style.css":
+/***/ function(module, exports) {
+
+module.exports = "/*!\n * Copyright (C) 2016 Sergey Akopkokhyants\n * This project is licensed under the terms of the MIT license.\n * https://github.com/akserg/ng2-slim-loading-bar\n */\n\n\n/* Styling for the Slim Loading Progress Bar container */\n.slim-loading-bar {\n    position: fixed;\n    margin: 0;\n    padding: 0;\n    top: 0;\n    left: 0;\n    right: 0;\n    z-index: 99999;\n}\n\n/* Styling for the Slim Loading Progress Bar itself */\n.slim-loading-bar-progress {\n    margin: 0;\n    padding: 0;\n    z-index: 99998;\n    background-color: green;\n    color: green;\n    box-shadow: 0 0 10px 0; /* Inherits the font color */\n    height: 2px;\n    opacity: 0;\n\n    /* Add CSS3 styles for transition smoothing */\n    -webkit-transition: all 0.5s ease-in-out;\n    -moz-transition: all 0.5s ease-in-out;\n    -o-transition: all 0.5s ease-in-out;\n    transition: all 0.5s ease-in-out;\n}\n"
 
 /***/ },
 

@@ -10,19 +10,35 @@ __webpack_require__("./ng2-admin/app/app.loader.ts");
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var global_state_1 = __webpack_require__("./ng2-admin/app/global.state.ts");
 var services_1 = __webpack_require__("./ng2-admin/app/theme/services/index.ts");
+var ng2_slim_loading_bar_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 /*
  * App Component
  * Top Level Component
  */
 var App = (function () {
-    function App(_state, _imageLoader, _spinner) {
+    function App(_state, _imageLoader, _spinner, router, slimLoader) {
         var _this = this;
         this._state = _state;
         this._imageLoader = _imageLoader;
         this._spinner = _spinner;
+        this.router = router;
+        this.slimLoader = slimLoader;
         this.isMenuCollapsed = false;
         this._state.subscribe('menu.isCollapsed', function (isCollapsed) {
             _this.isMenuCollapsed = isCollapsed;
+        });
+        this.sub = this.router.events.subscribe(function (event) {
+            if (event instanceof router_1.NavigationStart) {
+                _this.slimLoader.start();
+            }
+            else if (event instanceof router_1.NavigationEnd ||
+                event instanceof router_1.NavigationCancel ||
+                event instanceof router_1.NavigationError) {
+                _this.slimLoader.complete();
+            }
+        }, function (error) {
+            _this.slimLoader.complete();
         });
     }
     App.prototype.ngAfterViewInit = function () {
@@ -32,17 +48,22 @@ var App = (function () {
             _this._spinner.hide();
         });
     };
+    App.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
     App = __decorate([
         core_1.Component({
             selector: 'app',
             encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./node_modules/normalize.css/normalize.css"), __webpack_require__("./ng2-admin/app/app.scss")],
-            template: "\n    <main [ngClass]=\"{'menu-collapsed': isMenuCollapsed}\" baThemeRun>\n      <div class=\"additional-bg\"></div>\n      <router-outlet></router-outlet>\n    </main>\n  "
+            styles: [__webpack_require__("./node_modules/normalize.css/normalize.css"), __webpack_require__("./ng2-admin/app/app.scss"),
+                __webpack_require__("./node_modules/ng2-toastr/bundles/ng2-toastr.min.css")
+            ],
+            template: "\n    <main [ngClass]=\"{'menu-collapsed': isMenuCollapsed}\" baThemeRun>\n      <div class=\"additional-bg\"></div>\n      <router-outlet></router-outlet>\n      <ng2-slim-loading-bar></ng2-slim-loading-bar>\n    </main>\n  "
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _a) || Object, (typeof (_b = typeof services_1.BaImageLoaderService !== 'undefined' && services_1.BaImageLoaderService) === 'function' && _b) || Object, (typeof (_c = typeof services_1.BaThemeSpinner !== 'undefined' && services_1.BaThemeSpinner) === 'function' && _c) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _a) || Object, (typeof (_b = typeof services_1.BaImageLoaderService !== 'undefined' && services_1.BaImageLoaderService) === 'function' && _b) || Object, (typeof (_c = typeof services_1.BaThemeSpinner !== 'undefined' && services_1.BaThemeSpinner) === 'function' && _c) || Object, (typeof (_d = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _d) || Object, (typeof (_e = typeof ng2_slim_loading_bar_1.SlimLoadingBarService !== 'undefined' && ng2_slim_loading_bar_1.SlimLoadingBarService) === 'function' && _e) || Object])
     ], App);
     return App;
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e;
 }());
 exports.App = App;
 
@@ -83,6 +104,9 @@ var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var hmr_1 = __webpack_require__("./node_modules/@angularclass/hmr/dist/index.js");
 var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
+var ng2_slim_loading_bar_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/index.js");
+var ng2_toastr_1 = __webpack_require__("./node_modules/ng2-toastr/ng2-toastr.js");
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -154,11 +178,15 @@ var AppModule = (function () {
                 forms_1.ReactiveFormsModule,
                 nga_module_1.NgaModule,
                 pages_module_1.PagesModule,
-                app_routing_1.routing
+                app_routing_1.routing,
+                ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot(),
+                ng2_toastr_1.ToastModule
             ],
             providers: [
                 environment_1.ENV_PROVIDERS,
-                APP_PROVIDERS
+                APP_PROVIDERS,
+                angular2_jwt_1.AUTH_PROVIDERS,
+                auth_service_1.AuthService
             ]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof core_1.ApplicationRef !== 'undefined' && core_1.ApplicationRef) === 'function' && _a) || Object, (typeof (_b = typeof app_service_1.AppState !== 'undefined' && app_service_1.AppState) === 'function' && _b) || Object])
@@ -248,22 +276,27 @@ var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
 var AuthGuard = (function () {
-    function AuthGuard(auth, router) {
-        this.auth = auth;
+    function AuthGuard(authService, router) {
+        this.authService = authService;
         this.router = router;
     }
-    AuthGuard.prototype.canActivate = function () {
-        if (this.auth.loggedIn()) {
+    AuthGuard.prototype.canActivate = function (route, state) {
+        var url = state.url;
+        return this.checkLogin(url);
+    };
+    AuthGuard.prototype.checkLogin = function (url) {
+        if (this.authService.loggedIn()) {
             return true;
         }
-        else {
-            this.router.navigate(['/login']);
-            return false;
-        }
+        // Store the attempted URL for redirecting
+        this.authService.redirectRoute = url;
+        // Navigate to the login page with extras
+        this.router.navigate([this.authService.loginRoute]);
+        return false;
     };
     AuthGuard = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.Auth !== 'undefined' && auth_service_1.Auth) === 'function' && _a) || Object, (typeof (_b = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _b) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _b) || Object])
     ], AuthGuard);
     return AuthGuard;
     var _a, _b;
@@ -279,20 +312,65 @@ exports.AuthGuard = AuthGuard;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
 var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
-var Auth = (function () {
-    function Auth() {
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+__webpack_require__("./node_modules/rxjs/add/observable/throw.js");
+// Operators
+__webpack_require__("./node_modules/rxjs/add/operator/catch.js");
+__webpack_require__("./node_modules/rxjs/add/operator/map.js");
+var AuthService = (function () {
+    function AuthService(http) {
+        var _this = this;
+        this.http = http;
+        this.redirectRoute = '/pages/dashboard';
+        this.loginRoute = '/login';
+        this.loginUrl = '/api/auth/login';
+        this.tokenName = 'id_token';
+        this.logout = function () {
+            localStorage.removeItem(_this.tokenName);
+        };
+        this.extractUser = function (res) {
+            var data = res.json().data;
+            if (typeof data.token !== 'undefined') {
+                _this.saveToken(data.token);
+            }
+            return data.user || {};
+        };
     }
-    Auth.prototype.loggedIn = function () {
-        return angular2_jwt_1.tokenNotExpired();
+    AuthService.prototype.loggedIn = function () {
+        return angular2_jwt_1.tokenNotExpired(this.tokenName);
     };
-    Auth = __decorate([
+    AuthService.prototype.login = function (values) {
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        var options = new http_1.RequestOptions({ headers: headers });
+        return this.http.post(this.loginUrl, JSON.stringify(values), options)
+            .map(this.extractUser)
+            .catch(this.handleError);
+    };
+    AuthService.prototype.saveToken = function (token) {
+        localStorage.setItem(this.tokenName, token);
+    };
+    AuthService.prototype.handleError = function (error) {
+        var errMsg;
+        if (error instanceof http_1.Response) {
+            var body = error.json() || '';
+            var err = body.error || JSON.stringify(body);
+            errMsg = { title: error.statusText, text: err };
+        }
+        else {
+            errMsg = { title: '', text: error.message ? error.message : error.toString() };
+        }
+        return Observable_1.Observable.throw(errMsg);
+    };
+    AuthService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], Auth);
-    return Auth;
+        __metadata('design:paramtypes', [(typeof (_a = typeof http_1.Http !== 'undefined' && http_1.Http) === 'function' && _a) || Object])
+    ], AuthService);
+    return AuthService;
+    var _a;
 }());
-exports.Auth = Auth;
+exports.AuthService = AuthService;
 
 
 /***/ },
@@ -470,7 +548,7 @@ var PagesModule = (function () {
         core_1.NgModule({
             imports: [common_1.CommonModule, nga_module_1.NgaModule, pages_routing_1.routing],
             declarations: [pages_component_1.Pages],
-            providers: [auth_guard_service_1.AuthGuard, auth_service_1.Auth]
+            providers: [auth_guard_service_1.AuthGuard, auth_service_1.AuthService]
         }), 
         __metadata('design:paramtypes', [])
     ], PagesModule);
@@ -491,8 +569,8 @@ var pages_component_1 = __webpack_require__("./ng2-admin/app/pages/pages.compone
 var auth_guard_service_1 = __webpack_require__("./ng2-admin/app/auth/auth-guard.service.ts");
 // noinspection TypeScriptValidateTypes
 var routes = [
-    { path: 'login', loadChildren: function () { return __webpack_require__.e/* System.import */(1).then(__webpack_require__.bind(null, "./ng2-admin/app/pages/login/login.module.ts")).then(function (mod) { return (mod.__esModule && mod.default) ? mod.default : mod; }); } },
-    { path: 'not-found', loadChildren: function () { return __webpack_require__.e/* System.import */(0).then(__webpack_require__.bind(null, "./ng2-admin/app/pages/not-found/not-found.module.ts")).then(function (mod) { return (mod.__esModule && mod.default) ? mod.default : mod; }); } },
+    { path: 'login', loadChildren: function () { return __webpack_require__.e/* System.import */(0).then(__webpack_require__.bind(null, "./ng2-admin/app/pages/login/login.module.ts")).then(function (mod) { return (mod.__esModule && mod.default) ? mod.default : mod; }); } },
+    { path: 'not-found', loadChildren: function () { return __webpack_require__.e/* System.import */(1).then(__webpack_require__.bind(null, "./ng2-admin/app/pages/not-found/not-found.module.ts")).then(function (mod) { return (mod.__esModule && mod.default) ? mod.default : mod; }); } },
     {
         path: 'pages',
         component: pages_component_1.Pages,
@@ -1301,7 +1379,7 @@ module.exports = "<ul class=\"al-msg-center clearfix\">\n  <li class=\"dropdown\
 /***/ "./ng2-admin/app/theme/components/baMsgCenter/baMsgCenter.scss":
 /***/ function(module, exports) {
 
-module.exports = "/* msg center */\n@-webkit-keyframes pulsate {\n  30% {\n    -webkit-transform: scale(0.1, 0.1);\n    opacity: 0.0; }\n  35% {\n    opacity: 1.0; }\n  40% {\n    -webkit-transform: scale(1.2, 1.2);\n    opacity: 0.0; } }\n\n.al-msg-center {\n  float: right;\n  padding: 0;\n  list-style: none;\n  margin: 13px 47px 0 0; }\n  .al-msg-center li {\n    list-style: none;\n    float: left;\n    margin-left: 30px; }\n    .al-msg-center li:first-child {\n      margin-left: 0; }\n    .al-msg-center li > a {\n      color: #ffffff;\n      text-decoration: none;\n      font-size: 13px;\n      position: relative; }\n      .al-msg-center li > a span {\n        display: inline-block;\n        min-width: 10px;\n        padding: 2px 4px 2px 4px;\n        color: #ffffff;\n        vertical-align: baseline;\n        white-space: nowrap;\n        text-align: center;\n        border-radius: 13px;\n        text-shadow: none;\n        line-height: 11px;\n        background-color: #f95372;\n        position: absolute;\n        top: -5px;\n        right: -14px;\n        font-size: 11px; }\n      .al-msg-center li > a .notification-ring {\n        border: 1px solid #f95372;\n        border-radius: 100px;\n        height: 40px;\n        width: 40px;\n        position: absolute;\n        top: -18px;\n        right: -27px;\n        animation: pulsate 8s ease-out;\n        animation-iteration-count: infinite;\n        opacity: 0.0; }\n      .al-msg-center li > a:hover {\n        color: #f95372; }\n        .al-msg-center li > a:hover.msg {\n          color: #00abff; }\n      .al-msg-center li > a.msg span {\n        background-color: #00abff; }\n      .al-msg-center li > a.msg .notification-ring {\n        border-color: #00abff; }\n    .al-msg-center li.open > a {\n      color: #f95372; }\n      .al-msg-center li.open > a.msg {\n        color: #00abff; }\n\n@media (max-width: 435px) {\n  .al-msg-center {\n    margin-right: 20px; }\n    .al-msg-center li {\n      margin-left: 20px; }\n      .al-msg-center li:first-child {\n        margin-left: 0; } }\n\n.msg-block-header {\n  display: inline-block;\n  padding: 0;\n  font-size: 13px;\n  margin: 0 0 0 6px; }\n\n.top-dropdown-menu {\n  width: 316px;\n  left: auto;\n  right: -47px;\n  top: 26px; }\n  .top-dropdown-menu ::-webkit-scrollbar {\n    width: 0.4em;\n    height: 0.4em; }\n  .top-dropdown-menu ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.5);\n    cursor: pointer; }\n  .top-dropdown-menu ::-webkit-scrollbar-track {\n    background: #fff; }\n  .top-dropdown-menu body {\n    scrollbar-face-color: rgba(0, 0, 0, 0.5);\n    scrollbar-track-color: #fff; }\n  .top-dropdown-menu .header {\n    padding: 10px 12px;\n    border-bottom: 1px solid #ffffff;\n    font-size: 12px; }\n    .top-dropdown-menu .header strong {\n      float: left;\n      color: #7d7d7d; }\n    .top-dropdown-menu .header > a {\n      float: right;\n      margin-left: 12px;\n      text-decoration: none; }\n      .top-dropdown-menu .header > a:hover {\n        color: #7d7d7d; }\n  .top-dropdown-menu .msg-list {\n    max-height: 296px;\n    overflow: scroll;\n    overflow-x: hidden; }\n    .top-dropdown-menu .msg-list > a {\n      border-top: 1px solid #ffffff;\n      padding: 10px 12px;\n      display: block;\n      text-decoration: none;\n      color: #7d7d7d;\n      font-size: 12px; }\n      .top-dropdown-menu .msg-list > a:first-child {\n        border-top: none; }\n      .top-dropdown-menu .msg-list > a .img-area {\n        float: left;\n        width: 36px; }\n        .top-dropdown-menu .msg-list > a .img-area img {\n          width: 36px;\n          height: 36px; }\n          .top-dropdown-menu .msg-list > a .img-area img.photo-msg-item {\n            border-radius: 18px; }\n        .top-dropdown-menu .msg-list > a .img-area > div {\n          width: 36px;\n          height: 36px;\n          border-radius: 4px;\n          font-size: 24px;\n          text-align: center; }\n          .top-dropdown-menu .msg-list > a .img-area > div.comments {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div.orders {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div i {\n            width: 36px;\n            line-height: 36px; }\n      .top-dropdown-menu .msg-list > a .msg-area {\n        float: right;\n        width: 230px; }\n        .top-dropdown-menu .msg-list > a .msg-area div {\n          max-height: 34px;\n          overflow: hidden;\n          text-overflow: ellipsis; }\n        .top-dropdown-menu .msg-list > a .msg-area span {\n          font-style: italic;\n          text-align: right;\n          display: block;\n          font-size: 11px; }\n      .top-dropdown-menu .msg-list > a:hover {\n        background: #E2F0FF; }\n  .top-dropdown-menu > a {\n    border-top: 1px solid #ffffff;\n    display: block;\n    text-align: center;\n    padding: 10px;\n    font-size: 12px;\n    text-decoration: none; }\n    .top-dropdown-menu > a:hover {\n      color: #7d7d7d; }\n  .top-dropdown-menu.profile-dropdown {\n    width: 145px;\n    top: 55px;\n    right: -25px; }\n    .top-dropdown-menu.profile-dropdown a {\n      text-align: left;\n      border: none;\n      text-decoration: none;\n      color: #7d7d7d;\n      padding: 4px 16px 4px 20px; }\n      .top-dropdown-menu.profile-dropdown a.signout {\n        border-top: 1px solid #ffffff; }\n      .top-dropdown-menu.profile-dropdown a i {\n        margin-right: 10px; }\n      .top-dropdown-menu.profile-dropdown a:hover {\n        background: #f4fcff; }\n    .top-dropdown-menu.profile-dropdown i.dropdown-arr {\n      right: 25px; }\n  .top-dropdown-menu i.dropdown-arr {\n    position: absolute;\n    top: -22px;\n    right: 42px;\n    display: block;\n    width: 0;\n    height: 0;\n    border: 11px solid transparent;\n    border-bottom-color: rgba(0, 0, 0, 0.15); }\n    .top-dropdown-menu i.dropdown-arr:after {\n      top: -9px;\n      left: 0px;\n      margin-left: -10px;\n      content: \" \";\n      position: absolute;\n      display: block;\n      width: 0;\n      height: 0;\n      border: 10px solid transparent;\n      border-bottom-color: #ffffff; }\n\n@media (max-width: 415px) {\n  .top-dropdown-menu {\n    right: -81px; }\n    .top-dropdown-menu i.dropdown-arr {\n      right: 75px; } }\n"
+module.exports = "/* msg center */\n@-webkit-keyframes pulsate {\n  30% {\n    -webkit-transform: scale(0.1, 0.1);\n    opacity: 0.0; }\n  35% {\n    opacity: 1.0; }\n  40% {\n    -webkit-transform: scale(1.2, 1.2);\n    opacity: 0.0; } }\n\n.al-msg-center {\n  float: right;\n  padding: 0;\n  list-style: none;\n  margin: 13px 47px 0 0; }\n  .al-msg-center li {\n    list-style: none;\n    float: left;\n    margin-left: 30px; }\n    .al-msg-center li:first-child {\n      margin-left: 0; }\n    .al-msg-center li > a {\n      color: #ffffff;\n      text-decoration: none;\n      font-size: 13px;\n      position: relative; }\n      .al-msg-center li > a span {\n        display: inline-block;\n        min-width: 10px;\n        padding: 2px 4px 2px 4px;\n        color: #ffffff;\n        vertical-align: baseline;\n        white-space: nowrap;\n        text-align: center;\n        border-radius: 13px;\n        text-shadow: none;\n        line-height: 11px;\n        background-color: #f95372;\n        position: absolute;\n        top: -5px;\n        right: -14px;\n        font-size: 11px; }\n      .al-msg-center li > a .notification-ring {\n        border: 1px solid #f95372;\n        border-radius: 100px;\n        height: 40px;\n        width: 40px;\n        position: absolute;\n        top: -18px;\n        right: -27px;\n        animation: pulsate 8s ease-out;\n        animation-iteration-count: infinite;\n        opacity: 0.0; }\n      .al-msg-center li > a:hover {\n        color: #f95372; }\n        .al-msg-center li > a:hover.msg {\n          color: #00abff; }\n      .al-msg-center li > a.msg span {\n        background-color: #00abff; }\n      .al-msg-center li > a.msg .notification-ring {\n        border-color: #00abff; }\n    .al-msg-center li.open > a {\n      color: #f95372; }\n      .al-msg-center li.open > a.msg {\n        color: #00abff; }\n\n@media (max-width: 435px) {\n  .al-msg-center {\n    margin-right: 20px; }\n    .al-msg-center li {\n      margin-left: 20px; }\n      .al-msg-center li:first-child {\n        margin-left: 0; } }\n\n.msg-block-header {\n  display: inline-block;\n  padding: 0;\n  font-size: 13px;\n  margin: 0 0 0 6px; }\n\n.top-dropdown-menu {\n  width: 316px;\n  left: auto;\n  right: -47px;\n  top: 26px; }\n  .top-dropdown-menu ::-webkit-scrollbar {\n    width: 0.4em;\n    height: 0.4em; }\n  .top-dropdown-menu ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.5);\n    cursor: pointer; }\n  .top-dropdown-menu ::-webkit-scrollbar-track {\n    background: #fff; }\n  .top-dropdown-menu body {\n    scrollbar-face-color: rgba(0, 0, 0, 0.5);\n    scrollbar-track-color: #fff; }\n  .top-dropdown-menu .header {\n    padding: 10px 12px;\n    border-bottom: 1px solid #ffffff;\n    font-size: 12px; }\n    .top-dropdown-menu .header strong {\n      float: left;\n      color: #7d7d7d; }\n    .top-dropdown-menu .header > a {\n      float: right;\n      margin-left: 12px;\n      text-decoration: none; }\n      .top-dropdown-menu .header > a:hover {\n        color: #7d7d7d; }\n  .top-dropdown-menu .msg-list {\n    max-height: 296px;\n    overflow: scroll;\n    overflow-x: hidden; }\n    .top-dropdown-menu .msg-list > a {\n      border-top: 1px solid #ffffff;\n      padding: 10px 12px;\n      display: block;\n      text-decoration: none;\n      color: #7d7d7d;\n      font-size: 12px; }\n      .top-dropdown-menu .msg-list > a:first-child {\n        border-top: none; }\n      .top-dropdown-menu .msg-list > a .img-area {\n        float: left;\n        width: 36px; }\n        .top-dropdown-menu .msg-list > a .img-area img {\n          width: 36px;\n          height: 36px; }\n          .top-dropdown-menu .msg-list > a .img-area img.photo-msg-item {\n            border-radius: 18px; }\n        .top-dropdown-menu .msg-list > a .img-area > div {\n          width: 36px;\n          height: 36px;\n          border-radius: 4px;\n          font-size: 24px;\n          text-align: center; }\n          .top-dropdown-menu .msg-list > a .img-area > div.comments {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div.orders {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div i {\n            width: 36px;\n            line-height: 36px; }\n      .top-dropdown-menu .msg-list > a .msg-area {\n        float: right;\n        width: 230px; }\n        .top-dropdown-menu .msg-list > a .msg-area div {\n          max-height: 34px;\n          overflow: hidden;\n          text-overflow: ellipsis; }\n        .top-dropdown-menu .msg-list > a .msg-area span {\n          font-style: italic;\n          text-align: right;\n          display: block;\n          font-size: 11px; }\n      .top-dropdown-menu .msg-list > a:hover {\n        background: #E2F0FF; }\n  .top-dropdown-menu > a {\n    border-top: 1px solid #ffffff;\n    display: block;\n    text-align: center;\n    padding: 10px;\n    font-size: 12px;\n    text-decoration: none; }\n    .top-dropdown-menu > a:hover {\n      color: #7d7d7d; }\n  .top-dropdown-menu.profile-dropdown {\n    width: 145px;\n    top: 55px;\n    right: -25px; }\n    .top-dropdown-menu.profile-dropdown a {\n      text-align: left;\n      border: none;\n      text-decoration: none;\n      color: #7d7d7d;\n      padding: 4px 16px 4px 20px; }\n      .top-dropdown-menu.profile-dropdown a.signout {\n        cursor: pointer;\n        border-top: 1px solid #ffffff; }\n      .top-dropdown-menu.profile-dropdown a i {\n        margin-right: 10px; }\n      .top-dropdown-menu.profile-dropdown a:hover {\n        background: #f4fcff; }\n    .top-dropdown-menu.profile-dropdown i.dropdown-arr {\n      right: 25px; }\n  .top-dropdown-menu i.dropdown-arr {\n    position: absolute;\n    top: -22px;\n    right: 42px;\n    display: block;\n    width: 0;\n    height: 0;\n    border: 11px solid transparent;\n    border-bottom-color: rgba(0, 0, 0, 0.15); }\n    .top-dropdown-menu i.dropdown-arr:after {\n      top: -9px;\n      left: 0px;\n      margin-left: -10px;\n      content: \" \";\n      position: absolute;\n      display: block;\n      width: 0;\n      height: 0;\n      border: 10px solid transparent;\n      border-bottom-color: #ffffff; }\n\n@media (max-width: 415px) {\n  .top-dropdown-menu {\n    right: -81px; }\n    .top-dropdown-menu i.dropdown-arr {\n      right: 75px; } }\n"
 
 /***/ },
 
@@ -1430,11 +1508,15 @@ __export(__webpack_require__("./ng2-admin/app/theme/components/baMultiCheckbox/b
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var global_state_1 = __webpack_require__("./ng2-admin/app/global.state.ts");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
 var BaPageTop = (function () {
-    function BaPageTop(_state) {
+    function BaPageTop(_state, authService, router) {
         var _this = this;
         this._state = _state;
+        this.authService = authService;
+        this.router = router;
         this.isScrolled = false;
         this.isMenuCollapsed = false;
         this._state.subscribe('menu.isCollapsed', function (isCollapsed) {
@@ -1448,6 +1530,10 @@ var BaPageTop = (function () {
     BaPageTop.prototype.scrolledChanged = function (isScrolled) {
         this.isScrolled = isScrolled;
     };
+    BaPageTop.prototype.logOut = function () {
+        this.authService.logout();
+        this.router.navigate([this.authService.loginRoute]);
+    };
     BaPageTop = __decorate([
         core_1.Component({
             selector: 'ba-page-top',
@@ -1455,10 +1541,10 @@ var BaPageTop = (function () {
             template: __webpack_require__("./ng2-admin/app/theme/components/baPageTop/baPageTop.html"),
             encapsulation: core_1.ViewEncapsulation.None
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _a) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _a) || Object, (typeof (_b = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _b) || Object, (typeof (_c = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _c) || Object])
     ], BaPageTop);
     return BaPageTop;
-    var _a;
+    var _a, _b, _c;
 }());
 exports.BaPageTop = BaPageTop;
 
@@ -1468,14 +1554,14 @@ exports.BaPageTop = BaPageTop;
 /***/ "./ng2-admin/app/theme/components/baPageTop/baPageTop.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"page-top clearfix\" baScrollPosition maxHeight=\"50\" (scrollChange)=\"scrolledChanged($event)\"\n     [ngClass]=\"{scrolled: isScrolled}\">\n  <a routerLink=\"/pages/dashboard\" class=\"al-logo clearfix\"><span>Remarker</span>Admin</a>\n  <a (click)=\"toggleMenu()\" class=\"collapse-menu-link fa fa-bars\"></a>\n\n  <div class=\"user-profile clearfix\">\n    <div class=\"dropdown al-user-profile\">\n      <a class=\"profile-toggle-link dropdown-toggle\" id=\"user-profile-dd\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n        <img src=\"\">\n      </a>\n      <ul class=\"dropdown-menu top-dropdown-menu profile-dropdown\" aria-labelledby=\"user-profile-dd\">\n        <i class=\"dropdown-arr\"></i>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-user\"></i>Profile</a></li>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-cog\"></i>Settings</a></li>\n        <div class=\"dropdown-divider\"></div>\n        <li class=\"dropdown-item\"><a href class=\"signout\" i18n><i class=\"fa fa-power-off\"></i>Sign out</a></li>\n      </ul>\n    </div>\n    <ba-msg-center></ba-msg-center>\n  </div>\n</div>\n"
+module.exports = "<div class=\"page-top clearfix\" baScrollPosition maxHeight=\"50\" (scrollChange)=\"scrolledChanged($event)\"\n     [ngClass]=\"{scrolled: isScrolled}\">\n  <a routerLink=\"/pages/dashboard\" class=\"al-logo clearfix\"><span>Remarker</span>Admin</a>\n  <a (click)=\"toggleMenu()\" class=\"collapse-menu-link fa fa-bars\"></a>\n\n  <div class=\"user-profile clearfix\">\n    <div class=\"dropdown al-user-profile\">\n      <a class=\"profile-toggle-link dropdown-toggle\" id=\"user-profile-dd\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n        <img src=\"\">\n      </a>\n      <ul class=\"dropdown-menu top-dropdown-menu profile-dropdown\" aria-labelledby=\"user-profile-dd\">\n        <i class=\"dropdown-arr\"></i>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-user\"></i>Profile</a></li>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-cog\"></i>Settings</a></li>\n        <div class=\"dropdown-divider\"></div>\n        <li class=\"dropdown-item\"><a (click)=\"logOut()\" class=\"signout\" i18n><i class=\"fa fa-power-off\"></i>Sign out</a></li>\n      </ul>\n    </div>\n    <ba-msg-center></ba-msg-center>\n  </div>\n</div>\n"
 
 /***/ },
 
 /***/ "./ng2-admin/app/theme/components/baPageTop/baPageTop.scss":
 /***/ function(module, exports) {
 
-module.exports = "/* msg center */\n@-webkit-keyframes pulsate {\n  30% {\n    -webkit-transform: scale(0.1, 0.1);\n    opacity: 0.0; }\n  35% {\n    opacity: 1.0; }\n  40% {\n    -webkit-transform: scale(1.2, 1.2);\n    opacity: 0.0; } }\n\n.al-msg-center {\n  float: right;\n  padding: 0;\n  list-style: none;\n  margin: 13px 47px 0 0; }\n  .al-msg-center li {\n    list-style: none;\n    float: left;\n    margin-left: 30px; }\n    .al-msg-center li:first-child {\n      margin-left: 0; }\n    .al-msg-center li > a {\n      color: #ffffff;\n      text-decoration: none;\n      font-size: 13px;\n      position: relative; }\n      .al-msg-center li > a span {\n        display: inline-block;\n        min-width: 10px;\n        padding: 2px 4px 2px 4px;\n        color: #ffffff;\n        vertical-align: baseline;\n        white-space: nowrap;\n        text-align: center;\n        border-radius: 13px;\n        text-shadow: none;\n        line-height: 11px;\n        background-color: #f95372;\n        position: absolute;\n        top: -5px;\n        right: -14px;\n        font-size: 11px; }\n      .al-msg-center li > a .notification-ring {\n        border: 1px solid #f95372;\n        border-radius: 100px;\n        height: 40px;\n        width: 40px;\n        position: absolute;\n        top: -18px;\n        right: -27px;\n        animation: pulsate 8s ease-out;\n        animation-iteration-count: infinite;\n        opacity: 0.0; }\n      .al-msg-center li > a:hover {\n        color: #f95372; }\n        .al-msg-center li > a:hover.msg {\n          color: #00abff; }\n      .al-msg-center li > a.msg span {\n        background-color: #00abff; }\n      .al-msg-center li > a.msg .notification-ring {\n        border-color: #00abff; }\n    .al-msg-center li.open > a {\n      color: #f95372; }\n      .al-msg-center li.open > a.msg {\n        color: #00abff; }\n\n@media (max-width: 435px) {\n  .al-msg-center {\n    margin-right: 20px; }\n    .al-msg-center li {\n      margin-left: 20px; }\n      .al-msg-center li:first-child {\n        margin-left: 0; } }\n\n.msg-block-header {\n  display: inline-block;\n  padding: 0;\n  font-size: 13px;\n  margin: 0 0 0 6px; }\n\n.top-dropdown-menu {\n  width: 316px;\n  left: auto;\n  right: -47px;\n  top: 26px; }\n  .top-dropdown-menu ::-webkit-scrollbar {\n    width: 0.4em;\n    height: 0.4em; }\n  .top-dropdown-menu ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.5);\n    cursor: pointer; }\n  .top-dropdown-menu ::-webkit-scrollbar-track {\n    background: #fff; }\n  .top-dropdown-menu body {\n    scrollbar-face-color: rgba(0, 0, 0, 0.5);\n    scrollbar-track-color: #fff; }\n  .top-dropdown-menu .header {\n    padding: 10px 12px;\n    border-bottom: 1px solid #ffffff;\n    font-size: 12px; }\n    .top-dropdown-menu .header strong {\n      float: left;\n      color: #7d7d7d; }\n    .top-dropdown-menu .header > a {\n      float: right;\n      margin-left: 12px;\n      text-decoration: none; }\n      .top-dropdown-menu .header > a:hover {\n        color: #7d7d7d; }\n  .top-dropdown-menu .msg-list {\n    max-height: 296px;\n    overflow: scroll;\n    overflow-x: hidden; }\n    .top-dropdown-menu .msg-list > a {\n      border-top: 1px solid #ffffff;\n      padding: 10px 12px;\n      display: block;\n      text-decoration: none;\n      color: #7d7d7d;\n      font-size: 12px; }\n      .top-dropdown-menu .msg-list > a:first-child {\n        border-top: none; }\n      .top-dropdown-menu .msg-list > a .img-area {\n        float: left;\n        width: 36px; }\n        .top-dropdown-menu .msg-list > a .img-area img {\n          width: 36px;\n          height: 36px; }\n          .top-dropdown-menu .msg-list > a .img-area img.photo-msg-item {\n            border-radius: 18px; }\n        .top-dropdown-menu .msg-list > a .img-area > div {\n          width: 36px;\n          height: 36px;\n          border-radius: 4px;\n          font-size: 24px;\n          text-align: center; }\n          .top-dropdown-menu .msg-list > a .img-area > div.comments {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div.orders {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div i {\n            width: 36px;\n            line-height: 36px; }\n      .top-dropdown-menu .msg-list > a .msg-area {\n        float: right;\n        width: 230px; }\n        .top-dropdown-menu .msg-list > a .msg-area div {\n          max-height: 34px;\n          overflow: hidden;\n          text-overflow: ellipsis; }\n        .top-dropdown-menu .msg-list > a .msg-area span {\n          font-style: italic;\n          text-align: right;\n          display: block;\n          font-size: 11px; }\n      .top-dropdown-menu .msg-list > a:hover {\n        background: #E2F0FF; }\n  .top-dropdown-menu > a {\n    border-top: 1px solid #ffffff;\n    display: block;\n    text-align: center;\n    padding: 10px;\n    font-size: 12px;\n    text-decoration: none; }\n    .top-dropdown-menu > a:hover {\n      color: #7d7d7d; }\n  .top-dropdown-menu.profile-dropdown {\n    width: 145px;\n    top: 55px;\n    right: -25px; }\n    .top-dropdown-menu.profile-dropdown a {\n      text-align: left;\n      border: none;\n      text-decoration: none;\n      color: #7d7d7d;\n      padding: 4px 16px 4px 20px; }\n      .top-dropdown-menu.profile-dropdown a.signout {\n        border-top: 1px solid #ffffff; }\n      .top-dropdown-menu.profile-dropdown a i {\n        margin-right: 10px; }\n      .top-dropdown-menu.profile-dropdown a:hover {\n        background: #f4fcff; }\n    .top-dropdown-menu.profile-dropdown i.dropdown-arr {\n      right: 25px; }\n  .top-dropdown-menu i.dropdown-arr {\n    position: absolute;\n    top: -22px;\n    right: 42px;\n    display: block;\n    width: 0;\n    height: 0;\n    border: 11px solid transparent;\n    border-bottom-color: rgba(0, 0, 0, 0.15); }\n    .top-dropdown-menu i.dropdown-arr:after {\n      top: -9px;\n      left: 0px;\n      margin-left: -10px;\n      content: \" \";\n      position: absolute;\n      display: block;\n      width: 0;\n      height: 0;\n      border: 10px solid transparent;\n      border-bottom-color: #ffffff; }\n\n@media (max-width: 415px) {\n  .top-dropdown-menu {\n    right: -81px; }\n    .top-dropdown-menu i.dropdown-arr {\n      right: 75px; } }\n\n.page-top {\n  background-color: #282828;\n  position: fixed;\n  z-index: 904;\n  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.5);\n  height: 66px;\n  width: 100%;\n  min-width: 320px;\n  padding: 0 20px 0 10px; }\n  .page-top .dropdown-toggle::after {\n    display: none; }\n\n.blur .page-top.scrolled {\n  background-color: rgba(0, 0, 0, 0.85); }\n\na.al-logo {\n  color: #ffffff;\n  display: block;\n  font-size: 24px;\n  font-family: \"Roboto\", sans-serif;\n  white-space: nowrap;\n  float: left;\n  outline: none !important;\n  line-height: 60px; }\n  a.al-logo span {\n    color: #00abff; }\n\n.user-profile {\n  float: right;\n  min-width: 230px;\n  margin-top: 10px; }\n\n.al-user-profile {\n  float: right;\n  margin-right: 12px;\n  transition: all .15s ease-in-out;\n  padding: 0;\n  width: 36px;\n  height: 36px;\n  border: 0;\n  opacity: 1;\n  position: relative; }\n  .al-user-profile a {\n    display: block; }\n  .al-user-profile img {\n    width: 45px;\n    height: 45px;\n    border-radius: 50%; }\n\na.refresh-data {\n  color: #ffffff;\n  font-size: 13px;\n  text-decoration: none;\n  font-weight: 400;\n  float: right;\n  margin-top: 13px;\n  margin-right: 26px; }\n  a.refresh-data:hover {\n    color: #e7ba08 !important; }\n\na.collapse-menu-link {\n  font-size: 20px;\n  cursor: pointer;\n  display: block;\n  text-decoration: none;\n  line-height: 42px;\n  color: #ffffff;\n  padding: 0;\n  float: left;\n  margin: 11px 0 0 25px; }\n  a.collapse-menu-link:hover {\n    text-decoration: none;\n    color: #e7ba08; }\n\n.al-skin-dropdown {\n  float: right;\n  margin-top: 14px;\n  margin-right: 26px; }\n  .al-skin-dropdown .tpl-skin-panel {\n    max-height: 300px;\n    overflow-y: scroll;\n    overflow-x: hidden; }\n\n.icon-palette {\n  display: inline-block;\n  width: 14px;\n  height: 13px;\n  background: url(\"assets/img/theme/palette.png\");\n  background-size: cover; }\n\n.search {\n  text-shadow: none;\n  color: #ffffff;\n  font-size: 13px;\n  line-height: 25px;\n  transition: all 0.5s ease;\n  white-space: nowrap;\n  overflow: hidden;\n  width: 162px;\n  float: left;\n  margin: 20px 0 0 30px; }\n  .search label {\n    cursor: pointer; }\n  .search i {\n    width: 16px;\n    display: inline-block;\n    cursor: pointer;\n    padding-left: 1px;\n    font-size: 16px;\n    margin-right: 13px; }\n  .search input {\n    background: none;\n    border: none;\n    outline: none;\n    width: 120px;\n    padding: 0;\n    margin: 0 0 0 -3px;\n    height: 27px; }\n\n@media screen and (max-width: 660px) {\n  .search {\n    display: none; } }\n\n@media screen and (max-width: 500px) {\n  .page-top {\n    padding: 0 20px; } }\n\n@media (max-width: 435px) {\n  .user-profile {\n    min-width: 136px; }\n  a.refresh-data {\n    margin-right: 10px; }\n  a.collapse-menu-link {\n    margin-left: 10px; }\n  .al-skin-dropdown {\n    display: none; } }\n\n.profile-toggle-link {\n  cursor: pointer; }\n"
+module.exports = "/* msg center */\n@-webkit-keyframes pulsate {\n  30% {\n    -webkit-transform: scale(0.1, 0.1);\n    opacity: 0.0; }\n  35% {\n    opacity: 1.0; }\n  40% {\n    -webkit-transform: scale(1.2, 1.2);\n    opacity: 0.0; } }\n\n.al-msg-center {\n  float: right;\n  padding: 0;\n  list-style: none;\n  margin: 13px 47px 0 0; }\n  .al-msg-center li {\n    list-style: none;\n    float: left;\n    margin-left: 30px; }\n    .al-msg-center li:first-child {\n      margin-left: 0; }\n    .al-msg-center li > a {\n      color: #ffffff;\n      text-decoration: none;\n      font-size: 13px;\n      position: relative; }\n      .al-msg-center li > a span {\n        display: inline-block;\n        min-width: 10px;\n        padding: 2px 4px 2px 4px;\n        color: #ffffff;\n        vertical-align: baseline;\n        white-space: nowrap;\n        text-align: center;\n        border-radius: 13px;\n        text-shadow: none;\n        line-height: 11px;\n        background-color: #f95372;\n        position: absolute;\n        top: -5px;\n        right: -14px;\n        font-size: 11px; }\n      .al-msg-center li > a .notification-ring {\n        border: 1px solid #f95372;\n        border-radius: 100px;\n        height: 40px;\n        width: 40px;\n        position: absolute;\n        top: -18px;\n        right: -27px;\n        animation: pulsate 8s ease-out;\n        animation-iteration-count: infinite;\n        opacity: 0.0; }\n      .al-msg-center li > a:hover {\n        color: #f95372; }\n        .al-msg-center li > a:hover.msg {\n          color: #00abff; }\n      .al-msg-center li > a.msg span {\n        background-color: #00abff; }\n      .al-msg-center li > a.msg .notification-ring {\n        border-color: #00abff; }\n    .al-msg-center li.open > a {\n      color: #f95372; }\n      .al-msg-center li.open > a.msg {\n        color: #00abff; }\n\n@media (max-width: 435px) {\n  .al-msg-center {\n    margin-right: 20px; }\n    .al-msg-center li {\n      margin-left: 20px; }\n      .al-msg-center li:first-child {\n        margin-left: 0; } }\n\n.msg-block-header {\n  display: inline-block;\n  padding: 0;\n  font-size: 13px;\n  margin: 0 0 0 6px; }\n\n.top-dropdown-menu {\n  width: 316px;\n  left: auto;\n  right: -47px;\n  top: 26px; }\n  .top-dropdown-menu ::-webkit-scrollbar {\n    width: 0.4em;\n    height: 0.4em; }\n  .top-dropdown-menu ::-webkit-scrollbar-thumb {\n    background: rgba(0, 0, 0, 0.5);\n    cursor: pointer; }\n  .top-dropdown-menu ::-webkit-scrollbar-track {\n    background: #fff; }\n  .top-dropdown-menu body {\n    scrollbar-face-color: rgba(0, 0, 0, 0.5);\n    scrollbar-track-color: #fff; }\n  .top-dropdown-menu .header {\n    padding: 10px 12px;\n    border-bottom: 1px solid #ffffff;\n    font-size: 12px; }\n    .top-dropdown-menu .header strong {\n      float: left;\n      color: #7d7d7d; }\n    .top-dropdown-menu .header > a {\n      float: right;\n      margin-left: 12px;\n      text-decoration: none; }\n      .top-dropdown-menu .header > a:hover {\n        color: #7d7d7d; }\n  .top-dropdown-menu .msg-list {\n    max-height: 296px;\n    overflow: scroll;\n    overflow-x: hidden; }\n    .top-dropdown-menu .msg-list > a {\n      border-top: 1px solid #ffffff;\n      padding: 10px 12px;\n      display: block;\n      text-decoration: none;\n      color: #7d7d7d;\n      font-size: 12px; }\n      .top-dropdown-menu .msg-list > a:first-child {\n        border-top: none; }\n      .top-dropdown-menu .msg-list > a .img-area {\n        float: left;\n        width: 36px; }\n        .top-dropdown-menu .msg-list > a .img-area img {\n          width: 36px;\n          height: 36px; }\n          .top-dropdown-menu .msg-list > a .img-area img.photo-msg-item {\n            border-radius: 18px; }\n        .top-dropdown-menu .msg-list > a .img-area > div {\n          width: 36px;\n          height: 36px;\n          border-radius: 4px;\n          font-size: 24px;\n          text-align: center; }\n          .top-dropdown-menu .msg-list > a .img-area > div.comments {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div.orders {\n            color: #e7ba08; }\n          .top-dropdown-menu .msg-list > a .img-area > div i {\n            width: 36px;\n            line-height: 36px; }\n      .top-dropdown-menu .msg-list > a .msg-area {\n        float: right;\n        width: 230px; }\n        .top-dropdown-menu .msg-list > a .msg-area div {\n          max-height: 34px;\n          overflow: hidden;\n          text-overflow: ellipsis; }\n        .top-dropdown-menu .msg-list > a .msg-area span {\n          font-style: italic;\n          text-align: right;\n          display: block;\n          font-size: 11px; }\n      .top-dropdown-menu .msg-list > a:hover {\n        background: #E2F0FF; }\n  .top-dropdown-menu > a {\n    border-top: 1px solid #ffffff;\n    display: block;\n    text-align: center;\n    padding: 10px;\n    font-size: 12px;\n    text-decoration: none; }\n    .top-dropdown-menu > a:hover {\n      color: #7d7d7d; }\n  .top-dropdown-menu.profile-dropdown {\n    width: 145px;\n    top: 55px;\n    right: -25px; }\n    .top-dropdown-menu.profile-dropdown a {\n      text-align: left;\n      border: none;\n      text-decoration: none;\n      color: #7d7d7d;\n      padding: 4px 16px 4px 20px; }\n      .top-dropdown-menu.profile-dropdown a.signout {\n        cursor: pointer;\n        border-top: 1px solid #ffffff; }\n      .top-dropdown-menu.profile-dropdown a i {\n        margin-right: 10px; }\n      .top-dropdown-menu.profile-dropdown a:hover {\n        background: #f4fcff; }\n    .top-dropdown-menu.profile-dropdown i.dropdown-arr {\n      right: 25px; }\n  .top-dropdown-menu i.dropdown-arr {\n    position: absolute;\n    top: -22px;\n    right: 42px;\n    display: block;\n    width: 0;\n    height: 0;\n    border: 11px solid transparent;\n    border-bottom-color: rgba(0, 0, 0, 0.15); }\n    .top-dropdown-menu i.dropdown-arr:after {\n      top: -9px;\n      left: 0px;\n      margin-left: -10px;\n      content: \" \";\n      position: absolute;\n      display: block;\n      width: 0;\n      height: 0;\n      border: 10px solid transparent;\n      border-bottom-color: #ffffff; }\n\n@media (max-width: 415px) {\n  .top-dropdown-menu {\n    right: -81px; }\n    .top-dropdown-menu i.dropdown-arr {\n      right: 75px; } }\n\n.page-top {\n  background-color: #282828;\n  position: fixed;\n  z-index: 904;\n  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.5);\n  height: 66px;\n  width: 100%;\n  min-width: 320px;\n  padding: 0 20px 0 10px; }\n  .page-top .dropdown-toggle::after {\n    display: none; }\n\n.blur .page-top.scrolled {\n  background-color: rgba(0, 0, 0, 0.85); }\n\na.al-logo {\n  color: #ffffff;\n  display: block;\n  font-size: 24px;\n  font-family: \"Roboto\", sans-serif;\n  white-space: nowrap;\n  float: left;\n  outline: none !important;\n  line-height: 60px; }\n  a.al-logo span {\n    color: #00abff; }\n\n.user-profile {\n  float: right;\n  min-width: 230px;\n  margin-top: 10px; }\n\n.al-user-profile {\n  float: right;\n  margin-right: 12px;\n  transition: all .15s ease-in-out;\n  padding: 0;\n  width: 36px;\n  height: 36px;\n  border: 0;\n  opacity: 1;\n  position: relative; }\n  .al-user-profile a {\n    display: block; }\n  .al-user-profile img {\n    width: 45px;\n    height: 45px;\n    border-radius: 50%; }\n\na.refresh-data {\n  color: #ffffff;\n  font-size: 13px;\n  text-decoration: none;\n  font-weight: 400;\n  float: right;\n  margin-top: 13px;\n  margin-right: 26px; }\n  a.refresh-data:hover {\n    color: #e7ba08 !important; }\n\na.collapse-menu-link {\n  font-size: 20px;\n  cursor: pointer;\n  display: block;\n  text-decoration: none;\n  line-height: 42px;\n  color: #ffffff;\n  padding: 0;\n  float: left;\n  margin: 11px 0 0 25px; }\n  a.collapse-menu-link:hover {\n    text-decoration: none;\n    color: #e7ba08; }\n\n.al-skin-dropdown {\n  float: right;\n  margin-top: 14px;\n  margin-right: 26px; }\n  .al-skin-dropdown .tpl-skin-panel {\n    max-height: 300px;\n    overflow-y: scroll;\n    overflow-x: hidden; }\n\n.icon-palette {\n  display: inline-block;\n  width: 14px;\n  height: 13px;\n  background: url(\"assets/img/theme/palette.png\");\n  background-size: cover; }\n\n.search {\n  text-shadow: none;\n  color: #ffffff;\n  font-size: 13px;\n  line-height: 25px;\n  transition: all 0.5s ease;\n  white-space: nowrap;\n  overflow: hidden;\n  width: 162px;\n  float: left;\n  margin: 20px 0 0 30px; }\n  .search label {\n    cursor: pointer; }\n  .search i {\n    width: 16px;\n    display: inline-block;\n    cursor: pointer;\n    padding-left: 1px;\n    font-size: 16px;\n    margin-right: 13px; }\n  .search input {\n    background: none;\n    border: none;\n    outline: none;\n    width: 120px;\n    padding: 0;\n    margin: 0 0 0 -3px;\n    height: 27px; }\n\n@media screen and (max-width: 660px) {\n  .search {\n    display: none; } }\n\n@media screen and (max-width: 500px) {\n  .page-top {\n    padding: 0 20px; } }\n\n@media (max-width: 435px) {\n  .user-profile {\n    min-width: 136px; }\n  a.refresh-data {\n    margin-right: 10px; }\n  a.collapse-menu-link {\n    margin-left: 10px; }\n  .al-skin-dropdown {\n    display: none; } }\n\n.profile-toggle-link {\n  cursor: pointer; }\n"
 
 /***/ },
 
@@ -2648,6 +2734,755 @@ function objectAssign(target) {
 
 /***/ },
 
+/***/ "./node_modules/ng2-slim-loading-bar/index.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright (C) 2016 Sergey Akopkokhyants
+// This project is licensed under the terms of the MIT license.
+// https://github.com/akserg/ng2-slim-loading-bar
+'use strict';
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var slim_loading_bar_component_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.component.js");
+var slim_loading_bar_service_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.service.js");
+__export(__webpack_require__("./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.component.js"));
+__export(__webpack_require__("./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.service.js"));
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
+    providers: [slim_loading_bar_service_1.SlimLoadingBarService],
+    directives: [slim_loading_bar_component_1.SlimLoadingBarComponent]
+};
+var SlimLoadingBarModule = (function () {
+    function SlimLoadingBarModule() {
+    }
+    SlimLoadingBarModule.forRoot = function () {
+        return {
+            ngModule: SlimLoadingBarModule,
+            providers: [slim_loading_bar_service_1.SlimLoadingBarService]
+        };
+    };
+    SlimLoadingBarModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            declarations: [slim_loading_bar_component_1.SlimLoadingBarComponent],
+            exports: [common_1.CommonModule, slim_loading_bar_component_1.SlimLoadingBarComponent]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SlimLoadingBarModule);
+    return SlimLoadingBarModule;
+}());
+exports.SlimLoadingBarModule = SlimLoadingBarModule;
+//# sourceMappingURL=index.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.component.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright (C) 2016 Sergey Akopkokhyants
+// This project is licensed under the terms of the MIT license.
+// https://github.com/akserg/ng2-slim-loading-bar
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var slim_loading_bar_service_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.service.js");
+var slim_loading_bar_utils_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.utils.js");
+/**
+ * A Slim Loading Bar component shows message loading progress bar on the top of web page or parent component.
+ */
+var SlimLoadingBarComponent = (function () {
+    function SlimLoadingBarComponent(service) {
+        this.service = service;
+        this._progress = '0%';
+        this.color = 'firebrick';
+        this.height = '2px';
+        this.show = true;
+    }
+    Object.defineProperty(SlimLoadingBarComponent.prototype, "progress", {
+        get: function () {
+            return this._progress;
+        },
+        set: function (value) {
+            if (slim_loading_bar_utils_1.isPresent(value)) {
+                this._progress = value + '%';
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SlimLoadingBarComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.service.observable.subscribe(function (event) {
+            if (event.type === slim_loading_bar_service_1.SlimLoadingBarEventType.PROGRESS) {
+                _this.progress = event.value;
+            }
+            else if (event.type === slim_loading_bar_service_1.SlimLoadingBarEventType.COLOR) {
+                _this.color = event.value;
+            }
+            else if (event.type === slim_loading_bar_service_1.SlimLoadingBarEventType.HEIGHT) {
+                _this.height = event.value;
+            }
+            else if (event.type === slim_loading_bar_service_1.SlimLoadingBarEventType.VISIBLE) {
+                _this.show = event.value;
+            }
+        });
+    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String), 
+        __metadata('design:paramtypes', [String])
+    ], SlimLoadingBarComponent.prototype, "progress", null);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], SlimLoadingBarComponent.prototype, "color", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], SlimLoadingBarComponent.prototype, "height", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], SlimLoadingBarComponent.prototype, "show", void 0);
+    SlimLoadingBarComponent = __decorate([
+        core_1.Component({
+            moduleId: module.i.toString(),
+            selector: 'ng2-slim-loading-bar',
+            template: "\n<div class=\"slim-loading-bar\">\n    <div class=\"slim-loading-bar-progress\" [style.width]=\"progress\" [style.backgroundColor]=\"color\" [style.color]=\"color\"\n        [style.height]=\"height\" [style.opacity]=\"show ? '1' : '0'\"></div>\n</div>"
+        }), 
+        __metadata('design:paramtypes', [slim_loading_bar_service_1.SlimLoadingBarService])
+    ], SlimLoadingBarComponent);
+    return SlimLoadingBarComponent;
+}());
+exports.SlimLoadingBarComponent = SlimLoadingBarComponent;
+//# sourceMappingURL=slim-loading-bar.component.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.service.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright (C) 2016 Sergey Akopkokhyants
+// This project is licensed under the terms of the MIT license.
+// https://github.com/akserg/ng2-slim-loading-bar
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var slim_loading_bar_utils_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.utils.js");
+(function (SlimLoadingBarEventType) {
+    SlimLoadingBarEventType[SlimLoadingBarEventType["PROGRESS"] = 0] = "PROGRESS";
+    SlimLoadingBarEventType[SlimLoadingBarEventType["HEIGHT"] = 1] = "HEIGHT";
+    SlimLoadingBarEventType[SlimLoadingBarEventType["COLOR"] = 2] = "COLOR";
+    SlimLoadingBarEventType[SlimLoadingBarEventType["VISIBLE"] = 3] = "VISIBLE";
+})(exports.SlimLoadingBarEventType || (exports.SlimLoadingBarEventType = {}));
+var SlimLoadingBarEventType = exports.SlimLoadingBarEventType;
+var SlimLoadingBarEvent = (function () {
+    function SlimLoadingBarEvent(type, value) {
+        this.type = type;
+        this.value = value;
+    }
+    return SlimLoadingBarEvent;
+}());
+exports.SlimLoadingBarEvent = SlimLoadingBarEvent;
+/**
+ * SlimLoadingBar service helps manage Slim Loading bar on the top of screen or parent component
+ */
+var SlimLoadingBarService = (function () {
+    function SlimLoadingBarService() {
+        var _this = this;
+        this._progress = 0;
+        this._height = '2px';
+        this._color = 'firebrick';
+        this._visible = true;
+        this._intervalCounterId = 0;
+        this.interval = 500; // in milliseconds
+        this.observable = new Observable_1.Observable(function (subscriber) {
+            _this.subscriber = subscriber;
+        });
+    }
+    Object.defineProperty(SlimLoadingBarService.prototype, "progress", {
+        get: function () {
+            return this._progress;
+        },
+        set: function (value) {
+            if (slim_loading_bar_utils_1.isPresent(value)) {
+                if (value > 0) {
+                    this.visible = true;
+                }
+                this._progress = value;
+                this.emitEvent(new SlimLoadingBarEvent(SlimLoadingBarEventType.PROGRESS, this._progress));
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SlimLoadingBarService.prototype, "height", {
+        get: function () {
+            return this._height;
+        },
+        set: function (value) {
+            if (slim_loading_bar_utils_1.isPresent(value)) {
+                this._height = value;
+                this.emitEvent(new SlimLoadingBarEvent(SlimLoadingBarEventType.HEIGHT, this._height));
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SlimLoadingBarService.prototype, "color", {
+        get: function () {
+            return this._color;
+        },
+        set: function (value) {
+            if (slim_loading_bar_utils_1.isPresent(value)) {
+                this._color = value;
+                this.emitEvent(new SlimLoadingBarEvent(SlimLoadingBarEventType.COLOR, this._color));
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SlimLoadingBarService.prototype, "visible", {
+        get: function () {
+            return this._visible;
+        },
+        set: function (value) {
+            if (slim_loading_bar_utils_1.isPresent(value)) {
+                this._visible = value;
+                this.emitEvent(new SlimLoadingBarEvent(SlimLoadingBarEventType.VISIBLE, this._visible));
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SlimLoadingBarService.prototype.emitEvent = function (event) {
+        if (this.subscriber) {
+            // Push up a new event
+            this.subscriber.next(event);
+        }
+    };
+    SlimLoadingBarService.prototype.start = function (onCompleted) {
+        var _this = this;
+        if (onCompleted === void 0) { onCompleted = null; }
+        // Stop current timer
+        this.stop();
+        // Make it visible for sure
+        this.visible = true;
+        // Run the timer with milliseconds iterval
+        this._intervalCounterId = setInterval(function () {
+            // Increment the progress and update view component
+            _this.progress++;
+            // If the progress is 100% - call complete
+            if (_this.progress === 100) {
+                _this.complete();
+            }
+        }, this.interval);
+    };
+    SlimLoadingBarService.prototype.stop = function () {
+        if (this._intervalCounterId) {
+            clearInterval(this._intervalCounterId);
+            this._intervalCounterId = null;
+        }
+    };
+    SlimLoadingBarService.prototype.reset = function () {
+        this.stop();
+        this.progress = 0;
+    };
+    SlimLoadingBarService.prototype.complete = function () {
+        var _this = this;
+        this.progress = 100;
+        this.stop();
+        setTimeout(function () {
+            // Hide it away
+            _this.visible = false;
+            setTimeout(function () {
+                // Drop to 0
+                _this.progress = 0;
+            }, 250);
+        }, 250);
+    };
+    SlimLoadingBarService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [])
+    ], SlimLoadingBarService);
+    return SlimLoadingBarService;
+}());
+exports.SlimLoadingBarService = SlimLoadingBarService;
+//# sourceMappingURL=slim-loading-bar.service.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-slim-loading-bar/src/slim-loading-bar.utils.js":
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+/**
+ * Check and return true if an object not undefined or null
+ */
+function isPresent(obj) {
+    return obj !== undefined && obj !== null;
+}
+exports.isPresent = isPresent;
+//# sourceMappingURL=slim-loading-bar.utils.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-toastr/bundles/ng2-toastr.min.css":
+/***/ function(module, exports) {
+
+module.exports = ".toast-title{font-weight:700}.toast-message{word-wrap:break-word}.toast-message a,.toast-message label{color:#fff}.toast-message a:hover{color:#ccc;text-decoration:none}.toast-close-button{position:relative;right:-.3em;top:-.3em;float:right;font-size:20px;font-weight:700;color:#fff;-webkit-text-shadow:0 1px 0 #fff;text-shadow:0 1px 0 #fff;opacity:.8}.toast-close-button:focus,.toast-close-button:hover{color:#000;text-decoration:none;cursor:pointer;opacity:.4}button.toast-close-button{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none}.toast-top-center{top:0;right:0;width:100%}.toast-bottom-center{bottom:0;right:0;width:100%}.toast-top-full-width{top:0;right:0;width:100%}.toast-bottom-full-width{bottom:0;right:0;width:100%}.toast-top-left{top:12px;left:12px}.toast-top-right{top:12px;right:12px}.toast-bottom-right{right:12px;bottom:12px}.toast-bottom-left{bottom:12px;left:12px}#toast-container{position:fixed;z-index:99999}#toast-container *{box-sizing:border-box}#toast-container>div{position:relative;overflow:hidden;margin:0 0 6px;padding:15px 15px 15px 50px;width:300px;border-radius:3px 3px 3px 3px;background-position:15px;background-repeat:no-repeat;box-shadow:0 0 12px #999;color:#fff;opacity:.8}#toast-container>div.toast-custom{padding:15px;color:#030303}#toast-container>:hover{box-shadow:0 0 12px #000;opacity:1;cursor:pointer}#toast-container>.toast-info{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGwSURBVEhLtZa9SgNBEMc9sUxxRcoUKSzSWIhXpFMhhYWFhaBg4yPYiWCXZxBLERsLRS3EQkEfwCKdjWJAwSKCgoKCcudv4O5YLrt7EzgXhiU3/4+b2ckmwVjJSpKkQ6wAi4gwhT+z3wRBcEz0yjSseUTrcRyfsHsXmD0AmbHOC9Ii8VImnuXBPglHpQ5wwSVM7sNnTG7Za4JwDdCjxyAiH3nyA2mtaTJufiDZ5dCaqlItILh1NHatfN5skvjx9Z38m69CgzuXmZgVrPIGE763Jx9qKsRozWYw6xOHdER+nn2KkO+Bb+UV5CBN6WC6QtBgbRVozrahAbmm6HtUsgtPC19tFdxXZYBOfkbmFJ1VaHA1VAHjd0pp70oTZzvR+EVrx2Ygfdsq6eu55BHYR8hlcki+n+kERUFG8BrA0BwjeAv2M8WLQBtcy+SD6fNsmnB3AlBLrgTtVW1c2QN4bVWLATaIS60J2Du5y1TiJgjSBvFVZgTmwCU+dAZFoPxGEEs8nyHC9Bwe2GvEJv2WXZb0vjdyFT4Cxk3e/kIqlOGoVLwwPevpYHT+00T+hWwXDf4AJAOUqWcDhbwAAAAASUVORK5CYII=\")!important}#toast-container>.toast-error{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHOSURBVEhLrZa/SgNBEMZzh0WKCClSCKaIYOED+AAKeQQLG8HWztLCImBrYadgIdY+gIKNYkBFSwu7CAoqCgkkoGBI/E28PdbLZmeDLgzZzcx83/zZ2SSXC1j9fr+I1Hq93g2yxH4iwM1vkoBWAdxCmpzTxfkN2RcyZNaHFIkSo10+8kgxkXIURV5HGxTmFuc75B2RfQkpxHG8aAgaAFa0tAHqYFfQ7Iwe2yhODk8+J4C7yAoRTWI3w/4klGRgR4lO7Rpn9+gvMyWp+uxFh8+H+ARlgN1nJuJuQAYvNkEnwGFck18Er4q3egEc/oO+mhLdKgRyhdNFiacC0rlOCbhNVz4H9FnAYgDBvU3QIioZlJFLJtsoHYRDfiZoUyIxqCtRpVlANq0EU4dApjrtgezPFad5S19Wgjkc0hNVnuF4HjVA6C7QrSIbylB+oZe3aHgBsqlNqKYH48jXyJKMuAbiyVJ8KzaB3eRc0pg9VwQ4niFryI68qiOi3AbjwdsfnAtk0bCjTLJKr6mrD9g8iq/S/B81hguOMlQTnVyG40wAcjnmgsCNESDrjme7wfftP4P7SP4N3CJZdvzoNyGq2c/HWOXJGsvVg+RA/k2MC/wN6I2YA2Pt8GkAAAAASUVORK5CYII=\")!important}#toast-container>.toast-success{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADsSURBVEhLY2AYBfQMgf///3P8+/evAIgvA/FsIF+BavYDDWMBGroaSMMBiE8VC7AZDrIFaMFnii3AZTjUgsUUWUDA8OdAH6iQbQEhw4HyGsPEcKBXBIC4ARhex4G4BsjmweU1soIFaGg/WtoFZRIZdEvIMhxkCCjXIVsATV6gFGACs4Rsw0EGgIIH3QJYJgHSARQZDrWAB+jawzgs+Q2UO49D7jnRSRGoEFRILcdmEMWGI0cm0JJ2QpYA1RDvcmzJEWhABhD/pqrL0S0CWuABKgnRki9lLseS7g2AlqwHWQSKH4oKLrILpRGhEQCw2LiRUIa4lwAAAABJRU5ErkJggg==\")!important}#toast-container>.toast-warning{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGYSURBVEhL5ZSvTsNQFMbXZGICMYGYmJhAQIJAICYQPAACiSDB8AiICQQJT4CqQEwgJvYASAQCiZiYmJhAIBATCARJy+9rTsldd8sKu1M0+dLb057v6/lbq/2rK0mS/TRNj9cWNAKPYIJII7gIxCcQ51cvqID+GIEX8ASG4B1bK5gIZFeQfoJdEXOfgX4QAQg7kH2A65yQ87lyxb27sggkAzAuFhbbg1K2kgCkB1bVwyIR9m2L7PRPIhDUIXgGtyKw575yz3lTNs6X4JXnjV+LKM/m3MydnTbtOKIjtz6VhCBq4vSm3ncdrD2lk0VgUXSVKjVDJXJzijW1RQdsU7F77He8u68koNZTz8Oz5yGa6J3H3lZ0xYgXBK2QymlWWA+RWnYhskLBv2vmE+hBMCtbA7KX5drWyRT/2JsqZ2IvfB9Y4bWDNMFbJRFmC9E74SoS0CqulwjkC0+5bpcV1CZ8NMej4pjy0U+doDQsGyo1hzVJttIjhQ7GnBtRFN1UarUlH8F3xict+HY07rEzoUGPlWcjRFRr4/gChZgc3ZL2d8oAAAAASUVORK5CYII=\")!important}#toast-container.toast-bottom-center>div,#toast-container.toast-top-center>div{width:300px;margin:auto}#toast-container.toast-bottom-full-width>div,#toast-container.toast-top-full-width>div{width:96%;margin:auto}.toast{background-color:#fff}.toast-success{background-color:#51a351}.toast-error{background-color:#bd362f}.toast-info{background-color:#2f96b4}.toast-warning{background-color:#f89406}.toast-progress{position:absolute;left:0;bottom:0;height:4px;background-color:#000;opacity:.4}@media all and (max-width:240px){#toast-container>div{padding:8px 8px 8px 50px;width:11em}#toast-container .toast-close-button{right:-.2em;top:-.2em}}@media all and (min-width:241px) and (max-width:480px){#toast-container>div{padding:8px 8px 8px 50px;width:18em}#toast-container .toast-close-button{right:-.2em;top:-.2em}}@media all and (min-width:481px) and (max-width:768px){#toast-container>div{padding:15px 15px 15px 50px;width:25em}}"
+
+/***/ },
+
+/***/ "./node_modules/ng2-toastr/ng2-toastr.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+__export(__webpack_require__("./node_modules/ng2-toastr/src/toast.js"));
+__export(__webpack_require__("./node_modules/ng2-toastr/src/toast-manager.js"));
+__export(__webpack_require__("./node_modules/ng2-toastr/src/toast-container.component.js"));
+__export(__webpack_require__("./node_modules/ng2-toastr/src/toast-options.js"));
+__export(__webpack_require__("./node_modules/ng2-toastr/src/toast.module.js"));
+//# sourceMappingURL=ng2-toastr.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-toastr/src/toast-container.component.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var toast_options_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-options.js");
+var platform_browser_1 = __webpack_require__("./node_modules/@angular/platform-browser/index.js");
+var ToastContainer = (function () {
+    function ToastContainer(sanitizer, options) {
+        this.sanitizer = sanitizer;
+        this.position = 'fixed';
+        this.messageClass = 'toast-message';
+        this.titleClass = 'toast-title';
+        this.positionClass = 'toast-top-right';
+        this.toasts = [];
+        this.maxShown = 5;
+        this.animate = 'fade';
+        if (options) {
+            Object.assign(this, options);
+        }
+    }
+    ToastContainer.prototype.addToast = function (toast) {
+        if (this.positionClass.indexOf('top') > 0) {
+            this.toasts.push(toast);
+            if (this.toasts.length > this.maxShown) {
+                this.toasts.splice(0, (this.toasts.length - this.maxShown));
+            }
+        }
+        else {
+            this.toasts.unshift(toast);
+            if (this.toasts.length > this.maxShown) {
+                this.toasts.splice(this.maxShown, (this.toasts.length - this.maxShown));
+            }
+        }
+    };
+    ToastContainer.prototype.removeToast = function (toastId) {
+        this.toasts = this.toasts.filter(function (toast) {
+            return toast.id !== toastId;
+        });
+    };
+    ToastContainer.prototype.removeAllToasts = function () {
+        this.toasts = [];
+    };
+    ToastContainer.prototype.clicked = function (toast) {
+        if (this.onToastClicked) {
+            this.onToastClicked(toast);
+        }
+    };
+    ToastContainer.prototype.anyToast = function () {
+        return this.toasts.length > 0;
+    };
+    ToastContainer.prototype.findToast = function (toastId) {
+        for (var _i = 0, _a = this.toasts; _i < _a.length; _i++) {
+            var toast = _a[_i];
+            if (toast.id === toastId) {
+                return toast;
+            }
+        }
+        return null;
+    };
+    ToastContainer.decorators = [
+        { type: core_1.Component, args: [{
+                    selector: 'toast-container',
+                    template: "\n    <div id=\"toast-container\" [style.position]=\"position\" class=\"{{positionClass}}\">\n      <div *ngFor=\"let toast of toasts\" [@inOut]=\"animate\" class=\"toast toast-{{toast.type}}\" (click)=\"clicked(toast)\">\n        <div *ngIf=\"toast.title\" class=\"{{toast.titleClass || titleClass}}\">{{toast.title}}</div>\n        <div [ngSwitch]=\"toast.enableHTML\">\n          <span *ngSwitchCase=\"true\" [innerHTML]=\"sanitizer.bypassSecurityTrustHtml(toast.message)\"></span>\n          <span *ngSwitchDefault class=\"{{toast.messageClass || messageClass}}\">{{toast.message}}</span>\n        </div>              \n      </div>\n    </div>\n    ",
+                    animations: [
+                        core_1.trigger('inOut', [
+                            core_1.state('flyRight, flyLeft', core_1.style({ opacity: 1, transform: 'translateX(0)' })),
+                            core_1.state('fade', core_1.style({ opacity: 1 })),
+                            core_1.state('slideDown, slideUp', core_1.style({ opacity: 1, transform: 'translateY(0)' })),
+                            core_1.transition('void => flyRight', [
+                                core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateX(100%)'
+                                }),
+                                core_1.animate('0.2s ease-in')
+                            ]),
+                            core_1.transition('flyRight => void', [
+                                core_1.animate('0.2s 10 ease-out', core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateX(100%)'
+                                }))
+                            ]),
+                            core_1.transition('void => flyLeft', [
+                                core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateX(-100%)'
+                                }),
+                                core_1.animate('0.2s ease-in')
+                            ]),
+                            core_1.transition('flyLeft => void', [
+                                core_1.animate('0.2s 10 ease-out', core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateX(-100%)'
+                                }))
+                            ]),
+                            core_1.transition('void => fade', [
+                                core_1.style({
+                                    opacity: 0,
+                                }),
+                                core_1.animate('0.3s ease-in')
+                            ]),
+                            core_1.transition('fade => void', [
+                                core_1.animate('0.3s 10 ease-out', core_1.style({
+                                    opacity: 0,
+                                }))
+                            ]),
+                            core_1.transition('void => slideDown', [
+                                core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateY(-200%)'
+                                }),
+                                core_1.animate('0.3s ease-in')
+                            ]),
+                            core_1.transition('slideDown => void', [
+                                core_1.animate('0.3s 10 ease-out', core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateY(-200%)'
+                                }))
+                            ]),
+                            core_1.transition('void => slideUp', [
+                                core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateY(200%)'
+                                }),
+                                core_1.animate('0.3s ease-in')
+                            ]),
+                            core_1.transition('slideUp => void', [
+                                core_1.animate('0.3s 10 ease-out', core_1.style({
+                                    opacity: 0,
+                                    transform: 'translateY(200%)'
+                                }))
+                            ]),
+                        ]),
+                    ],
+                },] },
+    ];
+    /** @nocollapse */
+    ToastContainer.ctorParameters = [
+        { type: platform_browser_1.DomSanitizer, },
+        { type: toast_options_1.ToastOptions, decorators: [{ type: core_1.Optional },] },
+    ];
+    return ToastContainer;
+}());
+exports.ToastContainer = ToastContainer;
+//# sourceMappingURL=toast-container.component.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-toastr/src/toast-manager.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var toast_container_component_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-container.component.js");
+var toast_options_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-options.js");
+var toast_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast.js");
+var ToastsManager = (function () {
+    function ToastsManager(componentFactoryResolver, appRef, options) {
+        this.componentFactoryResolver = componentFactoryResolver;
+        this.appRef = appRef;
+        this.options = {
+            dismiss: 'auto',
+            toastLife: 3000,
+        };
+        this.index = 0;
+        if (options) {
+            Object.assign(this.options, options);
+        }
+    }
+    ToastsManager.prototype.show = function (toast, options) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (!_this.container) {
+                if (!_this.appRef['_rootComponents'].length) {
+                    var err = new Error('Application root component cannot be found. Try accessing application reference in the later life cycle of angular app.');
+                    console.error(err);
+                    reject(err);
+                }
+                // get app root view component ref
+                var appContainer = _this.appRef['_rootComponents'][0]['_hostElement'].vcRef;
+                // get options providers
+                var providers = core_1.ReflectiveInjector.resolve([
+                    { provide: toast_options_1.ToastOptions, useValue: _this.options }
+                ]);
+                // create and load ToastContainer
+                var toastFactory = _this.componentFactoryResolver.resolveComponentFactory(toast_container_component_1.ToastContainer);
+                var childInjector = core_1.ReflectiveInjector.fromResolvedProviders(providers, appContainer.parentInjector);
+                _this.container = appContainer.createComponent(toastFactory, appContainer.length, childInjector);
+                _this.container.instance.onToastClicked = function (toast) {
+                    _this.onToastClicked(toast);
+                };
+            }
+            resolve(_this.setupToast(toast, options));
+        });
+    };
+    ToastsManager.prototype.createTimeout = function (toastId, timeout) {
+        var _this = this;
+        var life = timeout || this.options.toastLife;
+        setTimeout(function () {
+            _this.clearToast(toastId);
+        }, life);
+    };
+    ToastsManager.prototype.setupToast = function (toast, options) {
+        toast.id = ++this.index;
+        if (options && typeof (options.messageClass) === 'string') {
+            toast.messageClass = options.messageClass;
+        }
+        else if (typeof (this.options.messageClass) === 'string') {
+            toast.messageClass = this.options.messageClass;
+        }
+        if (options && typeof (options.titleClass) === 'string') {
+            toast.titleClass = options.titleClass;
+        }
+        else if (typeof (this.options.titleClass) === 'string') {
+            toast.titleClass = this.options.titleClass;
+        }
+        if (options && typeof (options.enableHTML) === 'boolean') {
+            toast.enableHTML = options.enableHTML;
+        }
+        else if (typeof (this.options.enableHTML) === 'boolean') {
+            toast.enableHTML = this.options.enableHTML;
+        }
+        if (options && typeof (options.dismiss) === 'string') {
+            toast.dismiss = options.dismiss;
+        }
+        else if (options && typeof (options.autoDismiss) === 'boolean') {
+            // backward compatibility
+            toast.dismiss = options.autoDismiss ? 'auto' : 'click';
+        }
+        else {
+            toast.dismiss = this.options.dismiss;
+        }
+        if (options && typeof (options.toastLife) === 'number') {
+            toast.dismiss = 'auto';
+            this.createTimeout(toast.id, options.toastLife);
+        }
+        else if (toast.dismiss === 'auto') {
+            this.createTimeout(toast.id);
+        }
+        this.container.instance.addToast(toast);
+        return toast;
+    };
+    ToastsManager.prototype.onToastClicked = function (toast) {
+        if (toast.dismiss === 'click') {
+            this.clearToast(toast.id);
+        }
+    };
+    ToastsManager.prototype.dismissToast = function (toast) {
+        this.clearToast(toast.id);
+    };
+    ToastsManager.prototype.clearToast = function (toastId) {
+        if (this.container) {
+            var instance = this.container.instance;
+            instance.removeToast(toastId);
+            if (!instance.anyToast()) {
+                this.dispose();
+            }
+        }
+    };
+    ToastsManager.prototype.clearAllToasts = function () {
+        if (this.container) {
+            var instance = this.container.instance;
+            instance.removeAllToasts();
+            this.dispose();
+        }
+    };
+    ToastsManager.prototype.dispose = function () {
+        var _this = this;
+        // using timeout to allow animation to finish
+        setTimeout(function () {
+            if (_this.container && !_this.container.instance.anyToast()) {
+                _this.container.destroy();
+                _this.container = null;
+            }
+        }, 2000);
+    };
+    ToastsManager.prototype.error = function (message, title, options) {
+        var toast = new toast_1.Toast('error', message, title);
+        return this.show(toast, options);
+    };
+    ToastsManager.prototype.info = function (message, title, options) {
+        var toast = new toast_1.Toast('info', message, title);
+        return this.show(toast, options);
+    };
+    ToastsManager.prototype.success = function (message, title, options) {
+        var toast = new toast_1.Toast('success', message, title);
+        return this.show(toast, options);
+    };
+    ToastsManager.prototype.warning = function (message, title, options) {
+        var toast = new toast_1.Toast('warning', message, title);
+        return this.show(toast, options);
+    };
+    // allow user define custom background color and image
+    ToastsManager.prototype.custom = function (message, title, options) {
+        var toast = new toast_1.Toast('custom', message, title);
+        return this.show(toast, options);
+    };
+    ToastsManager.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    ToastsManager.ctorParameters = [
+        { type: core_1.ComponentFactoryResolver, },
+        { type: core_1.ApplicationRef, },
+        { type: toast_options_1.ToastOptions, decorators: [{ type: core_1.Optional },] },
+    ];
+    return ToastsManager;
+}());
+exports.ToastsManager = ToastsManager;
+//# sourceMappingURL=toast-manager.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-toastr/src/toast-options.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var ToastOptions = (function () {
+    function ToastOptions(options) {
+        this.enableHTML = false;
+        this.animate = 'fade';
+        Object.assign(this, options);
+    }
+    ToastOptions.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    ToastOptions.ctorParameters = [
+        { type: Object, },
+    ];
+    return ToastOptions;
+}());
+exports.ToastOptions = ToastOptions;
+//# sourceMappingURL=toast-options.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-toastr/src/toast.js":
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var Toast = (function () {
+    function Toast(type, message, title) {
+        this.type = type;
+        this.message = message;
+        this.title = title;
+        this.enableHTML = false;
+    }
+    return Toast;
+}());
+exports.Toast = Toast;
+//# sourceMappingURL=toast.js.map
+
+/***/ },
+
+/***/ "./node_modules/ng2-toastr/src/toast.module.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var toast_container_component_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-container.component.js");
+var toast_manager_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-manager.js");
+var toast_options_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-options.js");
+var ToastModule = (function () {
+    function ToastModule() {
+    }
+    ToastModule.forRoot = function (config) {
+        return {
+            ngModule: ToastModule,
+            providers: [
+                { provide: toast_options_1.ToastOptions, useValue: config }
+            ]
+        };
+    };
+    ToastModule.decorators = [
+        { type: core_1.NgModule, args: [{
+                    imports: [common_1.CommonModule],
+                    declarations: [toast_container_component_1.ToastContainer],
+                    exports: [toast_container_component_1.ToastContainer],
+                    providers: [toast_manager_1.ToastsManager],
+                    entryComponents: [toast_container_component_1.ToastContainer]
+                },] },
+    ];
+    /** @nocollapse */
+    ToastModule.ctorParameters = [];
+    return ToastModule;
+}());
+exports.ToastModule = ToastModule;
+//# sourceMappingURL=toast.module.js.map
+
+/***/ },
+
 /***/ "./node_modules/normalize.css/normalize.css":
 /***/ function(module, exports) {
 
@@ -2664,6 +3499,131 @@ var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var fromPromise_1 = __webpack_require__("./node_modules/rxjs/observable/fromPromise.js");
 Observable_1.Observable.fromPromise = fromPromise_1.fromPromise;
 //# sourceMappingURL=fromPromise.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/add/observable/throw.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var throw_1 = __webpack_require__("./node_modules/rxjs/observable/throw.js");
+Observable_1.Observable.throw = throw_1._throw;
+//# sourceMappingURL=throw.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/add/operator/catch.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var catch_1 = __webpack_require__("./node_modules/rxjs/operator/catch.js");
+Observable_1.Observable.prototype.catch = catch_1._catch;
+Observable_1.Observable.prototype._catch = catch_1._catch;
+//# sourceMappingURL=catch.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/observable/ErrorObservable.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @extends {Ignored}
+ * @hide true
+ */
+var ErrorObservable = (function (_super) {
+    __extends(ErrorObservable, _super);
+    function ErrorObservable(error, scheduler) {
+        _super.call(this);
+        this.error = error;
+        this.scheduler = scheduler;
+    }
+    /**
+     * Creates an Observable that emits no items to the Observer and immediately
+     * emits an error notification.
+     *
+     * <span class="informal">Just emits 'error', and nothing else.
+     * </span>
+     *
+     * <img src="./img/throw.png" width="100%">
+     *
+     * This static operator is useful for creating a simple Observable that only
+     * emits the error notification. It can be used for composing with other
+     * Observables, such as in a {@link mergeMap}.
+     *
+     * @example <caption>Emit the number 7, then emit an error.</caption>
+     * var result = Rx.Observable.throw(new Error('oops!')).startWith(7);
+     * result.subscribe(x => console.log(x), e => console.error(e));
+     *
+     * @example <caption>Map and flattens numbers to the sequence 'a', 'b', 'c', but throw an error for 13</caption>
+     * var interval = Rx.Observable.interval(1000);
+     * var result = interval.mergeMap(x =>
+     *   x === 13 ?
+     *     Rx.Observable.throw('Thirteens are bad') :
+     *     Rx.Observable.of('a', 'b', 'c')
+     * );
+     * result.subscribe(x => console.log(x), e => console.error(e));
+     *
+     * @see {@link create}
+     * @see {@link empty}
+     * @see {@link never}
+     * @see {@link of}
+     *
+     * @param {any} error The particular Error to pass to the error notification.
+     * @param {Scheduler} [scheduler] A {@link Scheduler} to use for scheduling
+     * the emission of the error notification.
+     * @return {Observable} An error Observable: emits only the error notification
+     * using the given error argument.
+     * @static true
+     * @name throw
+     * @owner Observable
+     */
+    ErrorObservable.create = function (error, scheduler) {
+        return new ErrorObservable(error, scheduler);
+    };
+    ErrorObservable.dispatch = function (arg) {
+        var error = arg.error, subscriber = arg.subscriber;
+        subscriber.error(error);
+    };
+    ErrorObservable.prototype._subscribe = function (subscriber) {
+        var error = this.error;
+        var scheduler = this.scheduler;
+        if (scheduler) {
+            return scheduler.schedule(ErrorObservable.dispatch, 0, {
+                error: error, subscriber: subscriber
+            });
+        }
+        else {
+            subscriber.error(error);
+        }
+    };
+    return ErrorObservable;
+}(Observable_1.Observable));
+exports.ErrorObservable = ErrorObservable;
+//# sourceMappingURL=ErrorObservable.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/observable/throw.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var ErrorObservable_1 = __webpack_require__("./node_modules/rxjs/observable/ErrorObservable.js");
+exports._throw = ErrorObservable_1.ErrorObservable.create;
+//# sourceMappingURL=throw.js.map
 
 /***/ }
 

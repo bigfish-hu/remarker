@@ -5,6 +5,9 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { AuthService } from './auth/auth.service';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -48,11 +51,15 @@ type StoreType = {
     ReactiveFormsModule,
     NgaModule,
     PagesModule,
-    routing
+    routing,
+    SlimLoadingBarModule.forRoot(),
+    ToastModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    AUTH_PROVIDERS,
+    AuthService
   ]
 })
 

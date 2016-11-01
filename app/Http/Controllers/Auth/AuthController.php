@@ -41,7 +41,7 @@ class AuthController extends Controller
         $user = User::whereEmail($credentials['email'])->first();
 
         if (! $token = $this->jwt->attempt($credentials)) {
-            return response()->json('user_not_found', 404);
+            return response()->json(['error' => 'Invalid Credentials'], 401);
         }
 
         return response()->success(compact('user', 'token'));

@@ -9,7 +9,7 @@
     "sourceMap": true,
     "noEmitHelpers": true,
     "strictNullChecks": false,
-    "baseUrl": "./src",
+    "baseUrl": "./ng2-admin",
     "paths": [
     ],
     "lib": [
