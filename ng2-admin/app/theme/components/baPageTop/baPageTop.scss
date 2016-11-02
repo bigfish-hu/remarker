@@ -180,3 +180,18 @@ a.collapse-menu-link {
   cursor: pointer;
 }
 
+span.user-name-letter-circle {
+  width: 40px;
+  height: 40px;
+  background: #1e5899;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  color: #ffffff;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 1.6em;
+  margin-right: 15px;
+  text-align: center;
+}
+

@@ -45,7 +45,8 @@ export class AuthService {
             this.saveToken(data.token);
         }
 
-        return data.user || { };
+        this.user = data.user || {};
+        return this.user;
     }
 
     saveToken(token: string) {
