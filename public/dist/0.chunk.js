@@ -7,7 +7,7 @@ webpackJsonpac__name_([0],{
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
-var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
 var LoginGuard = (function () {
     function LoginGuard(authService, router) {
         this.authService = authService;
@@ -21,14 +21,14 @@ var LoginGuard = (function () {
         this.router.navigate([this.dashboardRoute]);
         return false;
     };
-    LoginGuard = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _b) || Object])
-    ], LoginGuard);
     return LoginGuard;
-    var _a, _b;
 }());
+LoginGuard = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" && _a || Object, typeof (_b = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _b || Object])
+], LoginGuard);
 exports.LoginGuard = LoginGuard;
+var _a, _b;
 
 
 /***/ },
@@ -40,14 +40,12 @@ exports.LoginGuard = LoginGuard;
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
-var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
-var ng2_toastr_1 = __webpack_require__("./node_modules/ng2-toastr/ng2-toastr.js");
 var Login = (function () {
-    function Login(fb, authService, router, toastr) {
+    function Login(fb, authService, router) {
         this.authService = authService;
         this.router = router;
-        this.toastr = toastr;
         this.submitted = false;
         this.form = fb.group({
             'email': ['', forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(4)])],
@@ -61,30 +59,24 @@ var Login = (function () {
         this.submitted = true;
         if (this.form.valid) {
             this.authService.login(values)
-                .subscribe(function (user) {
-                _this.authService.user = user;
+                .subscribe(function () {
                 _this.router.navigate([_this.authService.redirectRoute]);
-            }, function (error) {
-                _this.showMessage(error);
-            });
+            }, function (error) { });
         }
     };
-    Login.prototype.showMessage = function (error) {
-        this.toastr.error(error.text, error.title);
-    };
-    Login = __decorate([
-        core_1.Component({
-            selector: 'login',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./ng2-admin/app/pages/login/login.scss")],
-            template: __webpack_require__("./ng2-admin/app/pages/login/login.html"),
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof forms_1.FormBuilder !== 'undefined' && forms_1.FormBuilder) === 'function' && _a) || Object, (typeof (_b = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _b) || Object, (typeof (_c = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _c) || Object, (typeof (_d = typeof ng2_toastr_1.ToastsManager !== 'undefined' && ng2_toastr_1.ToastsManager) === 'function' && _d) || Object])
-    ], Login);
     return Login;
-    var _a, _b, _c, _d;
 }());
+Login = __decorate([
+    core_1.Component({
+        selector: 'login',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [__webpack_require__("./ng2-admin/app/pages/login/login.scss")],
+        template: __webpack_require__("./ng2-admin/app/pages/login/login.html"),
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof forms_1.FormBuilder !== "undefined" && forms_1.FormBuilder) === "function" && _a || Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" && _b || Object, typeof (_c = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _c || Object])
+], Login);
 exports.Login = Login;
+var _a, _b, _c;
 
 
 /***/ },
@@ -108,31 +100,31 @@ var nga_module_1 = __webpack_require__("./ng2-admin/app/theme/nga.module.ts");
 var login_component_1 = __webpack_require__("./ng2-admin/app/pages/login/login.component.ts");
 var login_routing_1 = __webpack_require__("./ng2-admin/app/pages/login/login.routing.ts");
 var login_guard_service_1 = __webpack_require__("./ng2-admin/app/pages/login/login-guard.service.ts");
-var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
 var LoginModule = (function () {
     function LoginModule() {
     }
-    LoginModule = __decorate([
-        core_1.NgModule({
-            imports: [
-                common_1.CommonModule,
-                forms_1.ReactiveFormsModule,
-                forms_1.FormsModule,
-                nga_module_1.NgaModule,
-                login_routing_1.routing
-            ],
-            declarations: [
-                login_component_1.Login
-            ],
-            providers: [
-                auth_service_1.AuthService,
-                login_guard_service_1.LoginGuard
-            ]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], LoginModule);
     return LoginModule;
 }());
+LoginModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            common_1.CommonModule,
+            forms_1.ReactiveFormsModule,
+            forms_1.FormsModule,
+            nga_module_1.NgaModule,
+            login_routing_1.routing
+        ],
+        declarations: [
+            login_component_1.Login
+        ],
+        providers: [
+            auth_service_1.AuthService,
+            login_guard_service_1.LoginGuard
+        ]
+    }),
+    __metadata("design:paramtypes", [])
+], LoginModule);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = LoginModule;
 

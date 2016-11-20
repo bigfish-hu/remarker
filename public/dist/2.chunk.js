@@ -9,17 +9,17 @@ var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var Dashboard = (function () {
     function Dashboard() {
     }
-    Dashboard = __decorate([
-        core_1.Component({
-            selector: 'dashboard',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./ng2-admin/app/pages/dashboard/dashboard.scss")],
-            template: __webpack_require__("./ng2-admin/app/pages/dashboard/dashboard.html")
-        }), 
-        __metadata('design:paramtypes', [])
-    ], Dashboard);
     return Dashboard;
 }());
+Dashboard = __decorate([
+    core_1.Component({
+        selector: 'dashboard',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [__webpack_require__("./ng2-admin/app/pages/dashboard/dashboard.scss")],
+        template: __webpack_require__("./ng2-admin/app/pages/dashboard/dashboard.html")
+    }),
+    __metadata("design:paramtypes", [])
+], Dashboard);
 exports.Dashboard = Dashboard;
 
 
@@ -46,23 +46,23 @@ var dashboard_routing_1 = __webpack_require__("./ng2-admin/app/pages/dashboard/d
 var DashboardModule = (function () {
     function DashboardModule() {
     }
-    DashboardModule = __decorate([
-        core_1.NgModule({
-            imports: [
-                common_1.CommonModule,
-                forms_1.FormsModule,
-                nga_module_1.NgaModule,
-                dashboard_routing_1.routing
-            ],
-            declarations: [
-                dashboard_component_1.Dashboard
-            ],
-            providers: []
-        }), 
-        __metadata('design:paramtypes', [])
-    ], DashboardModule);
     return DashboardModule;
 }());
+DashboardModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            common_1.CommonModule,
+            forms_1.FormsModule,
+            nga_module_1.NgaModule,
+            dashboard_routing_1.routing
+        ],
+        declarations: [
+            dashboard_component_1.Dashboard
+        ],
+        providers: []
+    }),
+    __metadata("design:paramtypes", [])
+], DashboardModule);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = DashboardModule;
 

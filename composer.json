@@ -6,7 +6,6 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "ext-gmp": "*",
         "laravel/framework": "5.3.*",
         "guzzlehttp/guzzle": "~6.0",
         "tymon/jwt-auth": "^1.0@dev",

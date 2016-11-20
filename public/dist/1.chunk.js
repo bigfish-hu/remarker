@@ -9,17 +9,17 @@ var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var NotFound = (function () {
     function NotFound() {
     }
-    NotFound = __decorate([
-        core_1.Component({
-            selector: 'not-found',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./ng2-admin/app/pages/not-found/not-found.scss")],
-            template: __webpack_require__("./ng2-admin/app/pages/not-found/not-found.html"),
-        }), 
-        __metadata('design:paramtypes', [])
-    ], NotFound);
     return NotFound;
 }());
+NotFound = __decorate([
+    core_1.Component({
+        selector: 'not-found',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [__webpack_require__("./ng2-admin/app/pages/not-found/not-found.scss")],
+        template: __webpack_require__("./ng2-admin/app/pages/not-found/not-found.html"),
+    }),
+    __metadata("design:paramtypes", [])
+], NotFound);
 exports.NotFound = NotFound;
 
 
@@ -45,22 +45,22 @@ var not_found_routing_1 = __webpack_require__("./ng2-admin/app/pages/not-found/n
 var NotFoundModule = (function () {
     function NotFoundModule() {
     }
-    NotFoundModule = __decorate([
-        core_1.NgModule({
-            imports: [
-                common_1.CommonModule,
-                nga_module_1.NgaModule,
-                not_found_routing_1.routing
-            ],
-            declarations: [
-                not_found_component_1.NotFound
-            ],
-            providers: []
-        }), 
-        __metadata('design:paramtypes', [])
-    ], NotFoundModule);
     return NotFoundModule;
 }());
+NotFoundModule = __decorate([
+    core_1.NgModule({
+        imports: [
+            common_1.CommonModule,
+            nga_module_1.NgaModule,
+            not_found_routing_1.routing
+        ],
+        declarations: [
+            not_found_component_1.NotFound
+        ],
+        providers: []
+    }),
+    __metadata("design:paramtypes", [])
+], NotFoundModule);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = NotFoundModule;
 

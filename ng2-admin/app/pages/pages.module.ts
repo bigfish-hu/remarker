@@ -5,13 +5,12 @@ import { routing }       from './pages.routing';
 import { NgaModule } from '../theme/nga.module';
 
 import { Pages } from './pages.component';
-import { AuthGuard } from '../auth/auth-guard.service';
-import { AuthService } from '../auth/auth.service';
+import { AuthGuard } from '../services/auth-guard.service';
 
 @NgModule({
   imports: [CommonModule, NgaModule, routing],
   declarations: [Pages],
-  providers: [AuthGuard, AuthService]
+  providers: [AuthGuard]
 })
 export class PagesModule {
 }

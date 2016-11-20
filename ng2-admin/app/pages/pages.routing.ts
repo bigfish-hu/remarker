@@ -1,6 +1,6 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { Pages } from './pages.component';
-import { AuthGuard } from '../auth/auth-guard.service';
+import { AuthGuard } from '../services/auth-guard.service';
 
 // noinspection TypeScriptValidateTypes
 const routes: Routes = [

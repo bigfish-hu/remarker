@@ -28,7 +28,9 @@ export class ColorHelper {
         c = [c[0], c[0], c[1], c[1], c[2], c[2]];
       }
       c = '0x' + c.join('');
+      /* tslint:disable */
       return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')';
+      /* tslint:enable */
     }
     throw new Error('Bad Hex');
   };

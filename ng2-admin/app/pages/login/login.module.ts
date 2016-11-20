@@ -6,7 +6,7 @@ import { NgaModule } from '../../theme/nga.module';
 import { Login } from './login.component';
 import { routing } from './login.routing';
 import { LoginGuard } from './login-guard.service';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @NgModule({
   imports: [

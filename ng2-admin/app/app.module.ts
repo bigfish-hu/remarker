@@ -5,9 +5,11 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './services/auth.service';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { ToastModule } from 'ng2-toastr/ng2-toastr';
+// import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { ApiService } from './services/api.service';
+import { ToasterModule } from 'angular2-toaster/angular2-toaster';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -26,7 +28,9 @@ import { PagesModule } from './pages/pages.module';
 const APP_PROVIDERS = [
   AppState,
   GlobalState,
-  AUTH_PROVIDERS
+  AUTH_PROVIDERS,
+  AuthService,
+  ApiService
 ];
 
 type StoreType = {
@@ -53,13 +57,12 @@ type StoreType = {
     PagesModule,
     routing,
     SlimLoadingBarModule.forRoot(),
-    ToastModule
+    ToasterModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
-    AUTH_PROVIDERS,
-    AuthService
+    AUTH_PROVIDERS
   ]
 })
 

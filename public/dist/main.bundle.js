@@ -51,21 +51,21 @@ var App = (function () {
     App.prototype.ngOnDestroy = function () {
         this.sub.unsubscribe();
     };
-    App = __decorate([
-        core_1.Component({
-            selector: 'app',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./node_modules/normalize.css/normalize.css"), __webpack_require__("./ng2-admin/app/app.scss"),
-                __webpack_require__("./node_modules/ng2-toastr/bundles/ng2-toastr.min.css")
-            ],
-            template: "\n    <main [ngClass]=\"{'menu-collapsed': isMenuCollapsed}\" baThemeRun>\n      <div class=\"additional-bg\"></div>\n      <router-outlet></router-outlet>\n      <ng2-slim-loading-bar></ng2-slim-loading-bar>\n    </main>\n  "
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _a) || Object, (typeof (_b = typeof services_1.BaImageLoaderService !== 'undefined' && services_1.BaImageLoaderService) === 'function' && _b) || Object, (typeof (_c = typeof services_1.BaThemeSpinner !== 'undefined' && services_1.BaThemeSpinner) === 'function' && _c) || Object, (typeof (_d = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _d) || Object, (typeof (_e = typeof ng2_slim_loading_bar_1.SlimLoadingBarService !== 'undefined' && ng2_slim_loading_bar_1.SlimLoadingBarService) === 'function' && _e) || Object])
-    ], App);
     return App;
-    var _a, _b, _c, _d, _e;
 }());
+App = __decorate([
+    core_1.Component({
+        selector: 'app',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [__webpack_require__("./node_modules/normalize.css/normalize.css"), __webpack_require__("./ng2-admin/app/app.scss"),
+            __webpack_require__("./node_modules/ng2-toastr/bundles/ng2-toastr.min.css")
+        ],
+        template: "\n    <main [ngClass]=\"{'menu-collapsed': isMenuCollapsed}\" baThemeRun>\n      <div class=\"additional-bg\"></div>\n      <router-outlet></router-outlet>\n      <toaster-container></toaster-container>\n      <ng2-slim-loading-bar></ng2-slim-loading-bar>\n    </main>\n  "
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof global_state_1.GlobalState !== "undefined" && global_state_1.GlobalState) === "function" && _a || Object, typeof (_b = typeof services_1.BaImageLoaderService !== "undefined" && services_1.BaImageLoaderService) === "function" && _b || Object, typeof (_c = typeof services_1.BaThemeSpinner !== "undefined" && services_1.BaThemeSpinner) === "function" && _c || Object, typeof (_d = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _d || Object, typeof (_e = typeof ng2_slim_loading_bar_1.SlimLoadingBarService !== "undefined" && ng2_slim_loading_bar_1.SlimLoadingBarService) === "function" && _e || Object])
+], App);
 exports.App = App;
+var _a, _b, _c, _d, _e;
 
 
 /***/ },
@@ -104,9 +104,11 @@ var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var hmr_1 = __webpack_require__("./node_modules/@angularclass/hmr/dist/index.js");
 var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
-var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
 var ng2_slim_loading_bar_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/index.js");
-var ng2_toastr_1 = __webpack_require__("./node_modules/ng2-toastr/ng2-toastr.js");
+// import { ToastModule } from 'ng2-toastr/ng2-toastr';
+var api_service_1 = __webpack_require__("./ng2-admin/app/services/api.service.ts");
+var angular2_toaster_1 = __webpack_require__("./node_modules/angular2-toaster/angular2-toaster.js");
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -122,7 +124,9 @@ var pages_module_1 = __webpack_require__("./ng2-admin/app/pages/pages.module.ts"
 var APP_PROVIDERS = [
     app_service_1.AppState,
     global_state_1.GlobalState,
-    angular2_jwt_1.AUTH_PROVIDERS
+    angular2_jwt_1.AUTH_PROVIDERS,
+    auth_service_1.AuthService,
+    api_service_1.ApiService
 ];
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -164,37 +168,36 @@ var AppModule = (function () {
         store.disposeOldHosts();
         delete store.disposeOldHosts;
     };
-    AppModule = __decorate([
-        core_1.NgModule({
-            bootstrap: [app_component_1.App],
-            declarations: [
-                app_component_1.App
-            ],
-            imports: [
-                platform_browser_1.BrowserModule,
-                http_1.HttpModule,
-                router_1.RouterModule,
-                forms_1.FormsModule,
-                forms_1.ReactiveFormsModule,
-                nga_module_1.NgaModule,
-                pages_module_1.PagesModule,
-                app_routing_1.routing,
-                ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot(),
-                ng2_toastr_1.ToastModule
-            ],
-            providers: [
-                environment_1.ENV_PROVIDERS,
-                APP_PROVIDERS,
-                angular2_jwt_1.AUTH_PROVIDERS,
-                auth_service_1.AuthService
-            ]
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof core_1.ApplicationRef !== 'undefined' && core_1.ApplicationRef) === 'function' && _a) || Object, (typeof (_b = typeof app_service_1.AppState !== 'undefined' && app_service_1.AppState) === 'function' && _b) || Object])
-    ], AppModule);
     return AppModule;
-    var _a, _b;
 }());
+AppModule = __decorate([
+    core_1.NgModule({
+        bootstrap: [app_component_1.App],
+        declarations: [
+            app_component_1.App
+        ],
+        imports: [
+            platform_browser_1.BrowserModule,
+            http_1.HttpModule,
+            router_1.RouterModule,
+            forms_1.FormsModule,
+            forms_1.ReactiveFormsModule,
+            nga_module_1.NgaModule,
+            pages_module_1.PagesModule,
+            app_routing_1.routing,
+            ng2_slim_loading_bar_1.SlimLoadingBarModule.forRoot(),
+            angular2_toaster_1.ToasterModule
+        ],
+        providers: [
+            environment_1.ENV_PROVIDERS,
+            APP_PROVIDERS,
+            angular2_jwt_1.AUTH_PROVIDERS
+        ]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof core_1.ApplicationRef !== "undefined" && core_1.ApplicationRef) === "function" && _a || Object, typeof (_b = typeof app_service_1.AppState !== "undefined" && app_service_1.AppState) === "function" && _b || Object])
+], AppModule);
 exports.AppModule = AppModule;
+var _a, _b;
 
 
 /***/ },
@@ -256,122 +259,13 @@ var AppState = (function () {
         // simple object clone
         return JSON.parse(JSON.stringify(object));
     };
-    AppState = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], AppState);
     return AppState;
 }());
+AppState = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], AppState);
 exports.AppState = AppState;
-
-
-/***/ },
-
-/***/ "./ng2-admin/app/auth/auth-guard.service.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
-var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
-var AuthGuard = (function () {
-    function AuthGuard(authService, router) {
-        this.authService = authService;
-        this.router = router;
-    }
-    AuthGuard.prototype.canActivate = function (route, state) {
-        var url = state.url;
-        return this.checkLogin(url);
-    };
-    AuthGuard.prototype.checkLogin = function (url) {
-        if (this.authService.loggedIn()) {
-            return true;
-        }
-        // Store the attempted URL for redirecting
-        this.authService.redirectRoute = url;
-        // Navigate to the login page with extras
-        this.router.navigate([this.authService.loginRoute]);
-        return false;
-    };
-    AuthGuard = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _b) || Object])
-    ], AuthGuard);
-    return AuthGuard;
-    var _a, _b;
-}());
-exports.AuthGuard = AuthGuard;
-
-
-/***/ },
-
-/***/ "./ng2-admin/app/auth/auth.service.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
-var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
-var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
-__webpack_require__("./node_modules/rxjs/add/observable/throw.js");
-// Operators
-__webpack_require__("./node_modules/rxjs/add/operator/catch.js");
-__webpack_require__("./node_modules/rxjs/add/operator/map.js");
-var AuthService = (function () {
-    function AuthService(http) {
-        var _this = this;
-        this.http = http;
-        this.redirectRoute = '/pages/dashboard';
-        this.loginRoute = '/login';
-        this.loginUrl = '/api/auth/login';
-        this.tokenName = 'id_token';
-        this.logout = function () {
-            localStorage.removeItem(_this.tokenName);
-        };
-        this.extractUser = function (res) {
-            var data = res.json().data;
-            if (typeof data.token !== 'undefined') {
-                _this.saveToken(data.token);
-            }
-            _this.user = data.user || {};
-            return _this.user;
-        };
-    }
-    AuthService.prototype.loggedIn = function () {
-        return angular2_jwt_1.tokenNotExpired(this.tokenName);
-    };
-    AuthService.prototype.login = function (values) {
-        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        var options = new http_1.RequestOptions({ headers: headers });
-        return this.http.post(this.loginUrl, JSON.stringify(values), options)
-            .map(this.extractUser)
-            .catch(this.handleError);
-    };
-    AuthService.prototype.saveToken = function (token) {
-        localStorage.setItem(this.tokenName, token);
-    };
-    AuthService.prototype.handleError = function (error) {
-        var errMsg;
-        if (error instanceof http_1.Response) {
-            var body = error.json() || '';
-            var err = body.error || JSON.stringify(body);
-            errMsg = { title: error.statusText, text: err };
-        }
-        else {
-            errMsg = { title: '', text: error.message ? error.message : error.toString() };
-        }
-        return Observable_1.Observable.throw(errMsg);
-    };
-    AuthService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof http_1.Http !== 'undefined' && http_1.Http) === 'function' && _a) || Object])
-    ], AuthService);
-    return AuthService;
-    var _a;
-}());
-exports.AuthService = AuthService;
 
 
 /***/ },
@@ -451,12 +345,12 @@ var GlobalState = (function () {
             callback.call(null, data['data']);
         });
     };
-    GlobalState = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], GlobalState);
     return GlobalState;
 }());
+GlobalState = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], GlobalState);
 exports.GlobalState = GlobalState;
 
 
@@ -486,17 +380,17 @@ var Pages = (function () {
     }
     Pages.prototype.ngOnInit = function () {
     };
-    Pages = __decorate([
-        core_1.Component({
-            selector: 'pages',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [],
-            template: "\n    <ba-sidebar></ba-sidebar>\n    <ba-page-top></ba-page-top>\n    <div class=\"al-main\">\n      <div class=\"al-content\">\n        <ba-content-top></ba-content-top>\n        <router-outlet></router-outlet>\n      </div>\n    </div>\n    <footer class=\"al-footer clearfix\">\n\n    </footer>\n    <ba-back-top position=\"200\"></ba-back-top>\n    "
-        }), 
-        __metadata('design:paramtypes', [])
-    ], Pages);
     return Pages;
 }());
+Pages = __decorate([
+    core_1.Component({
+        selector: 'pages',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [],
+        template: "\n    <ba-sidebar></ba-sidebar>\n    <ba-page-top></ba-page-top>\n    <div class=\"al-main\">\n      <div class=\"al-content\">\n        <ba-content-top></ba-content-top>\n        <router-outlet></router-outlet>\n      </div>\n    </div>\n    <footer class=\"al-footer clearfix\">\n\n    </footer>\n    <ba-back-top position=\"200\"></ba-back-top>\n    "
+    }),
+    __metadata("design:paramtypes", [])
+], Pages);
 exports.Pages = Pages;
 
 
@@ -540,21 +434,20 @@ var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
 var pages_routing_1 = __webpack_require__("./ng2-admin/app/pages/pages.routing.ts");
 var nga_module_1 = __webpack_require__("./ng2-admin/app/theme/nga.module.ts");
 var pages_component_1 = __webpack_require__("./ng2-admin/app/pages/pages.component.ts");
-var auth_guard_service_1 = __webpack_require__("./ng2-admin/app/auth/auth-guard.service.ts");
-var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
+var auth_guard_service_1 = __webpack_require__("./ng2-admin/app/services/auth-guard.service.ts");
 var PagesModule = (function () {
     function PagesModule() {
     }
-    PagesModule = __decorate([
-        core_1.NgModule({
-            imports: [common_1.CommonModule, nga_module_1.NgaModule, pages_routing_1.routing],
-            declarations: [pages_component_1.Pages],
-            providers: [auth_guard_service_1.AuthGuard, auth_service_1.AuthService]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PagesModule);
     return PagesModule;
 }());
+PagesModule = __decorate([
+    core_1.NgModule({
+        imports: [common_1.CommonModule, nga_module_1.NgaModule, pages_routing_1.routing],
+        declarations: [pages_component_1.Pages],
+        providers: [auth_guard_service_1.AuthGuard]
+    }),
+    __metadata("design:paramtypes", [])
+], PagesModule);
 exports.PagesModule = PagesModule;
 
 
@@ -567,7 +460,7 @@ exports.PagesModule = PagesModule;
 "use strict";
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var pages_component_1 = __webpack_require__("./ng2-admin/app/pages/pages.component.ts");
-var auth_guard_service_1 = __webpack_require__("./ng2-admin/app/auth/auth-guard.service.ts");
+var auth_guard_service_1 = __webpack_require__("./ng2-admin/app/services/auth-guard.service.ts");
 // noinspection TypeScriptValidateTypes
 var routes = [
     { path: 'login', loadChildren: function () { return __webpack_require__.e/* System.import */(0).then(__webpack_require__.bind(null, "./ng2-admin/app/pages/login/login.module.ts")).then(function (mod) { return (mod.__esModule && mod.default) ? mod.default : mod; }); } },
@@ -583,6 +476,150 @@ var routes = [
     }
 ];
 exports.routing = router_1.RouterModule.forChild(routes);
+
+
+/***/ },
+
+/***/ "./ng2-admin/app/services/api.service.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
+var angular2_toaster_1 = __webpack_require__("./node_modules/angular2-toaster/angular2-toaster.js");
+__webpack_require__("./node_modules/rxjs/add/observable/throw.js");
+// Operators
+__webpack_require__("./node_modules/rxjs/add/operator/catch.js");
+__webpack_require__("./node_modules/rxjs/add/operator/map.js");
+var ApiService = (function () {
+    function ApiService(http, toastr) {
+        this.http = http;
+        this.toastr = toastr;
+        this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+    }
+    ApiService.prototype.post = function (url, data, headers) {
+        var _this = this;
+        if (headers === void 0) { headers = {}; }
+        var options = new http_1.RequestOptions({ headers: this.headers });
+        return this.http.post(url, JSON.stringify(data), options)
+            .map(function (response) { return response.json(); })
+            .catch(function (error) {
+            return _this.handleError(error);
+        });
+    };
+    ApiService.prototype.setHeader = function (name, value) {
+        this.headers.append(name, value);
+        return this;
+    };
+    ApiService.prototype.handleError = function (error) {
+        if (error instanceof http_1.Response) {
+            var body = error.json() || '';
+            this.toastr.pop('error', error.statusText, body.error || JSON.stringify(body));
+        }
+        else {
+            this.toastr.pop('error', error.statusText || '', error.message || error.toString());
+        }
+        return Observable_1.Observable.throw(error);
+    };
+    return ApiService;
+}());
+ApiService = __decorate([
+    core_1.Injectable(),
+    __param(1, core_1.Inject(angular2_toaster_1.ToasterService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object, typeof (_b = typeof angular2_toaster_1.ToasterService !== "undefined" && angular2_toaster_1.ToasterService) === "function" && _b || Object])
+], ApiService);
+exports.ApiService = ApiService;
+var _a, _b;
+
+
+/***/ },
+
+/***/ "./ng2-admin/app/services/auth-guard.service.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
+var AuthGuard = (function () {
+    function AuthGuard(authService, router) {
+        this.authService = authService;
+        this.router = router;
+    }
+    AuthGuard.prototype.canActivate = function (route, state) {
+        var url = state.url;
+        return this.checkLogin(url);
+    };
+    AuthGuard.prototype.checkLogin = function (url) {
+        if (this.authService.loggedIn()) {
+            return true;
+        }
+        // Store the attempted URL for redirecting
+        this.authService.redirectRoute = url;
+        // Navigate to the login page with extras
+        this.router.navigate([this.authService.loginRoute]);
+        return false;
+    };
+    return AuthGuard;
+}());
+AuthGuard = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" && _a || Object, typeof (_b = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _b || Object])
+], AuthGuard);
+exports.AuthGuard = AuthGuard;
+var _a, _b;
+
+
+/***/ },
+
+/***/ "./ng2-admin/app/services/auth.service.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
+var api_service_1 = __webpack_require__("./ng2-admin/app/services/api.service.ts");
+__webpack_require__("./node_modules/rxjs/add/operator/map.js");
+var AuthService = (function () {
+    function AuthService(http) {
+        var _this = this;
+        this.http = http;
+        this.redirectRoute = '/pages/dashboard';
+        this.loginRoute = '/login';
+        this.loginUrl = '/api/auth/login';
+        this.tokenName = 'id_token';
+        this.logout = function () {
+            localStorage.removeItem(_this.tokenName);
+        };
+        this.extractToken = function (res) {
+            if (typeof res.data.token !== 'undefined') {
+                _this.saveToken(res.data.token);
+            }
+        };
+    }
+    AuthService.prototype.loggedIn = function () {
+        return angular2_jwt_1.tokenNotExpired(this.tokenName);
+    };
+    AuthService.prototype.login = function (values) {
+        var _this = this;
+        return this.http.post(this.loginUrl, values)
+            .map(function (response) { _this.extractToken(response); });
+    };
+    AuthService.prototype.saveToken = function (token) {
+        localStorage.setItem(this.tokenName, token);
+    };
+    return AuthService;
+}());
+AuthService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [typeof (_a = typeof api_service_1.ApiService !== "undefined" && api_service_1.ApiService) === "function" && _a || Object])
+], AuthService);
+exports.AuthService = AuthService;
+var _a;
 
 
 /***/ },
@@ -612,46 +649,46 @@ var BaBackTop = (function () {
             ? jQuery(el).fadeIn(this.showSpeed)
             : jQuery(el).fadeOut(this.showSpeed);
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], BaBackTop.prototype, "position", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], BaBackTop.prototype, "showSpeed", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], BaBackTop.prototype, "moveSpeed", void 0);
-    __decorate([
-        core_1.ViewChild('baBackTop'), 
-        __metadata('design:type', (typeof (_a = typeof core_1.ElementRef !== 'undefined' && core_1.ElementRef) === 'function' && _a) || Object)
-    ], BaBackTop.prototype, "_selector", void 0);
-    __decorate([
-        core_1.HostListener('click'), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', Boolean)
-    ], BaBackTop.prototype, "_onClick", null);
-    __decorate([
-        core_1.HostListener('window:scroll'), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', void 0)
-    ], BaBackTop.prototype, "_onWindowScroll", null);
-    BaBackTop = __decorate([
-        core_1.Component({
-            selector: 'ba-back-top',
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baBackTop/baBackTop.scss")],
-            template: "\n    <i #baBackTop class=\"fa fa-angle-up back-top ba-back-top\" title=\"Back to Top\"></i>\n  "
-        }), 
-        __metadata('design:paramtypes', [])
-    ], BaBackTop);
     return BaBackTop;
-    var _a;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], BaBackTop.prototype, "position", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], BaBackTop.prototype, "showSpeed", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], BaBackTop.prototype, "moveSpeed", void 0);
+__decorate([
+    core_1.ViewChild('baBackTop'),
+    __metadata("design:type", typeof (_a = typeof core_1.ElementRef !== "undefined" && core_1.ElementRef) === "function" && _a || Object)
+], BaBackTop.prototype, "_selector", void 0);
+__decorate([
+    core_1.HostListener('click'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Boolean)
+], BaBackTop.prototype, "_onClick", null);
+__decorate([
+    core_1.HostListener('window:scroll'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], BaBackTop.prototype, "_onWindowScroll", null);
+BaBackTop = __decorate([
+    core_1.Component({
+        selector: 'ba-back-top',
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baBackTop/baBackTop.scss")],
+        template: "\n    <i #baBackTop class=\"fa fa-angle-up back-top ba-back-top\" title=\"Back to Top\"></i>\n  "
+    }),
+    __metadata("design:paramtypes", [])
+], BaBackTop);
 exports.BaBackTop = BaBackTop;
+var _a;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
@@ -686,25 +723,25 @@ var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var BaCard = (function () {
     function BaCard() {
     }
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], BaCard.prototype, "title", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], BaCard.prototype, "baCardClass", void 0);
-    BaCard = __decorate([
-        core_1.Component({
-            selector: 'ba-card',
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baCard/baCard.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baCard/baCard.html"),
-            encapsulation: core_1.ViewEncapsulation.None
-        }), 
-        __metadata('design:paramtypes', [])
-    ], BaCard);
     return BaCard;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], BaCard.prototype, "title", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], BaCard.prototype, "baCardClass", void 0);
+BaCard = __decorate([
+    core_1.Component({
+        selector: 'ba-card',
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baCard/baCard.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baCard/baCard.html"),
+        encapsulation: core_1.ViewEncapsulation.None
+    }),
+    __metadata("design:paramtypes", [])
+], BaCard);
 exports.BaCard = BaCard;
 
 
@@ -775,27 +812,27 @@ var BaCardBlur = (function () {
     BaCardBlur.prototype._isEnabled = function () {
         return this._baConfig.get().theme.name === 'blur';
     };
-    __decorate([
-        core_1.HostBinding('class.card-blur'), 
-        __metadata('design:type', Boolean)
-    ], BaCardBlur.prototype, "isEnabled", void 0);
-    __decorate([
-        core_1.HostListener('window:resize'), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', void 0)
-    ], BaCardBlur.prototype, "_onWindowResize", null);
-    BaCardBlur = __decorate([
-        core_1.Directive({
-            selector: '[baCardBlur]',
-            providers: [baCardBlurHelper_service_1.BaCardBlurHelper]
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof theme_1.BaThemeConfigProvider !== 'undefined' && theme_1.BaThemeConfigProvider) === 'function' && _a) || Object, (typeof (_b = typeof baCardBlurHelper_service_1.BaCardBlurHelper !== 'undefined' && baCardBlurHelper_service_1.BaCardBlurHelper) === 'function' && _b) || Object, (typeof (_c = typeof core_1.ElementRef !== 'undefined' && core_1.ElementRef) === 'function' && _c) || Object])
-    ], BaCardBlur);
     return BaCardBlur;
-    var _a, _b, _c;
 }());
+__decorate([
+    core_1.HostBinding('class.card-blur'),
+    __metadata("design:type", Boolean)
+], BaCardBlur.prototype, "isEnabled", void 0);
+__decorate([
+    core_1.HostListener('window:resize'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], BaCardBlur.prototype, "_onWindowResize", null);
+BaCardBlur = __decorate([
+    core_1.Directive({
+        selector: '[baCardBlur]',
+        providers: [baCardBlurHelper_service_1.BaCardBlurHelper]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof theme_1.BaThemeConfigProvider !== "undefined" && theme_1.BaThemeConfigProvider) === "function" && _a || Object, typeof (_b = typeof baCardBlurHelper_service_1.BaCardBlurHelper !== "undefined" && baCardBlurHelper_service_1.BaCardBlurHelper) === "function" && _b || Object, typeof (_c = typeof core_1.ElementRef !== "undefined" && core_1.ElementRef) === "function" && _c || Object])
+], BaCardBlur);
 exports.BaCardBlur = BaCardBlur;
+var _a, _b, _c;
 
 
 /***/ },
@@ -856,12 +893,12 @@ var BaCardBlurHelper = (function () {
             _this.imageLoadSubject.complete();
         };
     };
-    BaCardBlurHelper = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], BaCardBlurHelper);
     return BaCardBlurHelper;
 }());
+BaCardBlurHelper = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], BaCardBlurHelper);
 exports.BaCardBlurHelper = BaCardBlurHelper;
 
 
@@ -904,35 +941,35 @@ var BaCheckbox = (function () {
         };
     };
     BaCheckbox.prototype.registerOnTouched = function (fn) { this.onTouch = fn; };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], BaCheckbox.prototype, "disabled", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], BaCheckbox.prototype, "label", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], BaCheckbox.prototype, "value", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], BaCheckbox.prototype, "baCheckboxClass", void 0);
-    BaCheckbox = __decorate([
-        core_1.Component({
-            selector: 'ba-checkbox[ngModel]',
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baCheckbox/baCheckbox.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baCheckbox/baCheckbox.html")
-        }),
-        __param(0, core_1.Self()), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof forms_1.NgModel !== 'undefined' && forms_1.NgModel) === 'function' && _a) || Object])
-    ], BaCheckbox);
     return BaCheckbox;
-    var _a;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], BaCheckbox.prototype, "disabled", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], BaCheckbox.prototype, "label", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], BaCheckbox.prototype, "value", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], BaCheckbox.prototype, "baCheckboxClass", void 0);
+BaCheckbox = __decorate([
+    core_1.Component({
+        selector: 'ba-checkbox[ngModel]',
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baCheckbox/baCheckbox.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baCheckbox/baCheckbox.html")
+    }),
+    __param(0, core_1.Self()),
+    __metadata("design:paramtypes", [typeof (_a = typeof forms_1.NgModel !== "undefined" && forms_1.NgModel) === "function" && _a || Object])
+], BaCheckbox);
 exports.BaCheckbox = BaCheckbox;
+var _a;
 
 
 /***/ },
@@ -982,18 +1019,18 @@ var BaContentTop = (function () {
             }
         });
     }
-    BaContentTop = __decorate([
-        core_1.Component({
-            selector: 'ba-content-top',
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baContentTop/baContentTop.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baContentTop/baContentTop.html"),
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _a) || Object])
-    ], BaContentTop);
     return BaContentTop;
-    var _a;
 }());
+BaContentTop = __decorate([
+    core_1.Component({
+        selector: 'ba-content-top',
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baContentTop/baContentTop.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baContentTop/baContentTop.html"),
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof global_state_1.GlobalState !== "undefined" && global_state_1.GlobalState) === "function" && _a || Object])
+], BaContentTop);
 exports.BaContentTop = BaContentTop;
+var _a;
 
 
 /***/ },
@@ -1088,36 +1125,36 @@ var BaMenu = (function () {
         }
         return false;
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', (typeof (_a = typeof router_1.Routes !== 'undefined' && router_1.Routes) === 'function' && _a) || Object)
-    ], BaMenu.prototype, "menuRoutes", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], BaMenu.prototype, "sidebarCollapsed", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], BaMenu.prototype, "menuHeight", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], BaMenu.prototype, "expandMenu", void 0);
-    BaMenu = __decorate([
-        core_1.Component({
-            selector: 'ba-menu',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baMenu/baMenu.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baMenu/baMenu.html"),
-            providers: [baMenu_service_1.BaMenuService]
-        }), 
-        __metadata('design:paramtypes', [(typeof (_b = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _b) || Object, (typeof (_c = typeof baMenu_service_1.BaMenuService !== 'undefined' && baMenu_service_1.BaMenuService) === 'function' && _c) || Object, (typeof (_d = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _d) || Object])
-    ], BaMenu);
     return BaMenu;
-    var _a, _b, _c, _d;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", typeof (_a = typeof router_1.Routes !== "undefined" && router_1.Routes) === "function" && _a || Object)
+], BaMenu.prototype, "menuRoutes", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], BaMenu.prototype, "sidebarCollapsed", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], BaMenu.prototype, "menuHeight", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], BaMenu.prototype, "expandMenu", void 0);
+BaMenu = __decorate([
+    core_1.Component({
+        selector: 'ba-menu',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baMenu/baMenu.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baMenu/baMenu.html"),
+        providers: [baMenu_service_1.BaMenuService]
+    }),
+    __metadata("design:paramtypes", [typeof (_b = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _b || Object, typeof (_c = typeof baMenu_service_1.BaMenuService !== "undefined" && baMenu_service_1.BaMenuService) === "function" && _c || Object, typeof (_d = typeof global_state_1.GlobalState !== "undefined" && global_state_1.GlobalState) === "function" && _d || Object])
+], BaMenu);
 exports.BaMenu = BaMenu;
+var _a, _b, _c, _d;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
@@ -1236,14 +1273,14 @@ var BaMenuService = (function () {
         object.selected = object.url === ('#' + this._router.url);
         return object;
     };
-    BaMenuService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _a) || Object])
-    ], BaMenuService);
     return BaMenuService;
-    var _a;
 }());
+BaMenuService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [typeof (_a = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _a || Object])
+], BaMenuService);
 exports.BaMenuService = BaMenuService;
+var _a;
 
 
 /***/ },
@@ -1268,33 +1305,33 @@ var BaMenuItem = (function () {
         this.toggleSubMenu.emit($event);
         return false;
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], BaMenuItem.prototype, "menuItem", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], BaMenuItem.prototype, "child", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], BaMenuItem.prototype, "itemHover", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], BaMenuItem.prototype, "toggleSubMenu", void 0);
-    BaMenuItem = __decorate([
-        core_1.Component({
-            selector: 'ba-menu-item',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baMenu/components/baMenuItem/baMenuItem.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baMenu/components/baMenuItem/baMenuItem.html")
-        }), 
-        __metadata('design:paramtypes', [])
-    ], BaMenuItem);
     return BaMenuItem;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], BaMenuItem.prototype, "menuItem", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], BaMenuItem.prototype, "child", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], BaMenuItem.prototype, "itemHover", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], BaMenuItem.prototype, "toggleSubMenu", void 0);
+BaMenuItem = __decorate([
+    core_1.Component({
+        selector: 'ba-menu-item',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baMenu/components/baMenuItem/baMenuItem.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baMenu/components/baMenuItem/baMenuItem.html")
+    }),
+    __metadata("design:paramtypes", [])
+], BaMenuItem);
 exports.BaMenuItem = BaMenuItem;
 
 
@@ -1353,19 +1390,19 @@ var BaMsgCenter = (function () {
         this.notifications = this._baMsgCenterService.getNotifications();
         this.messages = this._baMsgCenterService.getMessages();
     }
-    BaMsgCenter = __decorate([
-        core_1.Component({
-            selector: 'ba-msg-center',
-            providers: [baMsgCenter_service_1.BaMsgCenterService],
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baMsgCenter/baMsgCenter.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baMsgCenter/baMsgCenter.html")
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof baMsgCenter_service_1.BaMsgCenterService !== 'undefined' && baMsgCenter_service_1.BaMsgCenterService) === 'function' && _a) || Object])
-    ], BaMsgCenter);
     return BaMsgCenter;
-    var _a;
 }());
+BaMsgCenter = __decorate([
+    core_1.Component({
+        selector: 'ba-msg-center',
+        providers: [baMsgCenter_service_1.BaMsgCenterService],
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baMsgCenter/baMsgCenter.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baMsgCenter/baMsgCenter.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof baMsgCenter_service_1.BaMsgCenterService !== "undefined" && baMsgCenter_service_1.BaMsgCenterService) === "function" && _a || Object])
+], BaMsgCenter);
 exports.BaMsgCenter = BaMsgCenter;
+var _a;
 
 
 /***/ },
@@ -1401,12 +1438,12 @@ var BaMsgCenterService = (function () {
     BaMsgCenterService.prototype.getNotifications = function () {
         return this._notifications;
     };
-    BaMsgCenterService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], BaMsgCenterService);
     return BaMsgCenterService;
 }());
+BaMsgCenterService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], BaMsgCenterService);
 exports.BaMsgCenterService = BaMsgCenterService;
 
 
@@ -1459,26 +1496,26 @@ var BaMultiCheckbox = (function () {
         };
     };
     BaMultiCheckbox.prototype.registerOnTouched = function (fn) { this.onTouch = fn; };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], BaMultiCheckbox.prototype, "baMultiCheckboxClass", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], BaMultiCheckbox.prototype, "propertiesMapping", void 0);
-    BaMultiCheckbox = __decorate([
-        core_1.Component({
-            selector: 'ba-multi-checkbox[ngModel]',
-            template: __webpack_require__("./ng2-admin/app/theme/components/baMultiCheckbox/baMultiCheckbox.html"),
-        }),
-        __param(0, core_1.Self()), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof forms_1.NgModel !== 'undefined' && forms_1.NgModel) === 'function' && _a) || Object])
-    ], BaMultiCheckbox);
     return BaMultiCheckbox;
-    var _a;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], BaMultiCheckbox.prototype, "baMultiCheckboxClass", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], BaMultiCheckbox.prototype, "propertiesMapping", void 0);
+BaMultiCheckbox = __decorate([
+    core_1.Component({
+        selector: 'ba-multi-checkbox[ngModel]',
+        template: __webpack_require__("./ng2-admin/app/theme/components/baMultiCheckbox/baMultiCheckbox.html"),
+    }),
+    __param(0, core_1.Self()),
+    __metadata("design:paramtypes", [typeof (_a = typeof forms_1.NgModel !== "undefined" && forms_1.NgModel) === "function" && _a || Object])
+], BaMultiCheckbox);
 exports.BaMultiCheckbox = BaMultiCheckbox;
+var _a;
 
 
 /***/ },
@@ -1511,7 +1548,7 @@ __export(__webpack_require__("./ng2-admin/app/theme/components/baMultiCheckbox/b
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var global_state_1 = __webpack_require__("./ng2-admin/app/global.state.ts");
-var auth_service_1 = __webpack_require__("./ng2-admin/app/auth/auth.service.ts");
+var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
 var BaPageTop = (function () {
     function BaPageTop(_state, authService, router) {
         var _this = this;
@@ -1535,19 +1572,19 @@ var BaPageTop = (function () {
         this.authService.logout();
         this.router.navigate([this.authService.loginRoute]);
     };
-    BaPageTop = __decorate([
-        core_1.Component({
-            selector: 'ba-page-top',
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baPageTop/baPageTop.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baPageTop/baPageTop.html"),
-            encapsulation: core_1.ViewEncapsulation.None
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _a) || Object, (typeof (_b = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _b) || Object, (typeof (_c = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _c) || Object])
-    ], BaPageTop);
     return BaPageTop;
-    var _a, _b, _c;
 }());
+BaPageTop = __decorate([
+    core_1.Component({
+        selector: 'ba-page-top',
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baPageTop/baPageTop.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baPageTop/baPageTop.html"),
+        encapsulation: core_1.ViewEncapsulation.None
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof global_state_1.GlobalState !== "undefined" && global_state_1.GlobalState) === "function" && _a || Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" && _b || Object, typeof (_c = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _c || Object])
+], BaPageTop);
 exports.BaPageTop = BaPageTop;
+var _a, _b, _c;
 
 
 /***/ },
@@ -1637,25 +1674,25 @@ var BaSidebar = (function () {
     BaSidebar.prototype._shouldMenuCollapse = function () {
         return window.innerWidth <= theme_1.layoutSizes.resWidthCollapseSidebar;
     };
-    __decorate([
-        core_1.HostListener('window:resize'), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', void 0)
-    ], BaSidebar.prototype, "onWindowResize", null);
-    BaSidebar = __decorate([
-        core_1.Component({
-            selector: 'ba-sidebar',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [__webpack_require__("./ng2-admin/app/theme/components/baSidebar/baSidebar.scss")],
-            template: __webpack_require__("./ng2-admin/app/theme/components/baSidebar/baSidebar.html")
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof core_1.ElementRef !== 'undefined' && core_1.ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof global_state_1.GlobalState !== 'undefined' && global_state_1.GlobalState) === 'function' && _b) || Object])
-    ], BaSidebar);
     return BaSidebar;
-    var _a, _b;
 }());
+__decorate([
+    core_1.HostListener('window:resize'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], BaSidebar.prototype, "onWindowResize", null);
+BaSidebar = __decorate([
+    core_1.Component({
+        selector: 'ba-sidebar',
+        encapsulation: core_1.ViewEncapsulation.None,
+        styles: [__webpack_require__("./ng2-admin/app/theme/components/baSidebar/baSidebar.scss")],
+        template: __webpack_require__("./ng2-admin/app/theme/components/baSidebar/baSidebar.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof core_1.ElementRef !== "undefined" && core_1.ElementRef) === "function" && _a || Object, typeof (_b = typeof global_state_1.GlobalState !== "undefined" && global_state_1.GlobalState) === "function" && _b || Object])
+], BaSidebar);
 exports.BaSidebar = BaSidebar;
+var _a, _b;
 
 
 /***/ },
@@ -1729,30 +1766,30 @@ var BaScrollPosition = (function () {
             this.scrollChange.emit(isScrolled);
         }
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], BaScrollPosition.prototype, "maxHeight", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', (typeof (_a = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _a) || Object)
-    ], BaScrollPosition.prototype, "scrollChange", void 0);
-    __decorate([
-        core_1.HostListener('window:scroll'), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', void 0)
-    ], BaScrollPosition.prototype, "onWindowScroll", null);
-    BaScrollPosition = __decorate([
-        core_1.Directive({
-            selector: '[baScrollPosition]'
-        }), 
-        __metadata('design:paramtypes', [])
-    ], BaScrollPosition);
     return BaScrollPosition;
-    var _a;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], BaScrollPosition.prototype, "maxHeight", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", typeof (_a = typeof core_1.EventEmitter !== "undefined" && core_1.EventEmitter) === "function" && _a || Object)
+], BaScrollPosition.prototype, "scrollChange", void 0);
+__decorate([
+    core_1.HostListener('window:scroll'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], BaScrollPosition.prototype, "onWindowScroll", null);
+BaScrollPosition = __decorate([
+    core_1.Directive({
+        selector: '[baScrollPosition]'
+    }),
+    __metadata("design:paramtypes", [])
+], BaScrollPosition);
 exports.BaScrollPosition = BaScrollPosition;
+var _a;
 
 
 /***/ },
@@ -1798,20 +1835,20 @@ var BaThemeRun = (function () {
         this._classes.push(cls);
         this.classesString = this._classes.join(' ');
     };
-    __decorate([
-        core_1.HostBinding('class'), 
-        __metadata('design:type', String)
-    ], BaThemeRun.prototype, "classesString", void 0);
-    BaThemeRun = __decorate([
-        core_1.Directive({
-            selector: '[baThemeRun]'
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof theme_1.BaThemeConfigProvider !== 'undefined' && theme_1.BaThemeConfigProvider) === 'function' && _a) || Object])
-    ], BaThemeRun);
     return BaThemeRun;
-    var _a;
 }());
+__decorate([
+    core_1.HostBinding('class'),
+    __metadata("design:type", String)
+], BaThemeRun.prototype, "classesString", void 0);
+BaThemeRun = __decorate([
+    core_1.Directive({
+        selector: '[baThemeRun]'
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof theme_1.BaThemeConfigProvider !== "undefined" && theme_1.BaThemeConfigProvider) === "function" && _a || Object])
+], BaThemeRun);
 exports.BaThemeRun = BaThemeRun;
+var _a;
 
 
 /***/ },
@@ -1910,25 +1947,25 @@ var NGA_VALIDATORS = [
 var NgaModule = (function () {
     function NgaModule() {
     }
-    NgaModule = __decorate([
-        core_1.NgModule({
-            declarations: NGA_DIRECTIVES.concat(NGA_COMPONENTS),
-            imports: [
-                common_1.CommonModule,
-                router_1.RouterModule,
-                forms_1.FormsModule,
-                forms_1.ReactiveFormsModule,
-            ],
-            providers: [
-                theme_configProvider_1.BaThemeConfigProvider,
-                theme_config_1.BaThemeConfig
-            ].concat(NGA_VALIDATORS, NGA_SERVICES),
-            exports: NGA_DIRECTIVES.concat(NGA_COMPONENTS)
-        }), 
-        __metadata('design:paramtypes', [])
-    ], NgaModule);
     return NgaModule;
 }());
+NgaModule = __decorate([
+    core_1.NgModule({
+        declarations: NGA_DIRECTIVES.concat(NGA_COMPONENTS),
+        imports: [
+            common_1.CommonModule,
+            router_1.RouterModule,
+            forms_1.FormsModule,
+            forms_1.ReactiveFormsModule,
+        ],
+        providers: [
+            theme_configProvider_1.BaThemeConfigProvider,
+            theme_config_1.BaThemeConfig
+        ].concat(NGA_VALIDATORS, NGA_SERVICES),
+        exports: NGA_DIRECTIVES.concat(NGA_COMPONENTS)
+    }),
+    __metadata("design:paramtypes", [])
+], NgaModule);
 exports.NgaModule = NgaModule;
 
 
@@ -1952,12 +1989,12 @@ var BaImageLoaderService = (function () {
             };
         });
     };
-    BaImageLoaderService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], BaImageLoaderService);
     return BaImageLoaderService;
 }());
+BaImageLoaderService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], BaImageLoaderService);
 exports.BaImageLoaderService = BaImageLoaderService;
 
 
@@ -2005,13 +2042,13 @@ var BaThemePreloader = (function () {
             });
         });
     };
-    BaThemePreloader._loaders = [];
-    BaThemePreloader = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], BaThemePreloader);
     return BaThemePreloader;
 }());
+BaThemePreloader._loaders = [];
+BaThemePreloader = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], BaThemePreloader);
 exports.BaThemePreloader = BaThemePreloader;
 
 
@@ -2051,12 +2088,12 @@ var BaThemeSpinner = (function () {
             _this._element.style['display'] = 'none';
         }, delay);
     };
-    BaThemeSpinner = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], BaThemeSpinner);
     return BaThemeSpinner;
 }());
+BaThemeSpinner = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], BaThemeSpinner);
 exports.BaThemeSpinner = BaThemeSpinner;
 
 
@@ -2144,14 +2181,14 @@ var BaThemeConfig = (function () {
         //   },
         // });
     };
-    BaThemeConfig = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof theme_configProvider_1.BaThemeConfigProvider !== 'undefined' && theme_configProvider_1.BaThemeConfigProvider) === 'function' && _a) || Object])
-    ], BaThemeConfig);
     return BaThemeConfig;
-    var _a;
 }());
+BaThemeConfig = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [typeof (_a = typeof theme_configProvider_1.BaThemeConfigProvider !== "undefined" && theme_configProvider_1.BaThemeConfigProvider) === "function" && _a || Object])
+], BaThemeConfig);
 exports.BaThemeConfig = BaThemeConfig;
+var _a;
 
 
 /***/ },
@@ -2235,12 +2272,12 @@ var BaThemeConfigProvider = (function () {
     BaThemeConfigProvider.prototype.changeColors = function (colors) {
         _.merge(this.get().colors, colors);
     };
-    BaThemeConfigProvider = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], BaThemeConfigProvider);
     return BaThemeConfigProvider;
 }());
+BaThemeConfigProvider = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], BaThemeConfigProvider);
 exports.BaThemeConfigProvider = BaThemeConfigProvider;
 
 
@@ -2264,39 +2301,40 @@ exports.layoutPaths = {
 var ColorHelper = (function () {
     function ColorHelper() {
     }
-    ColorHelper.shade = function (color, weight) {
-        return ColorHelper.mix('#000000', color, weight);
-    };
-    ColorHelper.tint = function (color, weight) {
-        return ColorHelper.mix('#ffffff', color, weight);
-    };
-    ColorHelper.hexToRgbA = function (hex, alpha) {
-        var c;
-        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-            c = hex.substring(1).split('');
-            if (c.length === 3) {
-                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-            }
-            c = '0x' + c.join('');
-            return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')';
-        }
-        throw new Error('Bad Hex');
-    };
-    ColorHelper.mix = function (color1, color2, weight) {
-        var d2h = function (d) { return d.toString(16); };
-        var h2d = function (h) { return parseInt(h, 16); };
-        var result = '#';
-        for (var i = 1; i < 7; i += 2) {
-            var color1Part = h2d(color1.substr(i, 2));
-            var color2Part = h2d(color2.substr(i, 2));
-            var resultPart = d2h(Math.floor(color2Part + (color1Part - color2Part) * (weight / 100.0)));
-            result += ('0' + resultPart).slice(-2);
-        }
-        return result;
-    };
     return ColorHelper;
 }());
 exports.ColorHelper = ColorHelper;
+ColorHelper.shade = function (color, weight) {
+    return ColorHelper.mix('#000000', color, weight);
+};
+ColorHelper.tint = function (color, weight) {
+    return ColorHelper.mix('#ffffff', color, weight);
+};
+ColorHelper.hexToRgbA = function (hex, alpha) {
+    var c;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+        c = hex.substring(1).split('');
+        if (c.length === 3) {
+            c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c = '0x' + c.join('');
+        /* tslint:disable */
+        return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')';
+    }
+    throw new Error('Bad Hex');
+};
+ColorHelper.mix = function (color1, color2, weight) {
+    var d2h = function (d) { return d.toString(16); };
+    var h2d = function (h) { return parseInt(h, 16); };
+    var result = '#';
+    for (var i = 1; i < 7; i += 2) {
+        var color1Part = h2d(color1.substr(i, 2));
+        var color2Part = h2d(color2.substr(i, 2));
+        var resultPart = d2h(Math.floor(color2Part + (color1Part - color2Part) * (weight / 100.0)));
+        result += ('0' + resultPart).slice(-2);
+    }
+    return result;
+};
 exports.isMobile = function () {
     return (/android|webos|iphone|ipad|ipod|blackberry|windows phone/)
         .test(navigator.userAgent.toLowerCase());
@@ -2735,6 +2773,456 @@ function objectAssign(target) {
 
 /***/ },
 
+/***/ "./node_modules/angular2-toaster/angular2-toaster.js":
+/***/ function(module, exports, __webpack_require__) {
+
+exports.BodyOutputType = __webpack_require__("./node_modules/angular2-toaster/lib/bodyOutputType.js").BodyOutputType;
+exports.ToastComponent = __webpack_require__("./node_modules/angular2-toaster/lib/toast.component.js").ToastComponent;
+exports.ToasterConfig = __webpack_require__("./node_modules/angular2-toaster/lib/toaster-config.js").ToasterConfig;
+exports.ToasterContainerComponent = __webpack_require__("./node_modules/angular2-toaster/lib/toaster-container.component.js").ToasterContainerComponent;
+exports.ToasterService = __webpack_require__("./node_modules/angular2-toaster/lib/toaster.service.js").ToasterService;
+exports.ToasterModule = __webpack_require__("./node_modules/angular2-toaster/lib/toaster.module.js").ToasterModule;
+
+/***/ },
+
+/***/ "./node_modules/angular2-toaster/lib/bodyOutputType.js":
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+(function (BodyOutputType) {
+    BodyOutputType[BodyOutputType["Default"] = 0] = "Default";
+    BodyOutputType[BodyOutputType["TrustedHtml"] = 1] = "TrustedHtml";
+    BodyOutputType[BodyOutputType["Component"] = 2] = "Component";
+})(exports.BodyOutputType || (exports.BodyOutputType = {}));
+var BodyOutputType = exports.BodyOutputType;
+//# sourceMappingURL=bodyOutputType.js.map
+
+/***/ },
+
+/***/ "./node_modules/angular2-toaster/lib/toast.component.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var platform_browser_1 = __webpack_require__("./node_modules/@angular/platform-browser/index.js");
+var bodyOutputType_1 = __webpack_require__("./node_modules/angular2-toaster/lib/bodyOutputType.js");
+var ToastComponent = (function () {
+    function ToastComponent(sanitizer, componentFactoryResolver, changeDetectorRef) {
+        this.sanitizer = sanitizer;
+        this.componentFactoryResolver = componentFactoryResolver;
+        this.changeDetectorRef = changeDetectorRef;
+        this.bodyOutputType = bodyOutputType_1.BodyOutputType;
+        this.clickEvent = new core_1.EventEmitter();
+    }
+    ToastComponent.prototype.ngOnInit = function () {
+        if (this.toast.closeHtml) {
+            this.safeCloseHtml = this.sanitizer.bypassSecurityTrustHtml(this.toast.closeHtml);
+        }
+    };
+    ToastComponent.prototype.ngAfterViewInit = function () {
+        if (this.toast.bodyOutputType === this.bodyOutputType.Component) {
+            var component = this.componentFactoryResolver.resolveComponentFactory(this.toast.body);
+            this.componentBody.createComponent(component, null, this.componentBody.injector);
+            this.changeDetectorRef.detectChanges();
+        }
+    };
+    ToastComponent.prototype.click = function (event, toast) {
+        event.stopPropagation();
+        this.clickEvent.emit({
+            value: { toast: toast, isCloseButton: true }
+        });
+    };
+    ToastComponent.decorators = [
+        { type: core_1.Component, args: [{
+                    selector: '[toastComp]',
+                    template: "\n        <i class=\"toaster-icon\" [ngClass]=\"iconClass\"></i>\n        <div class=\"toast-content\">\n            <div [ngClass]=\"toast.toasterConfig.titleClass\">{{toast.title}}</div>\n            <div [ngClass]=\"toast.toasterConfig.messageClass\" [ngSwitch]=\"toast.bodyOutputType\">\n                <div *ngSwitchCase=\"bodyOutputType.Component\" #componentBody></div>\n                <div *ngSwitchCase=\"bodyOutputType.TrustedHtml\" [innerHTML]=\"toast.body\"></div>\n                <div *ngSwitchCase=\"bodyOutputType.Default\">{{toast.body}}</div>\n            </div>\n        </div>\n        <div class=\"toast-close-button\" *ngIf=\"toast.showCloseButton\" (click)=\"click($event, toast)\"\n            [innerHTML]=\"safeCloseHtml\">\n        </div>",
+                    outputs: ['clickEvent']
+                },] },
+    ];
+    /** @nocollapse */
+    ToastComponent.ctorParameters = [
+        { type: platform_browser_1.DomSanitizer, },
+        { type: core_1.ComponentFactoryResolver, },
+        { type: core_1.ChangeDetectorRef, },
+    ];
+    ToastComponent.propDecorators = {
+        'toast': [{ type: core_1.Input },],
+        'iconClass': [{ type: core_1.Input },],
+        'componentBody': [{ type: core_1.ViewChild, args: ['componentBody', { read: core_1.ViewContainerRef },] },],
+    };
+    return ToastComponent;
+}());
+exports.ToastComponent = ToastComponent;
+//# sourceMappingURL=toast.component.js.map
+
+/***/ },
+
+/***/ "./node_modules/angular2-toaster/lib/toaster-config.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var bodyOutputType_1 = __webpack_require__("./node_modules/angular2-toaster/lib/bodyOutputType.js");
+var ToasterConfig = (function () {
+    function ToasterConfig(configOverrides) {
+        configOverrides = configOverrides || {};
+        this.limit = configOverrides.limit || null;
+        this.tapToDismiss = configOverrides.tapToDismiss != null ? configOverrides.tapToDismiss : true;
+        this.showCloseButton = configOverrides.showCloseButton != null ? configOverrides.showCloseButton : false;
+        this.closeHtml = configOverrides.closeHtml || '<button class="toast-close-button" type="button">&times;</button>';
+        this.newestOnTop = configOverrides.newestOnTop != null ? configOverrides.newestOnTop : true;
+        this.timeout = configOverrides.timeout != null ? configOverrides.timeout : 5000;
+        this.typeClasses = configOverrides.typeClasses || {
+            error: 'toast-error',
+            info: 'toast-info',
+            wait: 'toast-wait',
+            success: 'toast-success',
+            warning: 'toast-warning'
+        };
+        this.iconClasses = configOverrides.iconClasses || {
+            error: 'icon-error',
+            info: 'icon-info',
+            wait: 'icon-wait',
+            success: 'icon-success',
+            warning: 'icon-warning'
+        };
+        this.bodyOutputType = configOverrides.bodyOutputType || bodyOutputType_1.BodyOutputType.Default;
+        this.bodyTemplate = configOverrides.bodyTemplate || 'toasterBodyTmpl.html';
+        this.defaultTypeClass = configOverrides.defaultTypeClass || 'toast-info';
+        this.positionClass = configOverrides.positionClass || 'toast-top-right';
+        this.animationClass = configOverrides.animationClass || '';
+        this.titleClass = configOverrides.titleClass || 'toast-title';
+        this.messageClass = configOverrides.messageClass || 'toast-message';
+        this.preventDuplicates = configOverrides.preventDuplicates != null ? configOverrides.preventDuplicates : false;
+        this.mouseoverTimerStop = configOverrides.mouseoverTimerStop != null ? configOverrides.mouseoverTimerStop : false;
+        this.toastContainerId = configOverrides.toastContainerId != null ? configOverrides.toastContainerId : null;
+    }
+    return ToasterConfig;
+}());
+exports.ToasterConfig = ToasterConfig;
+//# sourceMappingURL=toaster-config.js.map
+
+/***/ },
+
+/***/ "./node_modules/angular2-toaster/lib/toaster-container.component.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var toaster_config_1 = __webpack_require__("./node_modules/angular2-toaster/lib/toaster-config.js");
+var toaster_service_1 = __webpack_require__("./node_modules/angular2-toaster/lib/toaster.service.js");
+var ToasterContainerComponent = (function () {
+    function ToasterContainerComponent(toasterService, ref) {
+        this.ref = ref;
+        this.toasts = [];
+        this.toasterService = toasterService;
+    }
+    ToasterContainerComponent.prototype.ngOnInit = function () {
+        this.registerSubscribers();
+        if (this.toasterconfig === null || typeof this.toasterconfig === 'undefined') {
+            this.toasterconfig = new toaster_config_1.ToasterConfig();
+        }
+    };
+    // event handlers
+    ToasterContainerComponent.prototype.click = function (toast, isCloseButton) {
+        if (this.toasterconfig.tapToDismiss || (toast.showCloseButton && isCloseButton)) {
+            var removeToast = true;
+            if (toast.clickHandler) {
+                if (typeof toast.clickHandler === "function") {
+                    removeToast = toast.clickHandler(toast, isCloseButton);
+                }
+                else {
+                    console.log("The toast click handler is not a callable function.");
+                    return false;
+                }
+            }
+            if (removeToast) {
+                this.removeToast(toast);
+            }
+        }
+    };
+    ToasterContainerComponent.prototype.childClick = function ($event) {
+        this.click($event.value.toast, $event.value.isCloseButton);
+    };
+    ToasterContainerComponent.prototype.stopTimer = function (toast) {
+        if (this.toasterconfig.mouseoverTimerStop) {
+            if (toast.timeoutId) {
+                window.clearTimeout(toast.timeoutId);
+                toast.timeoutId = null;
+            }
+        }
+    };
+    ToasterContainerComponent.prototype.restartTimer = function (toast) {
+        if (this.toasterconfig.mouseoverTimerStop) {
+            if (toast.timeoutId) {
+                this.configureTimer(toast);
+            }
+        }
+        else if (toast.timeoutId === null) {
+            this.removeToast(toast);
+        }
+    };
+    // private functions
+    ToasterContainerComponent.prototype.registerSubscribers = function () {
+        var _this = this;
+        this.addToastSubscriber = this.toasterService.addToast.subscribe(function (toast) {
+            _this.addToast(toast);
+        });
+        this.clearToastsSubscriber = this.toasterService.clearToasts.subscribe(function (clearWrapper) {
+            _this.clearToasts(clearWrapper);
+        });
+    };
+    ToasterContainerComponent.prototype.addToast = function (toast) {
+        toast.toasterConfig = this.toasterconfig;
+        if (toast.toastContainerId && this.toasterconfig.toastContainerId
+            && toast.toastContainerId !== this.toasterconfig.toastContainerId)
+            return;
+        if (!toast.type) {
+            toast.type = this.toasterconfig.defaultTypeClass;
+        }
+        if (this.toasterconfig.preventDuplicates && this.toasts.length > 0) {
+            if (toast.toastId && this.toasts.some(function (t) { return t.toastId === toast.toastId; })) {
+                return;
+            }
+            else if (this.toasts.some(function (t) { return t.body === toast.body; })) {
+                return;
+            }
+        }
+        if (toast.showCloseButton === null || typeof toast.showCloseButton === "undefined") {
+            if (typeof this.toasterconfig.showCloseButton === "object") {
+                toast.showCloseButton = this.toasterconfig.showCloseButton[toast.type];
+            }
+            else if (typeof this.toasterconfig.showCloseButton === "boolean") {
+                toast.showCloseButton = this.toasterconfig.showCloseButton;
+            }
+        }
+        if (toast.showCloseButton) {
+            toast.closeHtml = toast.closeHtml || this.toasterconfig.closeHtml;
+        }
+        toast.bodyOutputType = toast.bodyOutputType || this.toasterconfig.bodyOutputType;
+        this.configureTimer(toast);
+        if (this.toasterconfig.newestOnTop) {
+            this.toasts.unshift(toast);
+            if (this.isLimitExceeded()) {
+                this.toasts.pop();
+            }
+        }
+        else {
+            this.toasts.push(toast);
+            if (this.isLimitExceeded()) {
+                this.toasts.shift();
+            }
+        }
+        if (toast.onShowCallback) {
+            toast.onShowCallback(toast);
+        }
+    };
+    ToasterContainerComponent.prototype.configureTimer = function (toast) {
+        var _this = this;
+        var timeout = (typeof toast.timeout === "number")
+            ? toast.timeout : this.toasterconfig.timeout;
+        if (typeof timeout === "object")
+            timeout = timeout[toast.type];
+        if (timeout > 0) {
+            toast.timeoutId = window.setTimeout(function () {
+                _this.ref.markForCheck();
+                _this.removeToast(toast);
+            }, timeout);
+        }
+    };
+    ToasterContainerComponent.prototype.isLimitExceeded = function () {
+        return this.toasterconfig.limit && this.toasts.length > this.toasterconfig.limit;
+    };
+    ToasterContainerComponent.prototype.removeToast = function (toast) {
+        var index = this.toasts.indexOf(toast);
+        if (index < 0)
+            return;
+        this.toasts.splice(index, 1);
+        if (toast.timeoutId) {
+            window.clearTimeout(toast.timeoutId);
+            toast.timeoutId = null;
+        }
+        if (toast.onHideCallback)
+            toast.onHideCallback(toast);
+        this.toasterService._removeToastSubject.next({ toastId: toast.toastId, toastContainerId: toast.toastContainerId });
+    };
+    ToasterContainerComponent.prototype.removeAllToasts = function () {
+        for (var i = this.toasts.length - 1; i >= 0; i--) {
+            this.removeToast(this.toasts[i]);
+        }
+    };
+    ToasterContainerComponent.prototype.clearToasts = function (clearWrapper) {
+        var toastId = clearWrapper.toastId;
+        var toastContainerId = clearWrapper.toastContainerId;
+        if (toastContainerId === null || typeof toastContainerId === 'undefined') {
+            this.clearToastsAction(toastId);
+        }
+        else if (toastContainerId === this.toasterconfig.toastContainerId) {
+            this.clearToastsAction(toastId);
+        }
+    };
+    ToasterContainerComponent.prototype.clearToastsAction = function (toastId) {
+        if (toastId) {
+            this.removeToast(this.toasts.filter(function (t) { return t.toastId === toastId; })[0]);
+        }
+        else {
+            this.removeAllToasts();
+        }
+    };
+    ToasterContainerComponent.prototype.ngOnDestroy = function () {
+        if (this.addToastSubscriber) {
+            this.addToastSubscriber.unsubscribe();
+        }
+        if (this.clearToastsSubscriber) {
+            this.clearToastsSubscriber.unsubscribe();
+        }
+    };
+    ToasterContainerComponent.decorators = [
+        { type: core_1.Component, args: [{
+                    selector: 'toaster-container',
+                    template: "\n        <div id=\"toast-container\" [ngClass]=\"[toasterconfig.positionClass, toasterconfig.animationClass]\" class=\"ng-animate\">\n            <div toastComp *ngFor=\"let toast of toasts\" class=\"toast\" [toast]=\"toast\"\n                [iconClass]=\"toasterconfig.iconClasses[toast.type]\" \n                [ngClass]=\"toasterconfig.typeClasses[toast.type]\"\n                (click)=\"click(toast)\" (clickEvent)=\"childClick($event)\" \n                (mouseover)=\"stopTimer(toast)\" (mouseout)=\"restartTimer\">\n            </div>\n        </div>\n        " //,
+                },] },
+    ];
+    /** @nocollapse */
+    ToasterContainerComponent.ctorParameters = [
+        { type: toaster_service_1.ToasterService, },
+        { type: core_1.ChangeDetectorRef, },
+    ];
+    ToasterContainerComponent.propDecorators = {
+        'toasterconfig': [{ type: core_1.Input },],
+    };
+    return ToasterContainerComponent;
+}());
+exports.ToasterContainerComponent = ToasterContainerComponent;
+//# sourceMappingURL=toaster-container.component.js.map
+
+/***/ },
+
+/***/ "./node_modules/angular2-toaster/lib/toaster.module.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var toast_component_1 = __webpack_require__("./node_modules/angular2-toaster/lib/toast.component.js");
+var toaster_container_component_1 = __webpack_require__("./node_modules/angular2-toaster/lib/toaster-container.component.js");
+var toaster_service_1 = __webpack_require__("./node_modules/angular2-toaster/lib/toaster.service.js");
+var ToasterModule = (function () {
+    function ToasterModule() {
+    }
+    ToasterModule.decorators = [
+        { type: core_1.NgModule, args: [{
+                    imports: [common_1.CommonModule],
+                    declarations: [toast_component_1.ToastComponent, toaster_container_component_1.ToasterContainerComponent],
+                    providers: [toaster_service_1.ToasterService],
+                    exports: [toaster_container_component_1.ToasterContainerComponent, toast_component_1.ToastComponent],
+                },] },
+    ];
+    /** @nocollapse */
+    ToasterModule.ctorParameters = [];
+    return ToasterModule;
+}());
+exports.ToasterModule = ToasterModule;
+//# sourceMappingURL=toaster.module.js.map
+
+/***/ },
+
+/***/ "./node_modules/angular2-toaster/lib/toaster.service.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+__webpack_require__("./node_modules/rxjs/add/operator/share.js");
+var Subject_1 = __webpack_require__("./node_modules/rxjs/Subject.js");
+var ToasterService = (function () {
+    /**
+     * Creates an instance of ToasterService.
+     */
+    function ToasterService() {
+        var _this = this;
+        this.addToast = new Observable_1.Observable(function (observer) { return _this._addToast = observer; }).share();
+        this.clearToasts = new Observable_1.Observable(function (observer) { return _this._clearToasts = observer; }).share();
+        this._removeToastSubject = new Subject_1.Subject();
+        this.removeToast = this._removeToastSubject.share();
+    }
+    /**
+     * Synchronously create and show a new toast instance.
+     *
+     * @param {(string | Toast)} type The type of the toast, or a Toast object.
+     * @param {string=} title The toast title.
+     * @param {string=} body The toast body.
+     * @returns {Toast}
+     *          The newly created Toast instance with a randomly generated GUID Id.
+     */
+    ToasterService.prototype.pop = function (type, title, body) {
+        var toast = typeof type === 'string' ? { type: type, title: title, body: body } : type;
+        toast.toastId = Guid.newGuid();
+        if (!this._addToast) {
+            throw new Error("No Toaster Containers have been initialized to receive toasts.");
+        }
+        this._addToast.next(toast);
+        return toast;
+    };
+    /**
+     * Asynchronously create and show a new toast instance.
+     *
+     * @param {(string | Toast)} type The type of the toast, or a Toast object.
+     * @param {string=} title The toast title.
+     * @param {string=} body The toast body.
+     * @returns {Observable<Toast>}
+     *          A hot Observable that can be subscribed to in order to receive the Toast instance
+     *          with a randomly generated GUID Id.
+     */
+    ToasterService.prototype.popAsync = function (type, title, body) {
+        var _this = this;
+        setTimeout(function () {
+            _this.pop(type, title, body);
+        }, 0);
+        return this.addToast;
+    };
+    /**
+     * Clears a toast by toastId and/or toastContainerId.
+     *
+     * @param {string} toastId The toastId to clear.
+     * @param {number=} toastContainerId
+     *        The toastContainerId of the container to remove toasts from.
+     */
+    ToasterService.prototype.clear = function (toastId, toastContainerId) {
+        var clearWrapper = {
+            toastId: toastId, toastContainerId: toastContainerId
+        };
+        this._clearToasts.next(clearWrapper);
+    };
+    ToasterService.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    ToasterService.ctorParameters = [];
+    return ToasterService;
+}());
+exports.ToasterService = ToasterService;
+// http://stackoverflow.com/questions/26501688/a-typescript-guid-class
+var Guid = (function () {
+    function Guid() {
+    }
+    Guid.newGuid = function () {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    };
+    return Guid;
+}());
+//# sourceMappingURL=toaster.service.js.map
+
+/***/ },
+
 /***/ "./node_modules/ng2-slim-loading-bar/index.js":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -3064,423 +3552,7 @@ exports.isPresent = isPresent;
 /***/ "./node_modules/ng2-toastr/bundles/ng2-toastr.min.css":
 /***/ function(module, exports) {
 
-module.exports = ".toast-title{font-weight:700}.toast-message{word-wrap:break-word}.toast-message a,.toast-message label{color:#fff}.toast-message a:hover{color:#ccc;text-decoration:none}.toast-close-button{position:relative;right:-.3em;top:-.3em;float:right;font-size:20px;font-weight:700;color:#fff;-webkit-text-shadow:0 1px 0 #fff;text-shadow:0 1px 0 #fff;opacity:.8}.toast-close-button:focus,.toast-close-button:hover{color:#000;text-decoration:none;cursor:pointer;opacity:.4}button.toast-close-button{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none}.toast-top-center{top:0;right:0;width:100%}.toast-bottom-center{bottom:0;right:0;width:100%}.toast-top-full-width{top:0;right:0;width:100%}.toast-bottom-full-width{bottom:0;right:0;width:100%}.toast-top-left{top:12px;left:12px}.toast-top-right{top:12px;right:12px}.toast-bottom-right{right:12px;bottom:12px}.toast-bottom-left{bottom:12px;left:12px}#toast-container{position:fixed;z-index:99999}#toast-container *{box-sizing:border-box}#toast-container>div{position:relative;overflow:hidden;margin:0 0 6px;padding:15px 15px 15px 50px;width:300px;border-radius:3px 3px 3px 3px;background-position:15px;background-repeat:no-repeat;box-shadow:0 0 12px #999;color:#fff;opacity:.8}#toast-container>div.toast-custom{padding:15px;color:#030303}#toast-container>:hover{box-shadow:0 0 12px #000;opacity:1;cursor:pointer}#toast-container>.toast-info{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGwSURBVEhLtZa9SgNBEMc9sUxxRcoUKSzSWIhXpFMhhYWFhaBg4yPYiWCXZxBLERsLRS3EQkEfwCKdjWJAwSKCgoKCcudv4O5YLrt7EzgXhiU3/4+b2ckmwVjJSpKkQ6wAi4gwhT+z3wRBcEz0yjSseUTrcRyfsHsXmD0AmbHOC9Ii8VImnuXBPglHpQ5wwSVM7sNnTG7Za4JwDdCjxyAiH3nyA2mtaTJufiDZ5dCaqlItILh1NHatfN5skvjx9Z38m69CgzuXmZgVrPIGE763Jx9qKsRozWYw6xOHdER+nn2KkO+Bb+UV5CBN6WC6QtBgbRVozrahAbmm6HtUsgtPC19tFdxXZYBOfkbmFJ1VaHA1VAHjd0pp70oTZzvR+EVrx2Ygfdsq6eu55BHYR8hlcki+n+kERUFG8BrA0BwjeAv2M8WLQBtcy+SD6fNsmnB3AlBLrgTtVW1c2QN4bVWLATaIS60J2Du5y1TiJgjSBvFVZgTmwCU+dAZFoPxGEEs8nyHC9Bwe2GvEJv2WXZb0vjdyFT4Cxk3e/kIqlOGoVLwwPevpYHT+00T+hWwXDf4AJAOUqWcDhbwAAAAASUVORK5CYII=\")!important}#toast-container>.toast-error{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHOSURBVEhLrZa/SgNBEMZzh0WKCClSCKaIYOED+AAKeQQLG8HWztLCImBrYadgIdY+gIKNYkBFSwu7CAoqCgkkoGBI/E28PdbLZmeDLgzZzcx83/zZ2SSXC1j9fr+I1Hq93g2yxH4iwM1vkoBWAdxCmpzTxfkN2RcyZNaHFIkSo10+8kgxkXIURV5HGxTmFuc75B2RfQkpxHG8aAgaAFa0tAHqYFfQ7Iwe2yhODk8+J4C7yAoRTWI3w/4klGRgR4lO7Rpn9+gvMyWp+uxFh8+H+ARlgN1nJuJuQAYvNkEnwGFck18Er4q3egEc/oO+mhLdKgRyhdNFiacC0rlOCbhNVz4H9FnAYgDBvU3QIioZlJFLJtsoHYRDfiZoUyIxqCtRpVlANq0EU4dApjrtgezPFad5S19Wgjkc0hNVnuF4HjVA6C7QrSIbylB+oZe3aHgBsqlNqKYH48jXyJKMuAbiyVJ8KzaB3eRc0pg9VwQ4niFryI68qiOi3AbjwdsfnAtk0bCjTLJKr6mrD9g8iq/S/B81hguOMlQTnVyG40wAcjnmgsCNESDrjme7wfftP4P7SP4N3CJZdvzoNyGq2c/HWOXJGsvVg+RA/k2MC/wN6I2YA2Pt8GkAAAAASUVORK5CYII=\")!important}#toast-container>.toast-success{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADsSURBVEhLY2AYBfQMgf///3P8+/evAIgvA/FsIF+BavYDDWMBGroaSMMBiE8VC7AZDrIFaMFnii3AZTjUgsUUWUDA8OdAH6iQbQEhw4HyGsPEcKBXBIC4ARhex4G4BsjmweU1soIFaGg/WtoFZRIZdEvIMhxkCCjXIVsATV6gFGACs4Rsw0EGgIIH3QJYJgHSARQZDrWAB+jawzgs+Q2UO49D7jnRSRGoEFRILcdmEMWGI0cm0JJ2QpYA1RDvcmzJEWhABhD/pqrL0S0CWuABKgnRki9lLseS7g2AlqwHWQSKH4oKLrILpRGhEQCw2LiRUIa4lwAAAABJRU5ErkJggg==\")!important}#toast-container>.toast-warning{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGYSURBVEhL5ZSvTsNQFMbXZGICMYGYmJhAQIJAICYQPAACiSDB8AiICQQJT4CqQEwgJvYASAQCiZiYmJhAIBATCARJy+9rTsldd8sKu1M0+dLb057v6/lbq/2rK0mS/TRNj9cWNAKPYIJII7gIxCcQ51cvqID+GIEX8ASG4B1bK5gIZFeQfoJdEXOfgX4QAQg7kH2A65yQ87lyxb27sggkAzAuFhbbg1K2kgCkB1bVwyIR9m2L7PRPIhDUIXgGtyKw575yz3lTNs6X4JXnjV+LKM/m3MydnTbtOKIjtz6VhCBq4vSm3ncdrD2lk0VgUXSVKjVDJXJzijW1RQdsU7F77He8u68koNZTz8Oz5yGa6J3H3lZ0xYgXBK2QymlWWA+RWnYhskLBv2vmE+hBMCtbA7KX5drWyRT/2JsqZ2IvfB9Y4bWDNMFbJRFmC9E74SoS0CqulwjkC0+5bpcV1CZ8NMej4pjy0U+doDQsGyo1hzVJttIjhQ7GnBtRFN1UarUlH8F3xict+HY07rEzoUGPlWcjRFRr4/gChZgc3ZL2d8oAAAAASUVORK5CYII=\")!important}#toast-container.toast-bottom-center>div,#toast-container.toast-top-center>div{width:300px;margin:auto}#toast-container.toast-bottom-full-width>div,#toast-container.toast-top-full-width>div{width:96%;margin:auto}.toast{background-color:#fff}.toast-success{background-color:#51a351}.toast-error{background-color:#bd362f}.toast-info{background-color:#2f96b4}.toast-warning{background-color:#f89406}.toast-progress{position:absolute;left:0;bottom:0;height:4px;background-color:#000;opacity:.4}@media all and (max-width:240px){#toast-container>div{padding:8px 8px 8px 50px;width:11em}#toast-container .toast-close-button{right:-.2em;top:-.2em}}@media all and (min-width:241px) and (max-width:480px){#toast-container>div{padding:8px 8px 8px 50px;width:18em}#toast-container .toast-close-button{right:-.2em;top:-.2em}}@media all and (min-width:481px) and (max-width:768px){#toast-container>div{padding:15px 15px 15px 50px;width:25em}}"
-
-/***/ },
-
-/***/ "./node_modules/ng2-toastr/ng2-toastr.js":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-__export(__webpack_require__("./node_modules/ng2-toastr/src/toast.js"));
-__export(__webpack_require__("./node_modules/ng2-toastr/src/toast-manager.js"));
-__export(__webpack_require__("./node_modules/ng2-toastr/src/toast-container.component.js"));
-__export(__webpack_require__("./node_modules/ng2-toastr/src/toast-options.js"));
-__export(__webpack_require__("./node_modules/ng2-toastr/src/toast.module.js"));
-//# sourceMappingURL=ng2-toastr.js.map
-
-/***/ },
-
-/***/ "./node_modules/ng2-toastr/src/toast-container.component.js":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var toast_options_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-options.js");
-var platform_browser_1 = __webpack_require__("./node_modules/@angular/platform-browser/index.js");
-var ToastContainer = (function () {
-    function ToastContainer(sanitizer, options) {
-        this.sanitizer = sanitizer;
-        this.position = 'fixed';
-        this.messageClass = 'toast-message';
-        this.titleClass = 'toast-title';
-        this.positionClass = 'toast-top-right';
-        this.toasts = [];
-        this.maxShown = 5;
-        this.animate = 'fade';
-        if (options) {
-            Object.assign(this, options);
-        }
-    }
-    ToastContainer.prototype.addToast = function (toast) {
-        if (this.positionClass.indexOf('top') > 0) {
-            this.toasts.push(toast);
-            if (this.toasts.length > this.maxShown) {
-                this.toasts.splice(0, (this.toasts.length - this.maxShown));
-            }
-        }
-        else {
-            this.toasts.unshift(toast);
-            if (this.toasts.length > this.maxShown) {
-                this.toasts.splice(this.maxShown, (this.toasts.length - this.maxShown));
-            }
-        }
-    };
-    ToastContainer.prototype.removeToast = function (toastId) {
-        this.toasts = this.toasts.filter(function (toast) {
-            return toast.id !== toastId;
-        });
-    };
-    ToastContainer.prototype.removeAllToasts = function () {
-        this.toasts = [];
-    };
-    ToastContainer.prototype.clicked = function (toast) {
-        if (this.onToastClicked) {
-            this.onToastClicked(toast);
-        }
-    };
-    ToastContainer.prototype.anyToast = function () {
-        return this.toasts.length > 0;
-    };
-    ToastContainer.prototype.findToast = function (toastId) {
-        for (var _i = 0, _a = this.toasts; _i < _a.length; _i++) {
-            var toast = _a[_i];
-            if (toast.id === toastId) {
-                return toast;
-            }
-        }
-        return null;
-    };
-    ToastContainer.decorators = [
-        { type: core_1.Component, args: [{
-                    selector: 'toast-container',
-                    template: "\n    <div id=\"toast-container\" [style.position]=\"position\" class=\"{{positionClass}}\">\n      <div *ngFor=\"let toast of toasts\" [@inOut]=\"animate\" class=\"toast toast-{{toast.type}}\" (click)=\"clicked(toast)\">\n        <div *ngIf=\"toast.title\" class=\"{{toast.titleClass || titleClass}}\">{{toast.title}}</div>\n        <div [ngSwitch]=\"toast.enableHTML\">\n          <span *ngSwitchCase=\"true\" [innerHTML]=\"sanitizer.bypassSecurityTrustHtml(toast.message)\"></span>\n          <span *ngSwitchDefault class=\"{{toast.messageClass || messageClass}}\">{{toast.message}}</span>\n        </div>              \n      </div>\n    </div>\n    ",
-                    animations: [
-                        core_1.trigger('inOut', [
-                            core_1.state('flyRight, flyLeft', core_1.style({ opacity: 1, transform: 'translateX(0)' })),
-                            core_1.state('fade', core_1.style({ opacity: 1 })),
-                            core_1.state('slideDown, slideUp', core_1.style({ opacity: 1, transform: 'translateY(0)' })),
-                            core_1.transition('void => flyRight', [
-                                core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateX(100%)'
-                                }),
-                                core_1.animate('0.2s ease-in')
-                            ]),
-                            core_1.transition('flyRight => void', [
-                                core_1.animate('0.2s 10 ease-out', core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateX(100%)'
-                                }))
-                            ]),
-                            core_1.transition('void => flyLeft', [
-                                core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateX(-100%)'
-                                }),
-                                core_1.animate('0.2s ease-in')
-                            ]),
-                            core_1.transition('flyLeft => void', [
-                                core_1.animate('0.2s 10 ease-out', core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateX(-100%)'
-                                }))
-                            ]),
-                            core_1.transition('void => fade', [
-                                core_1.style({
-                                    opacity: 0,
-                                }),
-                                core_1.animate('0.3s ease-in')
-                            ]),
-                            core_1.transition('fade => void', [
-                                core_1.animate('0.3s 10 ease-out', core_1.style({
-                                    opacity: 0,
-                                }))
-                            ]),
-                            core_1.transition('void => slideDown', [
-                                core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateY(-200%)'
-                                }),
-                                core_1.animate('0.3s ease-in')
-                            ]),
-                            core_1.transition('slideDown => void', [
-                                core_1.animate('0.3s 10 ease-out', core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateY(-200%)'
-                                }))
-                            ]),
-                            core_1.transition('void => slideUp', [
-                                core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateY(200%)'
-                                }),
-                                core_1.animate('0.3s ease-in')
-                            ]),
-                            core_1.transition('slideUp => void', [
-                                core_1.animate('0.3s 10 ease-out', core_1.style({
-                                    opacity: 0,
-                                    transform: 'translateY(200%)'
-                                }))
-                            ]),
-                        ]),
-                    ],
-                },] },
-    ];
-    /** @nocollapse */
-    ToastContainer.ctorParameters = [
-        { type: platform_browser_1.DomSanitizer, },
-        { type: toast_options_1.ToastOptions, decorators: [{ type: core_1.Optional },] },
-    ];
-    return ToastContainer;
-}());
-exports.ToastContainer = ToastContainer;
-//# sourceMappingURL=toast-container.component.js.map
-
-/***/ },
-
-/***/ "./node_modules/ng2-toastr/src/toast-manager.js":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var toast_container_component_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-container.component.js");
-var toast_options_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-options.js");
-var toast_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast.js");
-var ToastsManager = (function () {
-    function ToastsManager(componentFactoryResolver, appRef, options) {
-        this.componentFactoryResolver = componentFactoryResolver;
-        this.appRef = appRef;
-        this.options = {
-            dismiss: 'auto',
-            toastLife: 3000,
-        };
-        this.index = 0;
-        if (options) {
-            Object.assign(this.options, options);
-        }
-    }
-    ToastsManager.prototype.show = function (toast, options) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            if (!_this.container) {
-                if (!_this.appRef['_rootComponents'].length) {
-                    var err = new Error('Application root component cannot be found. Try accessing application reference in the later life cycle of angular app.');
-                    console.error(err);
-                    reject(err);
-                }
-                // get app root view component ref
-                var appContainer = _this.appRef['_rootComponents'][0]['_hostElement'].vcRef;
-                // get options providers
-                var providers = core_1.ReflectiveInjector.resolve([
-                    { provide: toast_options_1.ToastOptions, useValue: _this.options }
-                ]);
-                // create and load ToastContainer
-                var toastFactory = _this.componentFactoryResolver.resolveComponentFactory(toast_container_component_1.ToastContainer);
-                var childInjector = core_1.ReflectiveInjector.fromResolvedProviders(providers, appContainer.parentInjector);
-                _this.container = appContainer.createComponent(toastFactory, appContainer.length, childInjector);
-                _this.container.instance.onToastClicked = function (toast) {
-                    _this.onToastClicked(toast);
-                };
-            }
-            resolve(_this.setupToast(toast, options));
-        });
-    };
-    ToastsManager.prototype.createTimeout = function (toastId, timeout) {
-        var _this = this;
-        var life = timeout || this.options.toastLife;
-        setTimeout(function () {
-            _this.clearToast(toastId);
-        }, life);
-    };
-    ToastsManager.prototype.setupToast = function (toast, options) {
-        toast.id = ++this.index;
-        if (options && typeof (options.messageClass) === 'string') {
-            toast.messageClass = options.messageClass;
-        }
-        else if (typeof (this.options.messageClass) === 'string') {
-            toast.messageClass = this.options.messageClass;
-        }
-        if (options && typeof (options.titleClass) === 'string') {
-            toast.titleClass = options.titleClass;
-        }
-        else if (typeof (this.options.titleClass) === 'string') {
-            toast.titleClass = this.options.titleClass;
-        }
-        if (options && typeof (options.enableHTML) === 'boolean') {
-            toast.enableHTML = options.enableHTML;
-        }
-        else if (typeof (this.options.enableHTML) === 'boolean') {
-            toast.enableHTML = this.options.enableHTML;
-        }
-        if (options && typeof (options.dismiss) === 'string') {
-            toast.dismiss = options.dismiss;
-        }
-        else if (options && typeof (options.autoDismiss) === 'boolean') {
-            // backward compatibility
-            toast.dismiss = options.autoDismiss ? 'auto' : 'click';
-        }
-        else {
-            toast.dismiss = this.options.dismiss;
-        }
-        if (options && typeof (options.toastLife) === 'number') {
-            toast.dismiss = 'auto';
-            this.createTimeout(toast.id, options.toastLife);
-        }
-        else if (toast.dismiss === 'auto') {
-            this.createTimeout(toast.id);
-        }
-        this.container.instance.addToast(toast);
-        return toast;
-    };
-    ToastsManager.prototype.onToastClicked = function (toast) {
-        if (toast.dismiss === 'click') {
-            this.clearToast(toast.id);
-        }
-    };
-    ToastsManager.prototype.dismissToast = function (toast) {
-        this.clearToast(toast.id);
-    };
-    ToastsManager.prototype.clearToast = function (toastId) {
-        if (this.container) {
-            var instance = this.container.instance;
-            instance.removeToast(toastId);
-            if (!instance.anyToast()) {
-                this.dispose();
-            }
-        }
-    };
-    ToastsManager.prototype.clearAllToasts = function () {
-        if (this.container) {
-            var instance = this.container.instance;
-            instance.removeAllToasts();
-            this.dispose();
-        }
-    };
-    ToastsManager.prototype.dispose = function () {
-        var _this = this;
-        // using timeout to allow animation to finish
-        setTimeout(function () {
-            if (_this.container && !_this.container.instance.anyToast()) {
-                _this.container.destroy();
-                _this.container = null;
-            }
-        }, 2000);
-    };
-    ToastsManager.prototype.error = function (message, title, options) {
-        var toast = new toast_1.Toast('error', message, title);
-        return this.show(toast, options);
-    };
-    ToastsManager.prototype.info = function (message, title, options) {
-        var toast = new toast_1.Toast('info', message, title);
-        return this.show(toast, options);
-    };
-    ToastsManager.prototype.success = function (message, title, options) {
-        var toast = new toast_1.Toast('success', message, title);
-        return this.show(toast, options);
-    };
-    ToastsManager.prototype.warning = function (message, title, options) {
-        var toast = new toast_1.Toast('warning', message, title);
-        return this.show(toast, options);
-    };
-    // allow user define custom background color and image
-    ToastsManager.prototype.custom = function (message, title, options) {
-        var toast = new toast_1.Toast('custom', message, title);
-        return this.show(toast, options);
-    };
-    ToastsManager.decorators = [
-        { type: core_1.Injectable },
-    ];
-    /** @nocollapse */
-    ToastsManager.ctorParameters = [
-        { type: core_1.ComponentFactoryResolver, },
-        { type: core_1.ApplicationRef, },
-        { type: toast_options_1.ToastOptions, decorators: [{ type: core_1.Optional },] },
-    ];
-    return ToastsManager;
-}());
-exports.ToastsManager = ToastsManager;
-//# sourceMappingURL=toast-manager.js.map
-
-/***/ },
-
-/***/ "./node_modules/ng2-toastr/src/toast-options.js":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var ToastOptions = (function () {
-    function ToastOptions(options) {
-        this.enableHTML = false;
-        this.animate = 'fade';
-        Object.assign(this, options);
-    }
-    ToastOptions.decorators = [
-        { type: core_1.Injectable },
-    ];
-    /** @nocollapse */
-    ToastOptions.ctorParameters = [
-        { type: Object, },
-    ];
-    return ToastOptions;
-}());
-exports.ToastOptions = ToastOptions;
-//# sourceMappingURL=toast-options.js.map
-
-/***/ },
-
-/***/ "./node_modules/ng2-toastr/src/toast.js":
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-var Toast = (function () {
-    function Toast(type, message, title) {
-        this.type = type;
-        this.message = message;
-        this.title = title;
-        this.enableHTML = false;
-    }
-    return Toast;
-}());
-exports.Toast = Toast;
-//# sourceMappingURL=toast.js.map
-
-/***/ },
-
-/***/ "./node_modules/ng2-toastr/src/toast.module.js":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
-var toast_container_component_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-container.component.js");
-var toast_manager_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-manager.js");
-var toast_options_1 = __webpack_require__("./node_modules/ng2-toastr/src/toast-options.js");
-var ToastModule = (function () {
-    function ToastModule() {
-    }
-    ToastModule.forRoot = function (config) {
-        return {
-            ngModule: ToastModule,
-            providers: [
-                { provide: toast_options_1.ToastOptions, useValue: config }
-            ]
-        };
-    };
-    ToastModule.decorators = [
-        { type: core_1.NgModule, args: [{
-                    imports: [common_1.CommonModule],
-                    declarations: [toast_container_component_1.ToastContainer],
-                    exports: [toast_container_component_1.ToastContainer],
-                    providers: [toast_manager_1.ToastsManager],
-                    entryComponents: [toast_container_component_1.ToastContainer]
-                },] },
-    ];
-    /** @nocollapse */
-    ToastModule.ctorParameters = [];
-    return ToastModule;
-}());
-exports.ToastModule = ToastModule;
-//# sourceMappingURL=toast.module.js.map
+module.exports = ".toast-title{font-weight:700}.toast-message{word-wrap:break-word}.toast-message a,.toast-message label{color:#fff}.toast-message a:hover{color:#ccc;text-decoration:none}.toast-close-button{position:relative;right:-.3em;top:-.3em;float:right;font-size:20px;font-weight:700;color:#fff;-webkit-text-shadow:0 1px 0 #fff;text-shadow:0 1px 0 #fff;opacity:.8}.toast-close-button:focus,.toast-close-button:hover{color:#000;text-decoration:none;cursor:pointer;opacity:.4}button.toast-close-button{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none}.toast-top-center{top:0;right:0;width:100%}.toast-bottom-center{bottom:0;right:0;width:100%}.toast-top-full-width{top:0;right:0;width:100%}.toast-bottom-full-width{bottom:0;right:0;width:100%}.toast-top-left{top:12px;left:12px}.toast-top-right{top:12px;right:12px}.toast-bottom-right{right:12px;bottom:12px}.toast-bottom-left{bottom:12px;left:12px}#toast-container{position:fixed;z-index:99999}#toast-container *{box-sizing:border-box}#toast-container>div{position:relative;overflow:hidden;margin:0 0 6px;padding:15px 15px 15px 50px;width:300px;border-radius:3px 3px 3px 3px;background-position:15px;background-repeat:no-repeat;box-shadow:0 0 12px #999;color:#fff;opacity:.8}#toast-container>div.toast-custom{padding:15px;color:#030303}#toast-container>div.toast-custom .toast-close-button{color:#999!important}#toast-container>:hover{box-shadow:0 0 12px #000;opacity:1;cursor:pointer}#toast-container>.toast-info{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGwSURBVEhLtZa9SgNBEMc9sUxxRcoUKSzSWIhXpFMhhYWFhaBg4yPYiWCXZxBLERsLRS3EQkEfwCKdjWJAwSKCgoKCcudv4O5YLrt7EzgXhiU3/4+b2ckmwVjJSpKkQ6wAi4gwhT+z3wRBcEz0yjSseUTrcRyfsHsXmD0AmbHOC9Ii8VImnuXBPglHpQ5wwSVM7sNnTG7Za4JwDdCjxyAiH3nyA2mtaTJufiDZ5dCaqlItILh1NHatfN5skvjx9Z38m69CgzuXmZgVrPIGE763Jx9qKsRozWYw6xOHdER+nn2KkO+Bb+UV5CBN6WC6QtBgbRVozrahAbmm6HtUsgtPC19tFdxXZYBOfkbmFJ1VaHA1VAHjd0pp70oTZzvR+EVrx2Ygfdsq6eu55BHYR8hlcki+n+kERUFG8BrA0BwjeAv2M8WLQBtcy+SD6fNsmnB3AlBLrgTtVW1c2QN4bVWLATaIS60J2Du5y1TiJgjSBvFVZgTmwCU+dAZFoPxGEEs8nyHC9Bwe2GvEJv2WXZb0vjdyFT4Cxk3e/kIqlOGoVLwwPevpYHT+00T+hWwXDf4AJAOUqWcDhbwAAAAASUVORK5CYII=\")!important}#toast-container>.toast-error{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHOSURBVEhLrZa/SgNBEMZzh0WKCClSCKaIYOED+AAKeQQLG8HWztLCImBrYadgIdY+gIKNYkBFSwu7CAoqCgkkoGBI/E28PdbLZmeDLgzZzcx83/zZ2SSXC1j9fr+I1Hq93g2yxH4iwM1vkoBWAdxCmpzTxfkN2RcyZNaHFIkSo10+8kgxkXIURV5HGxTmFuc75B2RfQkpxHG8aAgaAFa0tAHqYFfQ7Iwe2yhODk8+J4C7yAoRTWI3w/4klGRgR4lO7Rpn9+gvMyWp+uxFh8+H+ARlgN1nJuJuQAYvNkEnwGFck18Er4q3egEc/oO+mhLdKgRyhdNFiacC0rlOCbhNVz4H9FnAYgDBvU3QIioZlJFLJtsoHYRDfiZoUyIxqCtRpVlANq0EU4dApjrtgezPFad5S19Wgjkc0hNVnuF4HjVA6C7QrSIbylB+oZe3aHgBsqlNqKYH48jXyJKMuAbiyVJ8KzaB3eRc0pg9VwQ4niFryI68qiOi3AbjwdsfnAtk0bCjTLJKr6mrD9g8iq/S/B81hguOMlQTnVyG40wAcjnmgsCNESDrjme7wfftP4P7SP4N3CJZdvzoNyGq2c/HWOXJGsvVg+RA/k2MC/wN6I2YA2Pt8GkAAAAASUVORK5CYII=\")!important}#toast-container>.toast-success{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADsSURBVEhLY2AYBfQMgf///3P8+/evAIgvA/FsIF+BavYDDWMBGroaSMMBiE8VC7AZDrIFaMFnii3AZTjUgsUUWUDA8OdAH6iQbQEhw4HyGsPEcKBXBIC4ARhex4G4BsjmweU1soIFaGg/WtoFZRIZdEvIMhxkCCjXIVsATV6gFGACs4Rsw0EGgIIH3QJYJgHSARQZDrWAB+jawzgs+Q2UO49D7jnRSRGoEFRILcdmEMWGI0cm0JJ2QpYA1RDvcmzJEWhABhD/pqrL0S0CWuABKgnRki9lLseS7g2AlqwHWQSKH4oKLrILpRGhEQCw2LiRUIa4lwAAAABJRU5ErkJggg==\")!important}#toast-container>.toast-warning{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGYSURBVEhL5ZSvTsNQFMbXZGICMYGYmJhAQIJAICYQPAACiSDB8AiICQQJT4CqQEwgJvYASAQCiZiYmJhAIBATCARJy+9rTsldd8sKu1M0+dLb057v6/lbq/2rK0mS/TRNj9cWNAKPYIJII7gIxCcQ51cvqID+GIEX8ASG4B1bK5gIZFeQfoJdEXOfgX4QAQg7kH2A65yQ87lyxb27sggkAzAuFhbbg1K2kgCkB1bVwyIR9m2L7PRPIhDUIXgGtyKw575yz3lTNs6X4JXnjV+LKM/m3MydnTbtOKIjtz6VhCBq4vSm3ncdrD2lk0VgUXSVKjVDJXJzijW1RQdsU7F77He8u68koNZTz8Oz5yGa6J3H3lZ0xYgXBK2QymlWWA+RWnYhskLBv2vmE+hBMCtbA7KX5drWyRT/2JsqZ2IvfB9Y4bWDNMFbJRFmC9E74SoS0CqulwjkC0+5bpcV1CZ8NMej4pjy0U+doDQsGyo1hzVJttIjhQ7GnBtRFN1UarUlH8F3xict+HY07rEzoUGPlWcjRFRr4/gChZgc3ZL2d8oAAAAASUVORK5CYII=\")!important}#toast-container.toast-bottom-center>div,#toast-container.toast-top-center>div{width:300px;margin:auto}#toast-container.toast-bottom-full-width>div,#toast-container.toast-top-full-width>div{width:96%;margin:auto}.toast{background-color:#fff}.toast-success{background-color:#51a351}.toast-error{background-color:#bd362f}.toast-info{background-color:#2f96b4}.toast-warning{background-color:#f89406}.toast-progress{position:absolute;left:0;bottom:0;height:4px;background-color:#000;opacity:.4}@media all and (max-width:240px){#toast-container>div{padding:8px 8px 8px 50px;width:11em}#toast-container .toast-close-button{right:-.2em;top:-.2em}}@media all and (min-width:241px) and (max-width:480px){#toast-container>div{padding:8px 8px 8px 50px;width:18em}#toast-container .toast-close-button{right:-.2em;top:-.2em}}@media all and (min-width:481px) and (max-width:768px){#toast-container>div{padding:15px 15px 15px 50px;width:25em}}"
 
 /***/ },
 
@@ -3525,6 +3597,179 @@ var catch_1 = __webpack_require__("./node_modules/rxjs/operator/catch.js");
 Observable_1.Observable.prototype.catch = catch_1._catch;
 Observable_1.Observable.prototype._catch = catch_1._catch;
 //# sourceMappingURL=catch.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/add/operator/share.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var share_1 = __webpack_require__("./node_modules/rxjs/operator/share.js");
+Observable_1.Observable.prototype.share = share_1.share;
+//# sourceMappingURL=share.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/observable/ConnectableObservable.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Subject_1 = __webpack_require__("./node_modules/rxjs/Subject.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var Subscriber_1 = __webpack_require__("./node_modules/rxjs/Subscriber.js");
+var Subscription_1 = __webpack_require__("./node_modules/rxjs/Subscription.js");
+/**
+ * @class ConnectableObservable<T>
+ */
+var ConnectableObservable = (function (_super) {
+    __extends(ConnectableObservable, _super);
+    function ConnectableObservable(source, subjectFactory) {
+        _super.call(this);
+        this.source = source;
+        this.subjectFactory = subjectFactory;
+        this._refCount = 0;
+    }
+    ConnectableObservable.prototype._subscribe = function (subscriber) {
+        return this.getSubject().subscribe(subscriber);
+    };
+    ConnectableObservable.prototype.getSubject = function () {
+        var subject = this._subject;
+        if (!subject || subject.isStopped) {
+            this._subject = this.subjectFactory();
+        }
+        return this._subject;
+    };
+    ConnectableObservable.prototype.connect = function () {
+        var connection = this._connection;
+        if (!connection) {
+            connection = this._connection = new Subscription_1.Subscription();
+            connection.add(this.source
+                .subscribe(new ConnectableSubscriber(this.getSubject(), this)));
+            if (connection.closed) {
+                this._connection = null;
+                connection = Subscription_1.Subscription.EMPTY;
+            }
+            else {
+                this._connection = connection;
+            }
+        }
+        return connection;
+    };
+    ConnectableObservable.prototype.refCount = function () {
+        return this.lift(new RefCountOperator(this));
+    };
+    return ConnectableObservable;
+}(Observable_1.Observable));
+exports.ConnectableObservable = ConnectableObservable;
+var ConnectableSubscriber = (function (_super) {
+    __extends(ConnectableSubscriber, _super);
+    function ConnectableSubscriber(destination, connectable) {
+        _super.call(this, destination);
+        this.connectable = connectable;
+    }
+    ConnectableSubscriber.prototype._error = function (err) {
+        this._unsubscribe();
+        _super.prototype._error.call(this, err);
+    };
+    ConnectableSubscriber.prototype._complete = function () {
+        this._unsubscribe();
+        _super.prototype._complete.call(this);
+    };
+    ConnectableSubscriber.prototype._unsubscribe = function () {
+        var connectable = this.connectable;
+        if (connectable) {
+            this.connectable = null;
+            var connection = connectable._connection;
+            connectable._refCount = 0;
+            connectable._subject = null;
+            connectable._connection = null;
+            if (connection) {
+                connection.unsubscribe();
+            }
+        }
+    };
+    return ConnectableSubscriber;
+}(Subject_1.SubjectSubscriber));
+var RefCountOperator = (function () {
+    function RefCountOperator(connectable) {
+        this.connectable = connectable;
+    }
+    RefCountOperator.prototype.call = function (subscriber, source) {
+        var connectable = this.connectable;
+        connectable._refCount++;
+        var refCounter = new RefCountSubscriber(subscriber, connectable);
+        var subscription = source._subscribe(refCounter);
+        if (!refCounter.closed) {
+            refCounter.connection = connectable.connect();
+        }
+        return subscription;
+    };
+    return RefCountOperator;
+}());
+var RefCountSubscriber = (function (_super) {
+    __extends(RefCountSubscriber, _super);
+    function RefCountSubscriber(destination, connectable) {
+        _super.call(this, destination);
+        this.connectable = connectable;
+    }
+    RefCountSubscriber.prototype._unsubscribe = function () {
+        var connectable = this.connectable;
+        if (!connectable) {
+            this.connection = null;
+            return;
+        }
+        this.connectable = null;
+        var refCount = connectable._refCount;
+        if (refCount <= 0) {
+            this.connection = null;
+            return;
+        }
+        connectable._refCount = refCount - 1;
+        if (refCount > 1) {
+            this.connection = null;
+            return;
+        }
+        ///
+        // Compare the local RefCountSubscriber's connection Subscription to the
+        // connection Subscription on the shared ConnectableObservable. In cases
+        // where the ConnectableObservable source synchronously emits values, and
+        // the RefCountSubscriber's dowstream Observers synchronously unsubscribe,
+        // execution continues to here before the RefCountOperator has a chance to
+        // supply the RefCountSubscriber with the shared connection Subscription.
+        // For example:
+        // ```
+        // Observable.range(0, 10)
+        //   .publish()
+        //   .refCount()
+        //   .take(5)
+        //   .subscribe();
+        // ```
+        // In order to account for this case, RefCountSubscriber should only dispose
+        // the ConnectableObservable's shared connection Subscription if the
+        // connection Subscription exists, *and* either:
+        //   a. RefCountSubscriber doesn't have a reference to the shared connection
+        //      Subscription yet, or,
+        //   b. RefCountSubscriber's connection Subscription reference is identical
+        //      to the shared connection Subscription
+        ///
+        var connection = this.connection;
+        var sharedConnection = connectable._connection;
+        this.connection = null;
+        if (sharedConnection && (!connection || sharedConnection === connection)) {
+            sharedConnection.unsubscribe();
+        }
+    };
+    return RefCountSubscriber;
+}(Subscriber_1.Subscriber));
+//# sourceMappingURL=ConnectableObservable.js.map
 
 /***/ },
 
@@ -3617,6 +3862,40 @@ exports.ErrorObservable = ErrorObservable;
 
 /***/ },
 
+/***/ "./node_modules/rxjs/observable/MulticastObservable.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var ConnectableObservable_1 = __webpack_require__("./node_modules/rxjs/observable/ConnectableObservable.js");
+var MulticastObservable = (function (_super) {
+    __extends(MulticastObservable, _super);
+    function MulticastObservable(source, subjectFactory, selector) {
+        _super.call(this);
+        this.source = source;
+        this.subjectFactory = subjectFactory;
+        this.selector = selector;
+    }
+    MulticastObservable.prototype._subscribe = function (subscriber) {
+        var _a = this, selector = _a.selector, source = _a.source;
+        var connectable = new ConnectableObservable_1.ConnectableObservable(source, this.subjectFactory);
+        var subscription = selector(connectable).subscribe(subscriber);
+        subscription.add(connectable.connect());
+        return subscription;
+    };
+    return MulticastObservable;
+}(Observable_1.Observable));
+exports.MulticastObservable = MulticastObservable;
+//# sourceMappingURL=MulticastObservable.js.map
+
+/***/ },
+
 /***/ "./node_modules/rxjs/observable/throw.js":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -3625,6 +3904,82 @@ exports.ErrorObservable = ErrorObservable;
 var ErrorObservable_1 = __webpack_require__("./node_modules/rxjs/observable/ErrorObservable.js");
 exports._throw = ErrorObservable_1.ErrorObservable.create;
 //# sourceMappingURL=throw.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/operator/multicast.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var MulticastObservable_1 = __webpack_require__("./node_modules/rxjs/observable/MulticastObservable.js");
+var ConnectableObservable_1 = __webpack_require__("./node_modules/rxjs/observable/ConnectableObservable.js");
+/**
+ * Returns an Observable that emits the results of invoking a specified selector on items
+ * emitted by a ConnectableObservable that shares a single subscription to the underlying stream.
+ *
+ * <img src="./img/multicast.png" width="100%">
+ *
+ * @param {Function|Subject} Factory function to create an intermediate subject through
+ * which the source sequence's elements will be multicast to the selector function
+ * or Subject to push source elements into.
+ * @param {Function} Optional selector function that can use the multicasted source stream
+ * as many times as needed, without causing multiple subscriptions to the source stream.
+ * Subscribers to the given source will receive all notifications of the source from the
+ * time of the subscription forward.
+ * @return {Observable} an Observable that emits the results of invoking the selector
+ * on the items emitted by a `ConnectableObservable` that shares a single subscription to
+ * the underlying stream.
+ * @method multicast
+ * @owner Observable
+ */
+function multicast(subjectOrSubjectFactory, selector) {
+    var subjectFactory;
+    if (typeof subjectOrSubjectFactory === 'function') {
+        subjectFactory = subjectOrSubjectFactory;
+    }
+    else {
+        subjectFactory = function subjectFactory() {
+            return subjectOrSubjectFactory;
+        };
+    }
+    return !selector ?
+        new ConnectableObservable_1.ConnectableObservable(this, subjectFactory) :
+        new MulticastObservable_1.MulticastObservable(this, subjectFactory, selector);
+}
+exports.multicast = multicast;
+//# sourceMappingURL=multicast.js.map
+
+/***/ },
+
+/***/ "./node_modules/rxjs/operator/share.js":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var multicast_1 = __webpack_require__("./node_modules/rxjs/operator/multicast.js");
+var Subject_1 = __webpack_require__("./node_modules/rxjs/Subject.js");
+function shareSubjectFactory() {
+    return new Subject_1.Subject();
+}
+/**
+ * Returns a new Observable that multicasts (shares) the original Observable. As long as there is at least one
+ * Subscriber this Observable will be subscribed and emitting data. When all subscribers have unsubscribed it will
+ * unsubscribe from the source Observable. Because the Observable is multicasting it makes the stream `hot`.
+ * This is an alias for .publish().refCount().
+ *
+ * <img src="./img/share.png" width="100%">
+ *
+ * @return {Observable<T>} an Observable that upon connection causes the source Observable to emit items to its Observers
+ * @method share
+ * @owner Observable
+ */
+function share() {
+    return multicast_1.multicast.call(this, shareSubjectFactory).refCount();
+}
+exports.share = share;
+;
+//# sourceMappingURL=share.js.map
 
 /***/ }
 

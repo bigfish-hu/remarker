@@ -21,6 +21,7 @@ import { Router, NavigationStart, NavigationEnd,
     <main [ngClass]="{'menu-collapsed': isMenuCollapsed}" baThemeRun>
       <div class="additional-bg"></div>
       <router-outlet></router-outlet>
+      <toaster-container></toaster-container>
       <ng2-slim-loading-bar></ng2-slim-loading-bar>
     </main>
   `
@@ -33,7 +34,8 @@ export class App {
               private _imageLoader: BaImageLoaderService,
               private _spinner: BaThemeSpinner,
               private router: Router,
-              private slimLoader: SlimLoadingBarService) {
+              private slimLoader: SlimLoadingBarService,
+  ) {
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;
     });
