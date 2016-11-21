@@ -106,9 +106,9 @@ var hmr_1 = __webpack_require__("./node_modules/@angularclass/hmr/dist/index.js"
 var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
 var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
 var ng2_slim_loading_bar_1 = __webpack_require__("./node_modules/ng2-slim-loading-bar/index.js");
-// import { ToastModule } from 'ng2-toastr/ng2-toastr';
 var api_service_1 = __webpack_require__("./ng2-admin/app/services/api.service.ts");
 var angular2_toaster_1 = __webpack_require__("./node_modules/angular2-toaster/angular2-toaster.js");
+var toastr_service_1 = __webpack_require__("./ng2-admin/app/services/toastr.service.ts");
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -126,7 +126,8 @@ var APP_PROVIDERS = [
     global_state_1.GlobalState,
     angular2_jwt_1.AUTH_PROVIDERS,
     auth_service_1.AuthService,
-    api_service_1.ApiService
+    api_service_1.ApiService,
+    toastr_service_1.ToastrService
 ];
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -488,7 +489,8 @@ exports.routing = router_1.RouterModule.forChild(routes);
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
-var angular2_toaster_1 = __webpack_require__("./node_modules/angular2-toaster/angular2-toaster.js");
+var toastr_service_1 = __webpack_require__("./ng2-admin/app/services/toastr.service.ts");
+var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
 __webpack_require__("./node_modules/rxjs/add/observable/throw.js");
 // Operators
 __webpack_require__("./node_modules/rxjs/add/operator/catch.js");
@@ -506,29 +508,19 @@ var ApiService = (function () {
         return this.http.post(url, JSON.stringify(data), options)
             .map(function (response) { return response.json(); })
             .catch(function (error) {
-            return _this.handleError(error);
+            _this.toastr.error(error);
+            return Observable_1.Observable.throw(error);
         });
     };
     ApiService.prototype.setHeader = function (name, value) {
         this.headers.append(name, value);
         return this;
     };
-    ApiService.prototype.handleError = function (error) {
-        if (error instanceof http_1.Response) {
-            var body = error.json() || '';
-            this.toastr.pop('error', error.statusText, body.error || JSON.stringify(body));
-        }
-        else {
-            this.toastr.pop('error', error.statusText || '', error.message || error.toString());
-        }
-        return Observable_1.Observable.throw(error);
-    };
     return ApiService;
 }());
 ApiService = __decorate([
     core_1.Injectable(),
-    __param(1, core_1.Inject(angular2_toaster_1.ToasterService)),
-    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object, typeof (_b = typeof angular2_toaster_1.ToasterService !== "undefined" && angular2_toaster_1.ToasterService) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof angular2_jwt_1.AuthHttp !== "undefined" && angular2_jwt_1.AuthHttp) === "function" && _a || Object, typeof (_b = typeof toastr_service_1.ToastrService !== "undefined" && toastr_service_1.ToastrService) === "function" && _b || Object])
 ], ApiService);
 exports.ApiService = ApiService;
 var _a, _b;
@@ -582,12 +574,15 @@ var _a, _b;
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var angular2_jwt_1 = __webpack_require__("./node_modules/angular2-jwt/angular2-jwt.js");
-var api_service_1 = __webpack_require__("./ng2-admin/app/services/api.service.ts");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
+var toastr_service_1 = __webpack_require__("./ng2-admin/app/services/toastr.service.ts");
 __webpack_require__("./node_modules/rxjs/add/operator/map.js");
 var AuthService = (function () {
-    function AuthService(http) {
+    function AuthService(http, toastr) {
         var _this = this;
         this.http = http;
+        this.toastr = toastr;
         this.redirectRoute = '/pages/dashboard';
         this.loginRoute = '/login';
         this.loginUrl = '/api/auth/login';
@@ -596,8 +591,8 @@ var AuthService = (function () {
             localStorage.removeItem(_this.tokenName);
         };
         this.extractToken = function (res) {
-            if (typeof res.data.token !== 'undefined') {
-                _this.saveToken(res.data.token);
+            if (typeof res.json().data.token !== 'undefined') {
+                _this.saveToken(res.json().data.token);
             }
         };
     }
@@ -607,7 +602,11 @@ var AuthService = (function () {
     AuthService.prototype.login = function (values) {
         var _this = this;
         return this.http.post(this.loginUrl, values)
-            .map(function (response) { _this.extractToken(response); });
+            .map(function (response) { _this.extractToken(response); })
+            .catch(function (error) {
+            _this.toastr.error(error);
+            return Observable_1.Observable.throw(error);
+        });
     };
     AuthService.prototype.saveToken = function (token) {
         localStorage.setItem(this.tokenName, token);
@@ -616,9 +615,43 @@ var AuthService = (function () {
 }());
 AuthService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof api_service_1.ApiService !== "undefined" && api_service_1.ApiService) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof http_1.Http !== "undefined" && http_1.Http) === "function" && _a || Object, typeof (_b = typeof toastr_service_1.ToastrService !== "undefined" && toastr_service_1.ToastrService) === "function" && _b || Object])
 ], AuthService);
 exports.AuthService = AuthService;
+var _a, _b;
+
+
+/***/ },
+
+/***/ "./ng2-admin/app/services/toastr.service.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var angular2_toaster_1 = __webpack_require__("./node_modules/angular2-toaster/angular2-toaster.js");
+var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
+var ToastrService = (function () {
+    function ToastrService(toastr) {
+        this.toastr = toastr;
+    }
+    ToastrService.prototype.error = function (error) {
+        if (error instanceof http_1.Response) {
+            var body = error.json() || '';
+            this.toastr.pop('error', error.statusText, body.error || JSON.stringify(body));
+        }
+        else {
+            this.toastr.pop('error', error.statusText || '', error.message || error.toString());
+        }
+    };
+    return ToastrService;
+}());
+ToastrService = __decorate([
+    core_1.Injectable(),
+    __param(0, core_1.Inject(angular2_toaster_1.ToasterService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof angular2_toaster_1.ToasterService !== "undefined" && angular2_toaster_1.ToasterService) === "function" && _a || Object])
+], ToastrService);
+exports.ToastrService = ToastrService;
 var _a;
 
 

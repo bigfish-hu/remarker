@@ -7,9 +7,9 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthService } from './services/auth.service';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-// import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { ApiService } from './services/api.service';
 import { ToasterModule } from 'angular2-toaster/angular2-toaster';
+import { ToastrService } from './services/toastr.service';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -30,7 +30,8 @@ const APP_PROVIDERS = [
   GlobalState,
   AUTH_PROVIDERS,
   AuthService,
-  ApiService
+  ApiService,
+  ToastrService
 ];
 
 type StoreType = {
