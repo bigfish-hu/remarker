@@ -109,6 +109,7 @@ var ng2_slim_loading_bar_1 = __webpack_require__("./node_modules/ng2-slim-loadin
 var api_service_1 = __webpack_require__("./ng2-admin/app/services/api.service.ts");
 var angular2_toaster_1 = __webpack_require__("./node_modules/angular2-toaster/angular2-toaster.js");
 var toastr_service_1 = __webpack_require__("./ng2-admin/app/services/toastr.service.ts");
+var user_service_1 = __webpack_require__("./ng2-admin/app/services/user.service.ts");
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -127,7 +128,8 @@ var APP_PROVIDERS = [
     angular2_jwt_1.AUTH_PROVIDERS,
     auth_service_1.AuthService,
     api_service_1.ApiService,
-    toastr_service_1.ToastrService
+    toastr_service_1.ToastrService,
+    user_service_1.UserService
 ];
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -370,6 +372,21 @@ __export(__webpack_require__("./ng2-admin/app/app.module.ts"));
 
 /***/ },
 
+/***/ "./ng2-admin/app/models/user.model.ts":
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var User = (function () {
+    function User() {
+    }
+    return User;
+}());
+exports.User = User;
+
+
+/***/ },
+
 /***/ "./ng2-admin/app/pages/pages.component.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -506,6 +523,17 @@ var ApiService = (function () {
         if (headers === void 0) { headers = {}; }
         var options = new http_1.RequestOptions({ headers: this.headers });
         return this.http.post(url, JSON.stringify(data), options)
+            .map(function (response) { return response.json(); })
+            .catch(function (error) {
+            _this.toastr.error(error);
+            return Observable_1.Observable.throw(error);
+        });
+    };
+    ApiService.prototype.get = function (url, headers) {
+        var _this = this;
+        if (headers === void 0) { headers = {}; }
+        var options = new http_1.RequestOptions({ headers: this.headers });
+        return this.http.get(url, options)
             .map(function (response) { return response.json(); })
             .catch(function (error) {
             _this.toastr.error(error);
@@ -652,6 +680,59 @@ ToastrService = __decorate([
     __metadata("design:paramtypes", [typeof (_a = typeof angular2_toaster_1.ToasterService !== "undefined" && angular2_toaster_1.ToasterService) === "function" && _a || Object])
 ], ToastrService);
 exports.ToastrService = ToastrService;
+var _a;
+
+
+/***/ },
+
+/***/ "./ng2-admin/app/services/user.service.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
+var user_model_1 = __webpack_require__("./ng2-admin/app/models/user.model.ts");
+var api_service_1 = __webpack_require__("./ng2-admin/app/services/api.service.ts");
+__webpack_require__("./node_modules/rxjs/add/operator/map.js");
+var UserService = (function () {
+    function UserService(http) {
+        this.http = http;
+        this.url = '/api/users/me';
+    }
+    UserService.prototype.isUserSet = function () {
+        return !!this.user;
+    };
+    UserService.prototype.getUser = function (force) {
+        var _this = this;
+        if (force === void 0) { force = false; }
+        if (force || !this.isUserSet()) {
+            return this.http.get(this.url)
+                .map(function (response) {
+                _this.user = _this.extractUser(response);
+                return _this.user;
+            });
+        }
+        return Observable_1.Observable.create(this.user);
+    };
+    UserService.prototype.extractUser = function (response) {
+        var res = response.data.user;
+        var user = new user_model_1.User();
+        user.id = res.id;
+        user.name = res.name;
+        user.email = res.email;
+        user.isSuperadmin = res.iisSuperadmind;
+        user.createdAt = res.createdAt;
+        user.updatedAt = res.updatedAt;
+        return user;
+    };
+    return UserService;
+}());
+UserService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [typeof (_a = typeof api_service_1.ApiService !== "undefined" && api_service_1.ApiService) === "function" && _a || Object])
+], UserService);
+exports.UserService = UserService;
 var _a;
 
 
@@ -1582,11 +1663,13 @@ var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var global_state_1 = __webpack_require__("./ng2-admin/app/global.state.ts");
 var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
+var user_service_1 = __webpack_require__("./ng2-admin/app/services/user.service.ts");
 var BaPageTop = (function () {
-    function BaPageTop(_state, authService, router) {
+    function BaPageTop(_state, AuthService, UserService, router) {
         var _this = this;
         this._state = _state;
-        this.authService = authService;
+        this.AuthService = AuthService;
+        this.UserService = UserService;
         this.router = router;
         this.isScrolled = false;
         this.isMenuCollapsed = false;
@@ -1602,8 +1685,12 @@ var BaPageTop = (function () {
         this.isScrolled = isScrolled;
     };
     BaPageTop.prototype.logOut = function () {
-        this.authService.logout();
-        this.router.navigate([this.authService.loginRoute]);
+        this.AuthService.logout();
+        this.router.navigate([this.AuthService.loginRoute]);
+    };
+    BaPageTop.prototype.ngOnInit = function () {
+        var _this = this;
+        this.UserService.getUser().subscribe(function (user) { _this.user = user; });
     };
     return BaPageTop;
 }());
@@ -1614,10 +1701,10 @@ BaPageTop = __decorate([
         template: __webpack_require__("./ng2-admin/app/theme/components/baPageTop/baPageTop.html"),
         encapsulation: core_1.ViewEncapsulation.None
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof global_state_1.GlobalState !== "undefined" && global_state_1.GlobalState) === "function" && _a || Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" && _b || Object, typeof (_c = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof global_state_1.GlobalState !== "undefined" && global_state_1.GlobalState) === "function" && _a || Object, typeof (_b = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" && _b || Object, typeof (_c = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" && _c || Object, typeof (_d = typeof router_1.Router !== "undefined" && router_1.Router) === "function" && _d || Object])
 ], BaPageTop);
 exports.BaPageTop = BaPageTop;
-var _a, _b, _c;
+var _a, _b, _c, _d;
 
 
 /***/ },
@@ -1625,7 +1712,7 @@ var _a, _b, _c;
 /***/ "./ng2-admin/app/theme/components/baPageTop/baPageTop.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"page-top clearfix\" baScrollPosition maxHeight=\"50\" (scrollChange)=\"scrolledChanged($event)\"\n     [ngClass]=\"{scrolled: isScrolled}\">\n  <a routerLink=\"/pages/dashboard\" class=\"al-logo clearfix\"><span>Remarker</span>Admin</a>\n  <a (click)=\"toggleMenu()\" class=\"collapse-menu-link fa fa-bars\"></a>\n\n  <div class=\"user-profile clearfix\">\n    <div class=\"dropdown al-user-profile\">\n      <a class=\"profile-toggle-link dropdown-toggle\" id=\"user-profile-dd\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n        <span class=\"user-name-letter-circle\"></span>\n      </a>\n      <ul class=\"dropdown-menu top-dropdown-menu profile-dropdown\" aria-labelledby=\"user-profile-dd\">\n        <i class=\"dropdown-arr\"></i>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-user\"></i>Profile</a></li>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-cog\"></i>Settings</a></li>\n        <div class=\"dropdown-divider\"></div>\n        <li class=\"dropdown-item\"><a (click)=\"logOut()\" class=\"signout\" i18n><i class=\"fa fa-power-off\"></i>Sign out</a></li>\n      </ul>\n    </div>\n    <ba-msg-center></ba-msg-center>\n  </div>\n</div>\n"
+module.exports = "<div class=\"page-top clearfix\" baScrollPosition maxHeight=\"50\" (scrollChange)=\"scrolledChanged($event)\"\n     [ngClass]=\"{scrolled: isScrolled}\">\n  <a routerLink=\"/pages/dashboard\" class=\"al-logo clearfix\"><span>Remarker</span>Admin</a>\n  <a (click)=\"toggleMenu()\" class=\"collapse-menu-link fa fa-bars\"></a>\n\n  <div class=\"user-profile clearfix\">\n    <div class=\"dropdown al-user-profile\">\n      <a class=\"profile-toggle-link dropdown-toggle\" id=\"user-profile-dd\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n        <span class=\"user-name-letter-circle\">{{user.id}}</span>\n      </a>\n      <ul class=\"dropdown-menu top-dropdown-menu profile-dropdown\" aria-labelledby=\"user-profile-dd\">\n        <i class=\"dropdown-arr\"></i>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-user\"></i>Profile</a></li>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-cog\"></i>Settings</a></li>\n        <div class=\"dropdown-divider\"></div>\n        <li class=\"dropdown-item\"><a (click)=\"logOut()\" class=\"signout\" i18n><i class=\"fa fa-power-off\"></i>Sign out</a></li>\n      </ul>\n    </div>\n    <ba-msg-center></ba-msg-center>\n  </div>\n</div>\n"
 
 /***/ },
 

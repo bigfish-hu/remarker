@@ -31,6 +31,18 @@ export class ApiService {
       });
   }
 
+  public get(url: string, headers: Object = {}): Observable<Response> {
+
+    let options = new RequestOptions({ headers: this.headers});
+
+    return this.http.get(url, options)
+      .map((response: Response) => <Response>response.json())
+      .catch((error) => {
+        this.toastr.error(error);
+        return Observable.throw(error);
+      });
+  }
+
   public setHeader(name: string, value: string) {
     this.headers.append(name, value);
     return this;

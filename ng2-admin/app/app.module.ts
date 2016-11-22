@@ -10,6 +10,7 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { ApiService } from './services/api.service';
 import { ToasterModule } from 'angular2-toaster/angular2-toaster';
 import { ToastrService } from './services/toastr.service';
+import { UserService } from './services/user.service';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -31,7 +32,8 @@ const APP_PROVIDERS = [
   AUTH_PROVIDERS,
   AuthService,
   ApiService,
-  ToastrService
+  ToastrService,
+  UserService
 ];
 
 type StoreType = {

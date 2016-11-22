@@ -11,6 +11,7 @@ export class BaContentTop {
 
   public activePageTitle: string = '';
 
+
   constructor(private _state: GlobalState) {
     this._state.subscribe('menu.activeLink', (activeLink) => {
       if (activeLink) {
