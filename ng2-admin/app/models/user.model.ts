@@ -7,4 +7,8 @@ export class User {
   createdAt: string;
   updatedAt: string;
 
+  public getNameFirstLetterUc(): string {
+    return this.name.charAt(0).toUpperCase();
+  }
+
 }

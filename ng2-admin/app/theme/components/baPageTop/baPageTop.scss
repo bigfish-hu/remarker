@@ -180,7 +180,9 @@ a.collapse-menu-link {
   cursor: pointer;
 }
 
-span.user-name-letter-circle {
+div.user-name-letter-circle {
+  color: white;
+  font: bold 20px Helvetica, Verdana, Tahoma, sans-serif;
   width: 40px;
   height: 40px;
   background: #1e5899;
@@ -189,9 +191,7 @@ span.user-name-letter-circle {
   -webkit-border-radius: 50%;
   color: #ffffff;
   display: inline-block;
-  font-weight: bold;
-  line-height: 1.6em;
+  line-height: 40px;
   margin-right: 15px;
   text-align: center;
 }
-

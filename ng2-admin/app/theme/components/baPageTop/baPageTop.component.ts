@@ -24,11 +24,7 @@ export class BaPageTop {
     private AuthService: AuthService,
     private UserService: UserService,
     private router: Router
-  ) {
-    this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
-      this.isMenuCollapsed = isCollapsed;
-    });
-  }
+  ) {}
 
   public toggleMenu() {
     this.isMenuCollapsed = !this.isMenuCollapsed;
@@ -41,10 +37,14 @@ export class BaPageTop {
 
   public logOut() {
     this.AuthService.logout();
+    this.UserService.clearUser();
     this.router.navigate([this.AuthService.loginRoute]);
   }
 
   ngOnInit(){
+    this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
+      this.isMenuCollapsed = isCollapsed;
+    });
     this.UserService.getUser().subscribe((user) => {this.user = user});
   }
 }

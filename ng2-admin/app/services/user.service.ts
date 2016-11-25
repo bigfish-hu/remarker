@@ -26,10 +26,15 @@ export class UserService {
     }
 
     return Observable.create(this.user);
-
   }
 
-  extractUser(response: Object): User {
+  clearUser() {
+    if (this.isUserSet()) {
+      this.user = undefined;
+    }
+  }
+
+  extractUser(response): User {
     let res = response.data.user;
     let user = new User();
 
