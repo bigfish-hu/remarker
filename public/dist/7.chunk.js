@@ -1,4 +1,4 @@
-webpackJsonpac__name_([0],{
+webpackJsonpac__name_([7],{
 
 /***/ "./ng2-admin/app/pages/login/login-guard.service.ts":
 /***/ function(module, exports, __webpack_require__) {
@@ -160,4 +160,4 @@ module.exports = ".auth-main {\n  display: flex;\n  align-items: center;\n  heig
 /***/ }
 
 });
-//# sourceMappingURL=0.map
+//# sourceMappingURL=7.map

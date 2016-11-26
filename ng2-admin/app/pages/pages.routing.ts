@@ -7,7 +7,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => System.import('./login/login.module') },
   { path: 'not-found', loadChildren: () => System.import('./not-found/not-found.module') },
   {
-    path: 'pages',
+    path: '',
     component: Pages,
     canActivate: [AuthGuard],
     children: [
@@ -15,7 +15,6 @@ const routes: Routes = [
       { path: 'dashboard', loadChildren: () => System.import('./dashboard/dashboard.module') },
     ]
   }
-
 ];
 
 export const routing = RouterModule.forChild(routes);

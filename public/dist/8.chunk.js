@@ -1,4 +1,4 @@
-webpackJsonpac__name_([1],{
+webpackJsonpac__name_([8],{
 
 /***/ "./ng2-admin/app/pages/not-found/not-found.component.ts":
 /***/ function(module, exports, __webpack_require__) {
@@ -94,4 +94,4 @@ module.exports = ""
 /***/ }
 
 });
-//# sourceMappingURL=1.map
+//# sourceMappingURL=8.map

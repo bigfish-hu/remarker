@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AuthService {
   user: User;
-  redirectRoute: string = '/pages/dashboard';
+  redirectRoute: string = '/dashboard';
   loginRoute: string = '/login';
   private loginUrl: string = '/api/auth/login';
   private tokenName: string = 'id_token';

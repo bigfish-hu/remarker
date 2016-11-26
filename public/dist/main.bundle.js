@@ -424,7 +424,7 @@ exports.Pages = Pages;
 "use strict";
 exports.PAGES_MENU = [
     {
-        path: 'pages',
+        path: '',
         children: [
             {
                 path: 'dashboard',
@@ -487,7 +487,7 @@ var routes = [
     { path: 'login', loadChildren: function () { return __webpack_require__.e/* System.import */(0).then(__webpack_require__.bind(null, "./ng2-admin/app/pages/login/login.module.ts")).then(function (mod) { return (mod.__esModule && mod.default) ? mod.default : mod; }); } },
     { path: 'not-found', loadChildren: function () { return __webpack_require__.e/* System.import */(1).then(__webpack_require__.bind(null, "./ng2-admin/app/pages/not-found/not-found.module.ts")).then(function (mod) { return (mod.__esModule && mod.default) ? mod.default : mod; }); } },
     {
-        path: 'pages',
+        path: '',
         component: pages_component_1.Pages,
         canActivate: [auth_guard_service_1.AuthGuard],
         children: [
@@ -614,7 +614,7 @@ var AuthService = (function () {
         var _this = this;
         this.http = http;
         this.toastr = toastr;
-        this.redirectRoute = '/pages/dashboard';
+        this.redirectRoute = '/dashboard';
         this.loginRoute = '/login';
         this.loginUrl = '/api/auth/login';
         this.tokenName = 'id_token';
