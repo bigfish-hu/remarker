@@ -1,0 +1,21 @@
+<div class="page-top clearfix" baScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)"
+     [ngClass]="{scrolled: isScrolled}">
+  <a routerLink="/pages/dashboard" class="al-logo clearfix"><span>Remarker</span>Admin</a>
+  <a (click)="toggleMenu()" class="collapse-menu-link fa fa-bars"></a>
+
+  <div class="user-profile clearfix">
+    <div class="dropdown al-user-profile">
+      <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
+        <div class="user-name-letter-circle">{{user?.getNameFirstLetterUc()}}</div>
+      </a>
+      <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
+        <i class="dropdown-arr"></i>
+        <li class="dropdown-item"><a [routerLink]="['/profile']" i18n><i class="fa fa-user"></i>Profile</a></li>
+        <li class="dropdown-item"><a [routerLink]="['/settings']" i18n><i class="fa fa-cog"></i>Settings</a></li>
+        <div class="dropdown-divider"></div>
+        <li class="dropdown-item"><a (click)="logOut()" class="signout" i18n><i class="fa fa-power-off"></i>Sign out</a></li>
+      </ul>
+    </div>
+    <ba-msg-center></ba-msg-center>
+  </div>
+</div>

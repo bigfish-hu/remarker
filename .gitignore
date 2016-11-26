@@ -1,16 +1,9 @@
 # Excluded files
 .env
-robots.txt
 *.bak
-app/config/config.php
-composer.lock
+npm-debug.log
 
 # Excluded folders
 vendor/
-.idea/
 bower_components/
 node_modules/
-public/build/
-public/css/
-public/js/
-public/dist/

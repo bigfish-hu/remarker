@@ -1,0 +1,12 @@
+{
+  "vendor": {
+    "js": "/dist/vendor.bundle.js"
+  },
+  "main": {
+    "js": "/dist/main.bundle.js",
+    "css": "/dist/initial.css"
+  },
+  "polyfills": {
+    "js": "/dist/polyfills.bundle.js"
+  }
+}

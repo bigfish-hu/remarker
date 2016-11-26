@@ -8,6 +8,7 @@ RUN \
   apt-get update && \
   apt-get install -y \
   curl \
+  git \
   wget
 
 RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.org.list && \
@@ -22,9 +23,13 @@ RUN apt-get update && \
                        php7.0-cli \
                        php7.0-fpm \
                        php7.0-curl \
+                       php7.0-dom \
                        php7.0-gd \
+                       php7.0-gmp \
                        php7.0-mcrypt \
+                       php7.0-mbstring \
                        php7.0-mysql \
+                       php7.0-simplexml \
                        php7.0-json \
                        php7.0-xdebug \
                        nginx
