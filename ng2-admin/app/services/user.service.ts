@@ -10,7 +10,7 @@ export class UserService {
   private user: User;
   private url: string = '/api/users/me';
 
-  constructor(private http: ApiService){}
+  constructor(private http: ApiService) {}
 
   public isUserSet(): boolean {
     return !!this.user;
@@ -25,7 +25,9 @@ export class UserService {
         });
     }
 
-    return Observable.create(this.user);
+    return Observable.create((observer) => {
+      observer.next(this.user);
+    });
   }
 
   clearUser() {

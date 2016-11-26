@@ -6,6 +6,7 @@ import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
 
 import { User } from '../../../models/user.model';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'ba-page-top',
@@ -21,8 +22,8 @@ export class BaPageTop {
 
   constructor(
     private _state: GlobalState,
-    private AuthService: AuthService,
-    private UserService: UserService,
+    private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -36,15 +37,16 @@ export class BaPageTop {
   }
 
   public logOut() {
-    this.AuthService.logout();
-    this.UserService.clearUser();
-    this.router.navigate([this.AuthService.loginRoute]);
+    this.authService.logout();
+    this.userService.clearUser();
+    this.router.navigate([this.authService.loginRoute]);
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;
     });
-    this.UserService.getUser().subscribe((user) => {this.user = user});
+
+    this.userService.getUser().subscribe((user) => { this.user = user; });
   }
 }

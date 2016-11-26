@@ -716,7 +716,9 @@ var UserService = (function () {
                 return _this.user;
             });
         }
-        return Observable_1.Observable.create(this.user);
+        return Observable_1.Observable.create(function (observer) {
+            observer.next(_this.user);
+        });
     };
     UserService.prototype.clearUser = function () {
         if (this.isUserSet()) {
@@ -1673,10 +1675,10 @@ var global_state_1 = __webpack_require__("./ng2-admin/app/global.state.ts");
 var auth_service_1 = __webpack_require__("./ng2-admin/app/services/auth.service.ts");
 var user_service_1 = __webpack_require__("./ng2-admin/app/services/user.service.ts");
 var BaPageTop = (function () {
-    function BaPageTop(_state, AuthService, UserService, router) {
+    function BaPageTop(_state, authService, userService, router) {
         this._state = _state;
-        this.AuthService = AuthService;
-        this.UserService = UserService;
+        this.authService = authService;
+        this.userService = userService;
         this.router = router;
         this.isScrolled = false;
         this.isMenuCollapsed = false;
@@ -1689,16 +1691,16 @@ var BaPageTop = (function () {
         this.isScrolled = isScrolled;
     };
     BaPageTop.prototype.logOut = function () {
-        this.AuthService.logout();
-        this.UserService.clearUser();
-        this.router.navigate([this.AuthService.loginRoute]);
+        this.authService.logout();
+        this.userService.clearUser();
+        this.router.navigate([this.authService.loginRoute]);
     };
     BaPageTop.prototype.ngOnInit = function () {
         var _this = this;
         this._state.subscribe('menu.isCollapsed', function (isCollapsed) {
             _this.isMenuCollapsed = isCollapsed;
         });
-        this.UserService.getUser().subscribe(function (user) { _this.user = user; });
+        this.userService.getUser().subscribe(function (user) { _this.user = user; });
     };
     return BaPageTop;
 }());
@@ -1720,7 +1722,7 @@ var _a, _b, _c, _d;
 /***/ "./ng2-admin/app/theme/components/baPageTop/baPageTop.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"page-top clearfix\" baScrollPosition maxHeight=\"50\" (scrollChange)=\"scrolledChanged($event)\"\n     [ngClass]=\"{scrolled: isScrolled}\">\n  <a routerLink=\"/pages/dashboard\" class=\"al-logo clearfix\"><span>Remarker</span>Admin</a>\n  <a (click)=\"toggleMenu()\" class=\"collapse-menu-link fa fa-bars\"></a>\n\n  <div class=\"user-profile clearfix\">\n    <div class=\"dropdown al-user-profile\">\n      <a class=\"profile-toggle-link dropdown-toggle\" id=\"user-profile-dd\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n        <div class=\"user-name-letter-circle\">{{user?.getNameFirstLetterUc()}}</div>\n      </a>\n      <ul class=\"dropdown-menu top-dropdown-menu profile-dropdown\" aria-labelledby=\"user-profile-dd\">\n        <i class=\"dropdown-arr\"></i>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-user\"></i>Profile</a></li>\n        <li class=\"dropdown-item\"><a href i18n><i class=\"fa fa-cog\"></i>Settings</a></li>\n        <div class=\"dropdown-divider\"></div>\n        <li class=\"dropdown-item\"><a (click)=\"logOut()\" class=\"signout\" i18n><i class=\"fa fa-power-off\"></i>Sign out</a></li>\n      </ul>\n    </div>\n    <ba-msg-center></ba-msg-center>\n  </div>\n</div>\n"
+module.exports = "<div class=\"page-top clearfix\" baScrollPosition maxHeight=\"50\" (scrollChange)=\"scrolledChanged($event)\"\n     [ngClass]=\"{scrolled: isScrolled}\">\n  <a routerLink=\"/pages/dashboard\" class=\"al-logo clearfix\"><span>Remarker</span>Admin</a>\n  <a (click)=\"toggleMenu()\" class=\"collapse-menu-link fa fa-bars\"></a>\n\n  <div class=\"user-profile clearfix\">\n    <div class=\"dropdown al-user-profile\">\n      <a class=\"profile-toggle-link dropdown-toggle\" id=\"user-profile-dd\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n        <div class=\"user-name-letter-circle\">{{user?.getNameFirstLetterUc()}}</div>\n      </a>\n      <ul class=\"dropdown-menu top-dropdown-menu profile-dropdown\" aria-labelledby=\"user-profile-dd\">\n        <i class=\"dropdown-arr\"></i>\n        <li class=\"dropdown-item\"><a [routerLink]=\"['/profile']\" i18n><i class=\"fa fa-user\"></i>Profile</a></li>\n        <li class=\"dropdown-item\"><a [routerLink]=\"['/settings']\" i18n><i class=\"fa fa-cog\"></i>Settings</a></li>\n        <div class=\"dropdown-divider\"></div>\n        <li class=\"dropdown-item\"><a (click)=\"logOut()\" class=\"signout\" i18n><i class=\"fa fa-power-off\"></i>Sign out</a></li>\n      </ul>\n    </div>\n    <ba-msg-center></ba-msg-center>\n  </div>\n</div>\n"
 
 /***/ },
 

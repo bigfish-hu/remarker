@@ -32,7 +32,6 @@ RUN apt-get update && \
                        php7.0-simplexml \
                        php7.0-json \
                        php7.0-xdebug \
-                       composer \
                        nginx
 
 #

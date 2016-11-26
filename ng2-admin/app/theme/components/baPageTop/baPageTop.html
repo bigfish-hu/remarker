@@ -10,8 +10,8 @@
       </a>
       <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
         <i class="dropdown-arr"></i>
-        <li class="dropdown-item"><a href i18n><i class="fa fa-user"></i>Profile</a></li>
-        <li class="dropdown-item"><a href i18n><i class="fa fa-cog"></i>Settings</a></li>
+        <li class="dropdown-item"><a [routerLink]="['/profile']" i18n><i class="fa fa-user"></i>Profile</a></li>
+        <li class="dropdown-item"><a [routerLink]="['/settings']" i18n><i class="fa fa-cog"></i>Settings</a></li>
         <div class="dropdown-divider"></div>
         <li class="dropdown-item"><a (click)="logOut()" class="signout" i18n><i class="fa fa-power-off"></i>Sign out</a></li>
       </ul>
