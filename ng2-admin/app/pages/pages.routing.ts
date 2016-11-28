@@ -15,7 +15,9 @@ const routes: Routes = [
       { path: 'dashboard', loadChildren: () => System.import('./dashboard/dashboard.module') },
       { path: 'feedbacks', loadChildren: () => System.import('./feedbacks/feedbacks.module') },
       { path: 'projects', loadChildren: () => System.import('./projects/projects.module') },
-      { path: 'users', loadChildren: () => System.import('./users/users.module') }
+      { path: 'users', loadChildren: () => System.import('./users/users.module') },
+      { path: 'profile', loadChildren: () => System.import('./profile/profile.module') },
+      { path: 'settings', loadChildren: () => System.import('./settings/settings.module') }
     ]
   }
 ];

@@ -45,6 +45,16 @@ export class BaMenu {
     });
   }
 
+  public clickOnItem(event) {
+    // console.log(event.srcElement.childNodes[1].text);
+    console.log(event.target.innerText);
+
+    let activeLink: any = {};
+    activeLink.title = event.target.innerText;
+
+    this._state.notifyDataChanged('menu.activeLink', activeLink);
+  }
+
   public selectMenuAndNotify(): void {
     if (this.menuItems) {
       this.menuItems = this._service.selectMenuItem(this.menuItems);

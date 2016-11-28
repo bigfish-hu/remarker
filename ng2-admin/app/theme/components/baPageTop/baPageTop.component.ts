@@ -42,6 +42,16 @@ export class BaPageTop {
     this.router.navigate([this.authService.loginRoute]);
   }
 
+  public clickOnItem(event) {
+    // console.log(event.srcElement.childNodes[1].text);
+    console.log(event.target.innerText);
+
+    let activeLink: any = {};
+    activeLink.title = event.target.innerText;
+
+    this._state.notifyDataChanged('menu.activeLink', activeLink);
+  }
+
   ngOnInit() {
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;

@@ -22,7 +22,7 @@ export const PAGES_MENU = [
             icon: 'fa fa-bug',
             selected: false,
             expanded: false,
-            order: 0
+            order: 1
           }
         }
       },
@@ -34,7 +34,7 @@ export const PAGES_MENU = [
             icon: 'fa fa-list',
             selected: false,
             expanded: false,
-            order: 0
+            order: 2
           }
         }
       },
@@ -46,7 +46,7 @@ export const PAGES_MENU = [
             icon: 'fa fa-users',
             selected: false,
             expanded: false,
-            order: 0
+            order: 3
           }
         }
       },

@@ -5,4 +5,4 @@ export const routes: Routes = [
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' }
 ];
 
-export const routing = RouterModule.forRoot(routes, { useHash: true });
+export const routing = RouterModule.forRoot(routes);

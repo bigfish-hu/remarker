@@ -50,3 +50,5 @@ Route::group(['prefix' => 'api'], function () {
         });
     });
 });
+
+Route::get('admin/{catchall}', 'AngularController@serveApp')->where('catchall', '(.*)');
