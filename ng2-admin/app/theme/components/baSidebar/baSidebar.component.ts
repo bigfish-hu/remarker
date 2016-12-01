@@ -1,8 +1,7 @@
 import { Component, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
 import { GlobalState } from '../../../global.state';
 import { layoutSizes } from '../../../theme';
-import { MENU } from '../../../../app/app.menu';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 @Component({
   selector: 'ba-sidebar',
@@ -11,11 +10,6 @@ import * as _ from 'lodash';
   template: require('./baSidebar.html')
 })
 export class BaSidebar {
-
-  // here we declare which routes we want to use as a menu in our sidebar
-  // we're creating a deep copy since we are going to change that object
-  public routes = _.cloneDeep(MENU);
-
   public menuHeight: number;
   public isMenuCollapsed: boolean = false;
   public isMenuShouldCollapsed: boolean = false;
