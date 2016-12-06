@@ -1,7 +1,8 @@
 import { Component, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
 import { GlobalState } from '../../../global.state';
 import { layoutSizes } from '../../../theme';
-// import * as _ from 'lodash';
+import { UserService } from '../../../services/user.service';
+import { User } from '../../../models/user.model';
 
 @Component({
   selector: 'ba-sidebar',
@@ -13,10 +14,13 @@ export class BaSidebar {
   public menuHeight: number;
   public isMenuCollapsed: boolean = false;
   public isMenuShouldCollapsed: boolean = false;
+  public user: User;
 
-
-  constructor(private _elementRef: ElementRef, private _state: GlobalState) {
-
+  constructor(
+    private _elementRef: ElementRef,
+    private _state: GlobalState,
+    private userService: UserService
+  ) {
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;
     });
@@ -26,6 +30,8 @@ export class BaSidebar {
     if (this._shouldMenuCollapse()) {
       this.menuCollapse();
     }
+    this.userService.getUser().subscribe((user) => { this.user = user; console.log(user); });
+    console.log(this.user);
   }
 
   public ngAfterViewInit(): void {
