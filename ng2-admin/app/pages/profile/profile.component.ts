@@ -1,4 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'profile',
@@ -7,8 +9,11 @@ import { Component, ViewEncapsulation } from '@angular/core';
   template: require('./profile.html')
 })
 export class Profile {
+  public user: User;
 
-  constructor() {
+  constructor(private route: ActivatedRoute) {}
+
+  public ngOnInit(): void {
+    this.route.data.subscribe((data: any) => { this.user = data.me; });
   }
-
 }

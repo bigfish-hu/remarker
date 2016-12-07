@@ -32,7 +32,7 @@ export class BaSidebar {
     if (this._shouldMenuCollapse()) {
       this.menuCollapse();
     }
-    this.route.data.subscribe((data: any) => { this.user = data.me });
+    this.route.data.subscribe((data: any) => { this.user = data.me; });
   }
 
   public ngAfterViewInit(): void {

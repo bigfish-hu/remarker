@@ -1,47 +1,42 @@
 <div class="content-top clearfix">
   <h1 class="al-title" i18n>Profile</h1>
-
   <ul class="breadcrumb al-breadcrumb">
-    <li>
-      <a routerLink="/pages/dashboard" i18n>Home</a></li>
-    <li i18n>profile</li>
-  </ul>
+      <li>
+        <a routerLink="/pages/dashboard" i18n>Home</a></li>
+      <li i18n>Profile</li>
+    </ul>
 </div>
 
 <div class="row">
-  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-  </div>
-</div>
-
-<div class="row">
-</div>
-
-<div class="row">
-  <div class="col-xlg-9 col-xl-6 col-lg-6  col-md-12 col-sm-12 col-xs-12">
-    <div class="row">
-      <ba-card class="col-xlg-8 col-xl-12 col-lg-12 col-md-7 col-sm-12 col-xs-12"
-               title="Revenue" baCardClass="medium-card">
-
-      </ba-card>
-      <ba-card class="col-xlg-4 col-xl-12 col-lg-12 col-md-5 col-sm-12 col-xs-12"
-               baCardClass="popular-app medium-card">
-      </ba-card>
-    </div>
-  </div>
-
-  <div class="col-xlg-3 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12">
-    <ba-card title="Feed"
-             baCardClass="large-card with-scroll feed-panel">
-    </ba-card>
-  </div>
-
-</div>
-
-<div class="row shift-up">
-  <ba-card class="col-xlg-3 col-lg-6 col-md-12 col-sm-12 col-xs-12" title="To Do List"
-           baCardClass="xmedium-card feed-comply-panel with-scroll todo-panel">
-  </ba-card>
-  <ba-card class="col-xlg-6 col-lg-6 col-md-12 col-sm-12 col-xs-12" title="Calendar"
-           baCardClass="xmedium-card feed-comply-panel with-scroll calendar-panel">
+  <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
+    <form>
+      <div class="form-group">
+        <label for="userId"><b i18n>ID: </b></label>
+        <input name="userId" type="number" [ngModel]="user.id" class="form-control" id="userId" placeholder="ID" disabled>
+      </div>
+      <div class="form-group">
+        <label for="userName"><b i18n>Name: </b></label>
+        <input name="userName" type="text" [(ngModel)]="user.name" class="form-control" id="userName" placeholder="Name">
+      </div>
+      <div class="form-group">
+        <label for="userEmail"><b i18n>Email: </b></label>
+        <input name="userEmail" type="email" [(ngModel)]="user.email" class="form-control" id="userEmail" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label for="userCreated"><b i18n>Created at: </b></label>
+        <input name="userCreated" type="datetime" [(ngModel)]="user.createdAt" class="form-control" id="userCreated" disabled>
+      </div>
+      <div class="form-group">
+        <label for="userUpdated"><b i18n>Updated at: </b></label>
+        <input name="userUpdated" type="datetime" [(ngModel)]="user.updatedAt" class="form-control" id="userUpdated" disabled>
+      </div>
+      <div class="checkbox">
+        <label class="checkbox-inline custom-checkbox nowrap">
+          <input name="userAdmin" type="checkbox" [(ngModel)]="user.isSuperadmin" class="form-control" id="userAdmin" disabled>
+          <span><b i18n>Admin</b></span>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-success pull-xs-right">Submit</button>
+    </form>
   </ba-card>
 </div>

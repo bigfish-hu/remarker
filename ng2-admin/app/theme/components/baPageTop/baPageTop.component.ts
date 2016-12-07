@@ -48,6 +48,6 @@ export class BaPageTop {
       this.isMenuCollapsed = isCollapsed;
     });
 
-    this.route.data.subscribe((data: any) => { this.user = data.me });
+    this.route.data.subscribe((data: any) => { this.user = data.me; });
   }
 }

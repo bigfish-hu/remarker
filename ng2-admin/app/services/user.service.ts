@@ -19,7 +19,6 @@ export class UserService {
   }
 
   getMe(force: boolean = false): Observable<User> {
-    console.log('service', this.user);
     if (force || !this.isUserSet()) {
       return this.http.get(this.url)
         .map(res => { return this.extractUser(res); })

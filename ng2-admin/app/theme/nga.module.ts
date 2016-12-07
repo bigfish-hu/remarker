@@ -14,9 +14,7 @@ import {
 import {
   BaBackTop,
   BaCard,
-  BaCheckbox,
   BaMsgCenter,
-  BaMultiCheckbox,
   BaPageTop,
   BaSidebar
 } from './components';
@@ -42,9 +40,7 @@ import {
 const NGA_COMPONENTS = [
   BaBackTop,
   BaCard,
-  BaCheckbox,
   BaMsgCenter,
-  BaMultiCheckbox,
   BaPageTop,
   BaSidebar
 ];

@@ -65,11 +65,11 @@ $hoverlink: darken($activelink, 20%);
 @mixin body-bg() {
   //$mainBgUrl: $images-root + 'sky-bg.jpg';
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1e5799+0,7db9e8+100 */
-  background: #1e5799; /* Old browsers */
-  background: -moz-linear-gradient(right,  #1e5799 0%, #7db9e8 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(right,  #1e5799 0%,#7db9e8 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to left,  #1e5799 0%,#7db9e8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 ); /* IE6-9 */
+  background: #3169ab; /* Old browsers */
+  // background: -moz-linear-gradient(right,  #1e5799 0%, #7db9e8 100%); /* FF3.6-15 */
+  // background: -webkit-linear-gradient(right,  #1e5799 0%,#7db9e8 100%); /* Chrome10-25,Safari5.1-6 */
+  // background: linear-gradient(to left,  #1e5799 0%,#7db9e8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 ); /* IE6-9 */
 
   // &::before {
   //   content: '';
