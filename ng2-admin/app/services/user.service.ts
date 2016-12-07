@@ -12,19 +12,17 @@ export class UserService {
   private user: User;
   private url: string = '/api/users/me';
 
-  constructor(private http: ApiService) {
-    this.getUser().subscribe((user) => { this.user = user; });
-  }
+  constructor(private http: ApiService) {}
 
   public isUserSet(): boolean {
     return !!this.user;
   }
 
-  getUser(force: boolean = false): Observable<User> {
+  getMe(force: boolean = false): Observable<User> {
     console.log('service', this.user);
     if (force || !this.isUserSet()) {
       return this.http.get(this.url)
-        .map(res => {return this.extractUser(res)})
+        .map(res => { return this.extractUser(res); })
         .do((data) => {
           this.user = data;
         });

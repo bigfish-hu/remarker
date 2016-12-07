@@ -1,6 +1,7 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { Pages } from './pages.component';
 import { AuthGuard } from '../services/auth-guard.service';
+import { ResolveMe } from '../services/resolve-me.service';
 
 // noinspection TypeScriptValidateTypes
 const routes: Routes = [
@@ -10,6 +11,9 @@ const routes: Routes = [
     path: '',
     component: Pages,
     canActivate: [AuthGuard],
+    resolve: {
+      me: ResolveMe
+    },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadChildren: () => System.import('./dashboard/dashboard.module') },

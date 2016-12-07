@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { GlobalState } from '../../../global.state';
 import { AuthService } from '../../../services/auth.service';
@@ -24,7 +24,8 @@ export class BaPageTop {
     private _state: GlobalState,
     private authService: AuthService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   public toggleMenu() {
@@ -47,6 +48,6 @@ export class BaPageTop {
       this.isMenuCollapsed = isCollapsed;
     });
 
-    this.userService.getUser().subscribe((user) => { this.user = user; });
+    this.route.data.subscribe((data: any) => { this.user = data.me });
   }
 }

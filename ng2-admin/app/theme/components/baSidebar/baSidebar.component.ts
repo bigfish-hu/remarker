@@ -1,4 +1,6 @@
 import { Component, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
 import { GlobalState } from '../../../global.state';
 import { layoutSizes } from '../../../theme';
 import { UserService } from '../../../services/user.service';
@@ -19,7 +21,7 @@ export class BaSidebar {
   constructor(
     private _elementRef: ElementRef,
     private _state: GlobalState,
-    private userService: UserService
+    private route: ActivatedRoute
   ) {
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;
@@ -30,8 +32,7 @@ export class BaSidebar {
     if (this._shouldMenuCollapse()) {
       this.menuCollapse();
     }
-    this.userService.getUser().subscribe((user) => { this.user = user; console.log(user); });
-    console.log(this.user);
+    this.route.data.subscribe((data: any) => { this.user = data.me });
   }
 
   public ngAfterViewInit(): void {
