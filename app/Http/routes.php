@@ -25,6 +25,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::group(['middleware' => 'jwt.refresh'], function () {
 
         Route::get('users/me', 'Auth\AuthController@getAuthenticatedUser');
+        Route::put('users/me', 'Auth\AuthController@updateAuthenticatedUser');
 
         Route::get('/projects', 'Admin\ProjectController@getProjects');
 

@@ -5,7 +5,7 @@
 <div class="row">
   <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
     <h3 class="card-title" i18n>User Data</h3>
-    <form>
+    <form  (ngSubmit)="onSubmit()" #userForm="ngForm">
       <div class="form-group">
         <label for="userId"><b i18n>ID: </b></label>
         <input name="userId" type="number" [ngModel]="user.id" class="form-control" id="userId" placeholder="ID" disabled>
@@ -32,26 +32,26 @@
           <span><b i18n>Admin</b></span>
         </label>
       </div>
-      <button type="submit" class="btn btn-success pull-xs-right">Submit</button>
+      <button type="submit" class="btn btn-success pull-xs-right" [disabled]="!userForm.form.valid">Submit</button>
     </form>
   </ba-card>
 
   <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
     <h3 class="card-title" i18n>Change Password</h3>
-    <form>
+    <form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
       <div class="form-group">
         <label for="oldPassword"><b i18n>Old Password: </b></label>
-        <input name="oldPassword" type="password" class="form-control" id="oldPassword" placeholder="Old Password">
+        <input name="oldPassword" type="password" [(ngModel)]="password.oldPassword" class="form-control" id="oldPassword" placeholder="Old Password">
       </div>
       <div class="form-group">
         <label for="newPassword1"><b i18n>New Password: </b></label>
-        <input name="newPassword1" type="password" class="form-control" id="newPassword1" placeholder="New Password">
+        <input name="newPassword1" type="password" [(ngModel)]="password.newPassword1" class="form-control" id="newPassword1" placeholder="New Password">
       </div>
       <div class="form-group">
         <label for="newPassword2"><b i18n>New Password Again: </b></label>
-        <input name="newPassword2" type="password" class="form-control" id="newPassword2" placeholder="New Password Again">
+        <input name="newPassword2" type="password" [(ngModel)]="password.newPassword2" class="form-control" id="newPassword2" placeholder="New Password Again">
       </div>
-      <button type="submit" class="btn btn-success pull-xs-right">Submit</button>
+      <button type="submit" class="btn btn-success pull-xs-right" [disabled]="!passwordForm.form.valid">Submit</button>
     </form>
   </ba-card>
 </div>

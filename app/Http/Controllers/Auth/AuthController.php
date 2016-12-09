@@ -60,4 +60,9 @@ class AuthController extends Controller
 
         return response()->success(compact('user'));
     }
+
+    public function updateAuthenticatedUser(Request $request)
+    {
+
+    }
 }
