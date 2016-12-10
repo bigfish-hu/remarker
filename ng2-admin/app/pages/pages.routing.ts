@@ -6,6 +6,7 @@ import { ResolveMe } from '../services/resolve-me.service';
 // noinspection TypeScriptValidateTypes
 const routes: Routes = [
   { path: 'login', loadChildren: () => System.import('./login/login.module') },
+  { path: 'register', loadChildren: () => System.import('./register/register.module') },
   { path: 'not-found', loadChildren: () => System.import('./not-found/not-found.module') },
   {
     path: '',
