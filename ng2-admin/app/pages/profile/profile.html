@@ -5,18 +5,18 @@
 <div class="row">
   <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
     <h3 class="card-title" i18n>User Data</h3>
-    <form  (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <form  (ngSubmit)="submitUserForm()" #userForm="ngForm">
       <div class="form-group">
         <label for="userId"><b i18n>ID: </b></label>
         <input name="userId" type="number" [ngModel]="user.id" class="form-control" id="userId" placeholder="ID" disabled>
       </div>
       <div class="form-group">
         <label for="userName"><b i18n>Name: </b></label>
-        <input name="userName" type="text" [(ngModel)]="user.name" class="form-control" id="userName" placeholder="Name">
+        <input name="userName" type="text" [(ngModel)]="user.name" class="form-control" id="userName" placeholder="Name" required>
       </div>
       <div class="form-group">
         <label for="userEmail"><b i18n>Email: </b></label>
-        <input name="userEmail" type="email" [(ngModel)]="user.email" class="form-control" id="userEmail" placeholder="Email">
+        <input name="userEmail" type="email" [(ngModel)]="user.email" class="form-control" id="userEmail" placeholder="Email" required>
       </div>
       <div class="form-group">
         <label for="userCreated"><b i18n>Created at: </b></label>
@@ -38,20 +38,21 @@
 
   <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
     <h3 class="card-title" i18n>Change Password</h3>
-    <form (ngSubmit)="onSubmit()" #passwordForm="ngForm">
-      <div class="form-group">
+    <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()">
+      <div class="form-group" [ngClass]="{'has-error': (!oldPassword.valid && oldPassword.touched), 'has-success': (oldPassword.valid && oldPassword.touched)}">
         <label for="oldPassword"><b i18n>Old Password: </b></label>
-        <input name="oldPassword" type="password" [(ngModel)]="password.oldPassword" class="form-control" id="oldPassword" placeholder="Old Password">
+        <input type="password" [formControl]="oldPassword" class="form-control" id="oldPassword" placeholder="Old Password">
       </div>
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'has-error': (!newPassword1.valid && newPassword1.touched), 'has-success': (newPassword1.valid && newPassword1.touched)}">
         <label for="newPassword1"><b i18n>New Password: </b></label>
-        <input name="newPassword1" type="password" [(ngModel)]="password.newPassword1" class="form-control" id="newPassword1" placeholder="New Password">
+        <input type="password" [formControl]="newPassword1" class="form-control" id="newPassword1" placeholder="New Password">
       </div>
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'has-error': (!newPassword2.valid && newPassword2.touched) || , 'has-success': (newPassword2.valid && newPassword2.touched)}">
         <label for="newPassword2"><b i18n>New Password Again: </b></label>
-        <input name="newPassword2" type="password" [(ngModel)]="password.newPassword2" class="form-control" id="newPassword2" placeholder="New Password Again">
+        <input type="password" [formControl]="newPassword2"  class="form-control" id="newPassword2" placeholder="New Password Again">
+        <span *ngIf="!newPasswords.valid && (newPassword1.touched || newPassword2.touched)" class="help-block sub-little-text">Passwords don't match.</span>
       </div>
-      <button type="submit" class="btn btn-success pull-xs-right" [disabled]="!passwordForm.form.valid">Submit</button>
+      <button type="submit" class="btn btn-success pull-xs-right" [disabled]="!passwordForm.valid">Submit</button>
     </form>
   </ba-card>
 </div>

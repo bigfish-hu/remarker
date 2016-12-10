@@ -19,7 +19,7 @@ export class Login {
   constructor(
       fb: FormBuilder,
       private authService: AuthService,
-      private router: Router,
+      private router: Router
   ) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
