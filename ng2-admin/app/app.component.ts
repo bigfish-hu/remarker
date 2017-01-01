@@ -14,15 +14,14 @@ import { Router, NavigationStart, NavigationEnd,
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styles: [require('normalize.css'), require('./app.scss'),
-    require('../../node_modules/ng2-toastr/bundles/ng2-toastr.min.css')
+  styles: [require('normalize.css'), require('./app.scss')
   ],
   template: `
+      <ng2-slim-loading-bar></ng2-slim-loading-bar>
     <main [ngClass]="{'menu-collapsed': isMenuCollapsed}" baThemeRun>
       <div class="additional-bg"></div>
       <router-outlet></router-outlet>
       <toaster-container></toaster-container>
-      <ng2-slim-loading-bar></ng2-slim-loading-bar>
     </main>
   `
 })
