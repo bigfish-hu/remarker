@@ -21,6 +21,7 @@ Route::get('admin/manifest.json', function () {
 Route::group(['prefix' => 'api'], function () {
 
     Route::post('auth/login', 'Auth\AuthController@postLogin');
+    Route::post('auth/register', 'Auth\AuthController@registration');
 
     Route::group(['middleware' => 'jwt.refresh'], function () {
 

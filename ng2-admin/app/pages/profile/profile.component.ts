@@ -17,6 +17,7 @@ export class Profile {
   public newPassword2: AbstractControl;
   public passwordForm: FormGroup;
   public newPasswords: FormGroup;
+  public userForm: FormGroup;
 
   constructor(private route: ActivatedRoute, fb: FormBuilder) {
     this.passwordForm = fb.group({

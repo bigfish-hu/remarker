@@ -30,13 +30,15 @@ export class UserService {
     return Observable.of(this.user);
   }
 
+  updateMe() {}
+
   clearUser() {
     if (this.isUserSet()) {
       this.user = undefined;
     }
   }
 
-  extractUser(response): User {
+  private extractUser(response): User {
     let res = response.data.user;
     let user = new User();
 

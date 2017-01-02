@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
 {
@@ -54,8 +52,8 @@ class AuthController extends Controller
      */
     public function getAuthenticatedUser()
     {
-        if (! $user = $this->jwt->parseToken()->authenticate()) {
-            return response()->json('user_not_found', 404);
+        if (! $user = $this->getCurrentUser()) {
+            return response()->json('unauthenticated', 401);
         }
 
         return response()->success(compact('user'));
@@ -63,6 +61,25 @@ class AuthController extends Controller
 
     public function updateAuthenticatedUser(Request $request)
     {
+        $user = Auth::user();
 
+        return response()->success(compact('user'));
+    }
+
+    public function registration(Request $request)
+    {
+
+    }
+
+    /**
+     * @return bool|false|User
+     */
+    private function getCurrentUser()
+    {
+        if (! $user = $this->jwt->parseToken()->authenticate()) {
+            return false;
+        }
+
+        return $user;
     }
 }
