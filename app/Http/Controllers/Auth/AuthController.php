@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -61,7 +63,17 @@ class AuthController extends Controller
 
     public function updateAuthenticatedUser(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
+
+        if (!$request->has('id')) {
+            return $this->changePassword($request);
+        }
+
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email')
+        ]);
 
         return response()->success(compact('user'));
     }
@@ -81,5 +93,28 @@ class AuthController extends Controller
         }
 
         return $user;
+    }
+
+    private function changePassword(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $this->validate($request, [
+            'oldpassword'    => 'required|min:6',
+            'newpassword1' => 'required|min:6',
+            'newpassword2' => 'required|min:6|same:newpassword1',
+        ]);
+
+        $oldpassword = $request->input('oldpassword');
+        $newpassword = $request->input('newpassword');
+
+        if (!Hash::check($oldpassword, $user->password)) {
+            return response(['error' => 'Invalid Old Password'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user->password = Hash::make($newpassword);
+
+        return response('', Response::HTTP_NO_CONTENT);
     }
 }

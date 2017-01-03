@@ -3,6 +3,7 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
 import { EmailValidator, EqualPasswordsValidator } from '../../theme/validators';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'profile',
@@ -19,7 +20,7 @@ export class Profile {
   public newPasswords: FormGroup;
   public userForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, fb: FormBuilder) {
+  constructor(private route: ActivatedRoute, fb: FormBuilder, private userService: UserService ) {
     this.passwordForm = fb.group({
       'oldPassword': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'newPasswords': fb.group({
@@ -38,10 +39,11 @@ export class Profile {
   }
 
   public submitUserForm() {
+    this.userService.updateMe(this.user).subscribe((data: any) => { this.user = data; });
   }
 
   public submitPasswordForm() {
-
+    this.userService.changePassword(this.oldPassword.value, this.newPassword1.value, this.newPassword2.value).subscribe();
   }
 
 }

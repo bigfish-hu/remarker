@@ -5,7 +5,7 @@
 <div class="row">
   <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
     <h3 class="card-title" i18n>User Data</h3>
-    <form [formGroup]="userForm" (ngSubmit)="submitUserForm()" >
+    <form (ngSubmit)="submitUserForm()" #userForm="ngForm">
       <div class="form-group">
         <label for="userId"><b i18n>ID: </b></label>
         <input name="userId" type="number" [ngModel]="user.id" class="form-control" id="userId" placeholder="ID" disabled>

@@ -30,7 +30,22 @@ export class UserService {
     return Observable.of(this.user);
   }
 
-  updateMe() {}
+  updateMe(user: User) {
+    return this.http.put(this.url, user)
+        .map(res => { return this.extractUser(res); })
+        .do((data) => {
+          this.user = data;
+        });
+  }
+
+  changePassword(oldpassword: string, newpassword1: string, newpassword2: string) {
+    let requestObject = {
+      oldpassword: oldpassword,
+      newpassword1: newpassword1,
+      newpassword2: newpassword2
+    };
+    return this.http.put(this.url, requestObject);
+  }
 
   clearUser() {
     if (this.isUserSet()) {
