@@ -25,9 +25,7 @@ import 'bootstrap-loader';
 import 'font-awesome-sass-loader';
 import 'lodash';
 import '../node_modules/ng2-slim-loading-bar/style.css';
-// import '../node_modules/ng2-toasty/style-bootstrap.css';
-// import '../node_modules/ng2-toastr/bundles/ng2-toastr.min.css';
-import '../node_modules/angular2-toaster/lib/toaster.css';
+import '../node_modules/angular2-toaster/toaster.css';
 
 
 if ('production' === ENV) {

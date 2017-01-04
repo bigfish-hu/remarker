@@ -43,7 +43,9 @@ export class Profile {
   }
 
   public submitPasswordForm() {
-    this.userService.changePassword(this.oldPassword.value, this.newPassword1.value, this.newPassword2.value).subscribe();
+    this.userService.changePassword(
+        this.oldPassword.value, this.newPassword1.value, this.newPassword2.value
+    ).subscribe();
   }
 
 }

@@ -1,5 +1,8 @@
 # Remarker  
 
+[![dependencies](https://david-dm.org/bigfish-hu/remarker/status.svg)](https://david-dm.org/bigfish-hu/remarker)
+[![devDependencies](https://david-dm.org/bigfish-hu/remarker/dev-status.svg)](https://david-dm.org/bigfish-hu/remarker?type=dev)
+
 ## Setup  
 
   requirements: npm, docker-compose  
