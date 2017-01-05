@@ -1,4 +1,4 @@
-import {} from 'jasmine';
+import {  } from 'jasmine';
 
 describe('App', () => {
 

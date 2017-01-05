@@ -1,9 +1,9 @@
 export class Project {
 
   id: number;
-  ext_id: number;
+  extId: number;
   name: string;
-  issue_tracker: string;
+  issueTracker: string;
   createdAt: string;
   updatedAt: string;
 
