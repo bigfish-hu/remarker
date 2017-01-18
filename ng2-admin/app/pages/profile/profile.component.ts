@@ -22,10 +22,10 @@ export class Profile {
 
   constructor(private route: ActivatedRoute, fb: FormBuilder, private userService: UserService ) {
     this.passwordForm = fb.group({
-      'oldPassword': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+      'oldPassword': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       'newPasswords': fb.group({
-        'newPassword1': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-        'newPassword2': ['', Validators.compose([Validators.required, Validators.minLength(4)])]
+        'newPassword1': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+        'newPassword2': ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     }, {validator: EqualPasswordsValidator.validate('newPassword1', 'newPassword2')})
   });
     this.oldPassword = this.passwordForm.controls['oldPassword'];
