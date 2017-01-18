@@ -24,9 +24,6 @@ import 'jquery';
 import 'bootstrap-loader';
 import 'font-awesome-sass-loader';
 import 'lodash';
-import '../node_modules/ng2-slim-loading-bar/style.css';
-import '../node_modules/angular2-toaster/toaster.css';
-
 
 if ('production' === ENV) {
   // Production

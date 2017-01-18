@@ -101,7 +101,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $this->validate($request, [
-            'oldpassword'    => 'required|min:6',
+            'oldpassword'  => 'required|min:6',
             'newpassword1' => 'required|min:6',
             'newpassword2' => 'required|min:6|same:newpassword1',
         ]);
