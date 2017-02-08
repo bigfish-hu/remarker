@@ -1,7 +1,6 @@
 # Remarker  
 
-[![dependencies](https://david-dm.org/bigfish-hu/remarker/status.svg)](https://david-dm.org/bigfish-hu/remarker)
-[![devDependencies](https://david-dm.org/bigfish-hu/remarker/dev-status.svg)](https://david-dm.org/bigfish-hu/remarker?type=dev)
+[![Dependency Status](https://www.versioneye.com/user/projects/589b641b6a7781004a93f8ca/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/589b641b6a7781004a93f8ca)
 
 ## Setup  
 
