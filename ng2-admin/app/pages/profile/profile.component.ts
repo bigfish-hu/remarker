@@ -1,15 +1,15 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { EmailValidator, EqualPasswordsValidator } from '../../theme/validators';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
+import 'style-loader!./profile.scss';
+
 @Component({
   selector: 'profile',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['profile.scss'],
-  template: require('./profile.html')
+  templateUrl: './profile.html'
 })
 export class Profile {
   public user: User;

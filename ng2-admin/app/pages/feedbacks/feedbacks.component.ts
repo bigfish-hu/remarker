@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
+
+import 'style-loader!./feedbacks.scss';
 
 @Component({
   selector: 'feedbacks',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['feedbacks.scss'],
-  template: require('./feedbacks.html')
+  templateUrl: './feedbacks.html'
 })
 export class Feedbacks {
 

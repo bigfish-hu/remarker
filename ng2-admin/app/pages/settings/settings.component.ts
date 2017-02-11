@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
+
+import 'style-loader!./settings.scss';
 
 @Component({
   selector: 'settings',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['settings.scss'],
-  template: require('./settings.html')
+  templateUrl: './settings.html'
 })
 export class Settings {
 

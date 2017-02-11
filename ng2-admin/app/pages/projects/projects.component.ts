@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
+
+import 'style-loader!./projects.scss';
 
 @Component({
   selector: 'projects',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['projects.scss'],
-  template: require('./projects.html')
+  templateUrl: './projects.html'
 })
 export class Projects {
 

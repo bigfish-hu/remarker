@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
+
+import 'style-loader!./users.scss';
 
 @Component({
   selector: 'users',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['users.scss'],
-  template: require('./users.html')
+  templateUrl: './users.html'
 })
 export class Users {
 

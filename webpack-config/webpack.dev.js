@@ -136,7 +136,7 @@ module.exports = function (options) {
                         'rxjs',
                     ]
                 },
-                dllDir: helpers.root('dll'),
+                dllDir: helpers.root('public/dll'),
                 webpackConfig: webpackMergeDll(commonConfig({env: ENV}), {
                     devtool: 'cheap-module-source-map',
                     plugins: []
@@ -152,8 +152,8 @@ module.exports = function (options) {
              * See: https://github.com/SimenB/add-asset-html-webpack-plugin
              */
             new AddAssetHtmlPlugin([
-                { filepath: helpers.root(`dll/${DllBundlesPlugin.resolveFile('polyfills')}`) },
-                { filepath: helpers.root(`dll/${DllBundlesPlugin.resolveFile('vendor')}`) }
+                { filepath: helpers.root(`public/dll/${DllBundlesPlugin.resolveFile('polyfills')}`) },
+                { filepath: helpers.root(`public/dll/${DllBundlesPlugin.resolveFile('vendor')}`) }
             ]),
 
             /**

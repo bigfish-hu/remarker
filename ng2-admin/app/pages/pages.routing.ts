@@ -2,12 +2,12 @@ import { Routes, RouterModule }  from '@angular/router';
 import { Pages } from './pages.component';
 import { AuthGuard } from '../services/auth-guard.service';
 import { ResolveMe } from '../services/resolve-me.service';
+import { ModuleWithProviders } from '@angular/core';
 
-// noinspection TypeScriptValidateTypes
-const routes: Routes = [
-  { path: 'login', loadChildren: () => System.import('./login/login.module') },
-  { path: 'register', loadChildren: () => System.import('./register/register.module') },
-  { path: 'not-found', loadChildren: () => System.import('./not-found/not-found.module') },
+export const routes: Routes = [
+  { path: 'login', loadChildren: 'app/pages/login/login.module#LoginModule' },
+  { path: 'register', loadChildren: 'app/pages/register/register.module' },
+  { path: 'not-found', loadChildren: 'app/pages/not-found/not-found.module' },
   {
     path: '',
     component: Pages,
@@ -17,14 +17,14 @@ const routes: Routes = [
     },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadChildren: () => System.import('./dashboard/dashboard.module') },
-      { path: 'feedbacks', loadChildren: () => System.import('./feedbacks/feedbacks.module') },
-      { path: 'projects', loadChildren: () => System.import('./projects/projects.module') },
-      { path: 'users', loadChildren: () => System.import('./users/users.module') },
-      { path: 'profile', loadChildren: () => System.import('./profile/profile.module') },
-      { path: 'settings', loadChildren: () => System.import('./settings/settings.module') }
+      { path: 'dashboard', loadChildren: 'app/pages/dashboard/dashboard.module#DashboardModule' },
+      { path: 'feedbacks', loadChildren: 'app/pages/feedbacks/feedbacks.module#FeedbacksModule' },
+      { path: 'projects', loadChildren: 'app/pages/projects/projects.module' },
+      { path: 'users', loadChildren: 'app/pages/users/users.module' },
+      { path: 'profile', loadChildren: 'app/pages/profile/profile.module' },
+      { path: 'settings', loadChildren: 'app/pages/settings/settings.module' }
     ]
   }
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const routing: ModuleWithProviders = RouterModule.forChild(routes);

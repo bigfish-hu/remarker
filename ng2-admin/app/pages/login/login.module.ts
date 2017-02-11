@@ -24,4 +24,4 @@ import { AuthService } from '../../services/auth.service';
     LoginGuard
   ]
 })
-export default class LoginModule {}
+export class LoginModule {}

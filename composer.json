@@ -8,7 +8,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.4.*",
         "guzzlehttp/guzzle": "~6.0",
-        "tymon/jwt-auth": "^1.0@dev",
+        "tymon/jwt-auth": "1.0.0-beta.2",
         "barryvdh/laravel-cors": "0.8.*",
         "laravel-notification-channels/webpush": "^0.0.1"
     },

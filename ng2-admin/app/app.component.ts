@@ -7,6 +7,9 @@ import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { Router, NavigationStart, NavigationEnd,
   NavigationCancel, NavigationError } from '@angular/router';
 
+import 'style-loader!./app.scss';
+import 'style-loader!./theme/initial.scss';
+
 /*
  * App Component
  * Top Level Component
@@ -14,8 +17,6 @@ import { Router, NavigationStart, NavigationEnd,
 @Component({
   selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styles: [require('normalize.css'), require('./app.scss')
-  ],
   template: `
       <ng2-slim-loading-bar></ng2-slim-loading-bar>
     <main [ngClass]="{'menu-collapsed': isMenuCollapsed}" baThemeRun>

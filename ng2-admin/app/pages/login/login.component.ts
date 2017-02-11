@@ -3,11 +3,11 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
+import 'style-loader!./login.scss';
+
 @Component({
   selector: 'login',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['login.scss'],
-  template: require('./login.html'),
+  templateUrl: './login.html',
 })
 export class Login {
 

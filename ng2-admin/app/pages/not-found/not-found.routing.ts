@@ -2,7 +2,6 @@ import { Routes, RouterModule }  from '@angular/router';
 
 import { NotFound } from './not-found.component';
 
-// noinspection TypeScriptValidateTypes
 const routes: Routes = [
   {
     path: '',

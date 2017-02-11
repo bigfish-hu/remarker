@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
+
+import 'style-loader!./not-found.scss';
 
 @Component({
   selector: 'not-found',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['not-found.scss'],
-  template: 'not-found.html',
+  templateUrl: './not-found.html',
 })
 export class NotFound {
   constructor() {
