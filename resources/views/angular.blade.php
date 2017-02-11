@@ -1,51 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title i18n>Remarker Admin</title>
-
-  <meta name="description" content="Admin for Remarker">
-
+Html Webpack Plugin:
+<pre>
+  TypeError: Cannot read property 'title' of undefined
   
-  <!-- Configured Head Tags  -->
-  <link rel="apple-touch-icon" sizes="57x57" href="/dist/assets/icon/apple-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="/dist/assets/icon/apple-icon-60x60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="/dist/assets/icon/apple-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="/dist/assets/icon/apple-icon-76x76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="/dist/assets/icon/apple-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="/dist/assets/icon/apple-icon-120x120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="/dist/assets/icon/apple-icon-144x144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="/dist/assets/icon/apple-icon-152x152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="/dist/assets/icon/apple-icon-180x180.png">
-	<link rel="icon" type="image/png" sizes="192x192" href="/dist/assets/icon/android-icon-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/dist/assets/icon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="/dist/assets/icon/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/dist/assets/icon/favicon-16x16.png">
-	<meta name="msapplication-TileColor" content="#ffffff">
-	<meta name="msapplication-TileImage" content="/dist/assets/icon/ms-icon-144x144.png">
-	<meta name="theme-color" content="#4691d1">
+  - index.html:17225 
+    /home/nadapapa/dev/remarker/ng2-admin/index.html:17225:33
   
-
-  <!-- base url -->
-  <base href="/admin">
-
-<link href="/dist/initial.css" rel="stylesheet"></head>
-
-<body>
-<app>
-</app>
-
-<div id="preloader">
-  <div></div>
-</div>
-
-
-
-<link
-  href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900&subset=latin,greek,greek-ext,vietnamese,cyrillic-ext,latin-ext,cyrillic'
-  rel='stylesheet' type='text/css'>
-<script type="text/javascript" src="/dist/polyfills.bundle.js"></script><script type="text/javascript" src="/dist/vendor.bundle.js"></script><script type="text/javascript" src="/dist/main.bundle.js"></script></body>
-</html>
+  - index.html:17242 module.exports
+    /home/nadapapa/dev/remarker/ng2-admin/index.html:17242:3
+  
+  - index.js:265 
+    [remarker]/[html-webpack-plugin]/index.js:265:16
+  
+  - util.js:16 tryCatcher
+    [remarker]/[html-webpack-plugin]/[bluebird]/js/release/util.js:16:23
+  
+  - promise.js:510 Promise._settlePromiseFromHandler
+    [remarker]/[html-webpack-plugin]/[bluebird]/js/release/promise.js:510:31
+  
+  - promise.js:567 Promise._settlePromise
+    [remarker]/[html-webpack-plugin]/[bluebird]/js/release/promise.js:567:18
+  
+  - promise.js:604 Promise._settlePromiseCtx
+    [remarker]/[html-webpack-plugin]/[bluebird]/js/release/promise.js:604:10
+  
+  - async.js:138 Async._drainQueue
+    [remarker]/[html-webpack-plugin]/[bluebird]/js/release/async.js:138:12
+  
+  - async.js:143 Async._drainQueues
+    [remarker]/[html-webpack-plugin]/[bluebird]/js/release/async.js:143:10
+  
+  - async.js:17 Immediate.Async.drainQueues
+    [remarker]/[html-webpack-plugin]/[bluebird]/js/release/async.js:17:14
+  
+</pre>

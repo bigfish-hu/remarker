@@ -9,7 +9,7 @@ import { User } from '../../../models/user.model';
 @Component({
   selector: 'ba-sidebar',
   encapsulation: ViewEncapsulation.None,
-  styles: [require('./baSidebar.scss')],
+  styles: ['baSidebar.scss'],
   template: require('./baSidebar.html')
 })
 export class BaSidebar {

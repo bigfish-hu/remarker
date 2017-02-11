@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'ba-page-top',
-  styles: [require('./baPageTop.scss')],
+  styles: ['baPageTop.scss'],
   template: require('./baPageTop.html'),
   encapsulation: ViewEncapsulation.None
 })

@@ -8,7 +8,7 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'profile',
   encapsulation: ViewEncapsulation.None,
-  styles: [require('./profile.scss')],
+  styles: ['profile.scss'],
   template: require('./profile.html')
 })
 export class Profile {

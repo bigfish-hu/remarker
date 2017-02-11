@@ -5,7 +5,7 @@ import { EmailValidator, EqualPasswordsValidator } from '../../theme/validators'
 @Component({
   selector: 'register',
   encapsulation: ViewEncapsulation.None,
-  styles: [require('./register.scss')],
+  styles: ['register.scss'],
   template: require('./register.html'),
 })
 export class Register {

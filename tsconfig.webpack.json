@@ -7,6 +7,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "baseUrl": "./ng2-admin",
+    "outDir": "compiled",
     "paths": {
     },
     "lib": [
@@ -19,11 +20,19 @@
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "public",
+    "compiled",
+    "ng2-admin/**/*.spec.ts",
+    "ng2-admin/**/*.e2e.ts",
+    "vendor"
   ],
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,
     "useWebpackText": true
+  },
+  "angularCompilerOptions": {
+    "genDir": "compiled",
+    "skipMetadataEmit": true
   },
   "compileOnSave": false,
   "buildOnSave": false,
