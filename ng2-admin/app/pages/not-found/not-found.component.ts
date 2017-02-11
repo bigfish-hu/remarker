@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import 'style-loader!./not-found.scss';
+// import 'style-loader!./not-found.scss';
 
 @Component({
   selector: 'not-found',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import 'style-loader!./settings.scss';
+// import 'style-loader!./settings.scss';
 
 @Component({
   selector: 'settings',

@@ -1,8 +1,9 @@
 import { Component, ViewChild, HostListener, Input, ElementRef } from '@angular/core';
 
+import 'style-loader!./baBackTop.scss';
+
 @Component({
   selector: 'ba-back-top',
-  styles: ['baBackTop.scss'],
   template: `
     <i #baBackTop class="fa fa-angle-up back-top ba-back-top" title="Back to Top"></i>
   `

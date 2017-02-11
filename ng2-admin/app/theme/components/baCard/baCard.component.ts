@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 
+// import 'style-loader!./baCard.scss';
+
 @Component({
   selector: 'ba-card',
-  styles: ['./baCard.scss'],
-  template: require('./baCard.html'),
-  encapsulation: ViewEncapsulation.None
+  templateUrl: './baCard.html',
 })
 export class BaCard {
   @Input() title: String;

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
-import 'style-loader!./profile.scss';
+// import 'style-loader!./profile.scss';
 
 @Component({
   selector: 'profile',

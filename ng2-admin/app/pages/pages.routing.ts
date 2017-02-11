@@ -17,8 +17,8 @@ export const routes: Routes = [
     },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadChildren: 'app/pages/dashboard/dashboard.module#DashboardModule' },
-      { path: 'feedbacks', loadChildren: 'app/pages/feedbacks/feedbacks.module#FeedbacksModule' },
+      { path: 'dashboard', loadChildren: 'app/pages/dashboard/dashboard.module' },
+      { path: 'feedbacks', loadChildren: 'app/pages/feedbacks/feedbacks.module' },
       { path: 'projects', loadChildren: 'app/pages/projects/projects.module' },
       { path: 'users', loadChildren: 'app/pages/users/users.module' },
       { path: 'profile', loadChildren: 'app/pages/profile/profile.module' },

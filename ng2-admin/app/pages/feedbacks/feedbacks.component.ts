@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import 'style-loader!./feedbacks.scss';
+// import 'style-loader!./feedbacks.scss';
 
 @Component({
   selector: 'feedbacks',

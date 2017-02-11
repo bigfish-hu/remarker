@@ -19,4 +19,4 @@ import { routing } from './dashboard.routing';
   providers: [
   ]
 })
-export class DashboardModule {}
+export default class DashboardModule {}

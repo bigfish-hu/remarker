@@ -6,11 +6,11 @@ import { layoutSizes } from '../../../theme';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.model';
 
+import 'style-loader!./baSidebar.scss';
+
 @Component({
   selector: 'ba-sidebar',
-  encapsulation: ViewEncapsulation.None,
-  styles: ['baSidebar.scss'],
-  template: require('./baSidebar.html')
+  templateUrl: './baSidebar.html'
 })
 export class BaSidebar {
   public menuHeight: number;

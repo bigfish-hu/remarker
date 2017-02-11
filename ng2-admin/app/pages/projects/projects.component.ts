@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import 'style-loader!./projects.scss';
+// import 'style-loader!./projects.scss';
 
 @Component({
   selector: 'projects',
