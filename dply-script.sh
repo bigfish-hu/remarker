@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 export DEBIAN_FRONTEND=noninteractive;
 
 echo "--- add swap";
@@ -21,8 +21,8 @@ echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/
 wget -O- http://www.dotdeb.org/dotdeb.gpg | apt-key add -;
 
 echo "--- set mysql password";
-debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
-debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+echo "mysql-server mysql-server/root_password password root" | debconf-set-selections;
+echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections;
 
 echo "--- install nodejs";
 curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh;
