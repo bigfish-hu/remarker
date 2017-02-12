@@ -15,3 +15,7 @@
 - `docker exec -it remarker_web_1 php artisan db:seed`
 
 Now you can login at `http://localhost:8080/admin/login` with the username `admin@gmail.com` and the password `secret`.  
+
+## Try it out  
+If you have a GitHub account you can deploy Remarker to a cloud server provided by [Dply.co](https://dply.co/) (free for 2 hours)  
+[![Dply](https://dply.co/b.svg)](https://dply.co/b/SkIMh9JR) 

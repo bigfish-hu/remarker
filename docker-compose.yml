@@ -16,8 +16,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=remarker
-      - MYSQL_USER=remarker
-      - MYSQL_PASSWORD=remarker
     ports:
       - 3306:3306
     volumes:
