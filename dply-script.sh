@@ -2,6 +2,7 @@
 export DEBIAN_FRONTEND=noninteractive;
 export HOME=/root;
 
+echo "====== START: $(date +"%T")";
 echo "--- add swap";
 dd if=/dev/zero of=/root/myswapfile bs=1M count=2048;
 chmod 600 /root/myswapfile;
@@ -82,7 +83,9 @@ php artisan db:seed;
 
 echo "--- npm install, build";
 npm install;
-npm run build;
+npm run build:prod;
 
 chown -R www-data:www-data /var/www;
 service nginx restart;
+
+echo "====== END: $(date +"%T")";

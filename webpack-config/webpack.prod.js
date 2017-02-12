@@ -53,6 +53,7 @@ module.exports = function (env) {
              * See: http://webpack.github.io/docs/configuration.html#output-path
              */
             path: dist,
+            publicPath: '/dist/',
 
             /**
              * Specifies the name of each output file on disk.
@@ -184,12 +185,12 @@ module.exports = function (env) {
 
             new NormalModuleReplacementPlugin(
                 /angular2-hmr/,
-                helpers.root('config/empty.js')
+                helpers.root('webpack-config/empty.js')
             ),
 
             new NormalModuleReplacementPlugin(
                 /zone\.js(\\|\/)dist(\\|\/)long-stack-trace-zone/,
-                helpers.root('config/empty.js')
+                helpers.root('webpack-config/empty.js')
             ),
 
             /**

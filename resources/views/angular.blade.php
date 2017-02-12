@@ -32,7 +32,7 @@
   <!-- base url -->
   <base href="/admin">
 
-<link href="/dist/initial.css" rel="stylesheet"><script type="text/javascript" src="/dist/polyfills.dll.js" defer></script><script type="text/javascript" src="/dist/vendor.dll.js" defer></script><script type="text/javascript" src="/dist/polyfills.bundle.js" defer></script><script type="text/javascript" src="/dist/vendor.bundle.js" defer></script><script type="text/javascript" src="/dist/main.bundle.js" defer></script></head>
+<link href="/dist/initial.css" rel="stylesheet"><script type="text/javascript" src="/dist/polyfills.7403d8f64d3e21c19f5a.bundle.js" defer></script><script type="text/javascript" src="/dist/vendor.eb8e3cd9f3e50934cac3.bundle.js" defer></script><script type="text/javascript" src="/dist/main.da30ad786cd2eafcd245.bundle.js" defer></script></head>
 
 <body>
 <app>
