@@ -1,5 +1,6 @@
 #!/bin/bash
 export DEBIAN_FRONTEND=noninteractive;
+export HOME=/root;
 
 echo "--- add swap";
 dd if=/dev/zero of=/root/myswapfile bs=1M count=2048;
@@ -46,18 +47,11 @@ apt-get install -y php7.0-common \
                    mysql-server \
                    nodejs;
 
-echo "--- install composer";
-cd /usr/local/bin \
-    && wget -q https://getcomposer.org/download/1.0.0/composer.phar \
-    && chmod ugo+rx composer.phar \
-    && ln -s composer.phar composer;
-
 echo "--- create db";
 mysql --execute="create database remarker" --password=root;
 
 echo "--- create directory";
 mkdir -p /var/www;
-chown -R www-data:www-data /var/www
 cd /var/www;
 rm -rf *;
 
@@ -79,7 +73,8 @@ cp Docker/web/conf/nginx/nginx-site.conf /etc/nginx/sites-available/default.conf
 ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf;
 
 echo "--- composer install";
-composer install;
+curl -sS https://getcomposer.org/installer | sudo php
+php composer.phar install;
 
 echo "--- run artisan commands";
 php artisan migrate;
@@ -88,3 +83,6 @@ php artisan db:seed;
 echo "--- npm install, build";
 npm install;
 npm run build;
+
+chown -R www-data:www-data /var/www;
+service nginx restart;
