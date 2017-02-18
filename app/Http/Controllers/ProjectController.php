@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Project;
 use App\Services\IssueTrackerApiConnectionService;
 use GuzzleHttp\Exception\ClientException;
-use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Response;

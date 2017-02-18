@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
-use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -25,9 +24,10 @@ class AuthController extends Controller
     /**
      * Authorize user.
      *
-     * @param Instance Request instance
-     *
+     * @param Request $request
      * @return JSON user details and auth credentials
+     * @internal param Request $Instance instance
+     *
      */
     public function postLogin(Request $request)
     {
@@ -80,7 +80,7 @@ class AuthController extends Controller
 
     public function registration(Request $request)
     {
-
+        // @todo
     }
 
     /**

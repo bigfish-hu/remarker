@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 

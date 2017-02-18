@@ -8,7 +8,7 @@ Route::get('api/js/{id}', 'PluginController@getJs');
 
 Route::get('admin', 'AngularController@serveApp');
 
-Route::post('createFeedback', 'Admin\FeedbackController@createFeedback');
+Route::post('createFeedback', 'FeedbackController@createFeedback');
 
 // Manifest file
 Route::get('admin/manifest.json', function () {
@@ -20,35 +20,35 @@ Route::get('admin/manifest.json', function () {
 
 Route::group(['prefix' => 'api'], function () {
 
-    Route::post('auth/login', 'Auth\AuthController@postLogin');
-    Route::post('auth/register', 'Auth\AuthController@registration');
+    Route::post('auth/login', 'AuthController@postLogin');
+    Route::post('auth/register', 'AuthController@registration');
 
     Route::group(['middleware' => 'jwt.refresh'], function () {
 
-        Route::get('users/me', 'Auth\AuthController@getAuthenticatedUser');
-        Route::put('users/me', 'Auth\AuthController@updateAuthenticatedUser');
+        Route::get('users/me', 'AuthController@getAuthenticatedUser');
+        Route::put('users/me', 'AuthController@updateAuthenticatedUser');
 
-        Route::get('/projects', 'Admin\ProjectController@getProjects');
+        Route::get('/projects', 'ProjectController@getProjects');
 
-        Route::get('/feedbacks', 'Admin\FeedbackController@getFeedbacks');
-        Route::get('/feedbacks/{feedback}', 'Admin\FeedbackController@getFeedback');
-        Route::put('/feedbacks/{feedback}', 'Admin\FeedbackController@updateFeedback');
-        Route::delete('/feedbacks/{id}', 'Admin\FeedbackController@deleteFeedback');
+        Route::get('/feedbacks', 'FeedbackController@getFeedbacks');
+        Route::get('/feedbacks/{feedback}', 'FeedbackController@getFeedback');
+        Route::put('/feedbacks/{feedback}', 'FeedbackController@updateFeedback');
+        Route::delete('/feedbacks/{id}', 'FeedbackController@deleteFeedback');
 
         // Push Subscriptions
         Route::post('/subscriptions', 'PushSubscriptionController@update');
         Route::delete('/subscriptions/{endpoint}', 'PushSubscriptionController@destroy');
 
         Route::group(['middleware' => 'admin'], function () {
-            Route::get('/users/{id}', 'Admin\AdminController@getUser');
-            Route::get('/users', 'Admin\AdminController@getUsers');
-            Route::post('/users', 'Admin\AdminController@createUser');
-            Route::put('/users/{id}', 'Admin\AdminController@updateUser');
-            Route::delete('/users/{id}', 'Admin\AdminController@deleteUser');
+            Route::get('/users/{id}', 'AdminController@getUser');
+            Route::get('/users', 'AdminController@getUsers');
+            Route::post('/users', 'AdminController@createUser');
+            Route::put('/users/{id}', 'AdminController@updateUser');
+            Route::delete('/users/{id}', 'AdminController@deleteUser');
 
-            Route::get('/projects/{id}/users', 'Admin\ProjectController@getProjectUsers');
-            Route::get('/projects/sync', 'Admin\ProjectController@getProjectsFromIssueTrackers');
-            Route::delete('/projects/{project}/users/{user}', 'Admin\ProjectController@removeUserFromProject');
+            Route::get('/projects/{id}/users', 'ProjectController@getProjectUsers');
+            Route::get('/projects/sync', 'ProjectController@getProjectsFromIssueTrackers');
+            Route::delete('/projects/{project}/users/{user}', 'ProjectController@removeUserFromProject');
         });
     });
 });
