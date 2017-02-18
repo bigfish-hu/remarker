@@ -4,6 +4,8 @@
 FROM debian:jessie
 MAINTAINER BIG FISH <cafe@bigfish.hu>
 
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN \
   apt-get update && \
   apt-get install -y \
@@ -32,6 +34,7 @@ RUN apt-get update && \
                        php7.0-simplexml \
                        php7.0-json \
                        php7.0-xdebug \
+                       php7.0-sqlite3 \
                        nginx
 
 #
@@ -92,3 +95,4 @@ EXPOSE 80 443
 # Start services
 #
 CMD service php7.0-fpm start && nginx
+ENV DEBIAN_FRONTEND teletype
