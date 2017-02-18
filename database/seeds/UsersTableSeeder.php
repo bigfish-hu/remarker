@@ -13,14 +13,14 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             'name' => 'admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@remarker.com',
             'password' => bcrypt('secret'),
             'created_at' => \Carbon\Carbon::now(),
             'is_superadmin' => true,
         ]);
         DB::table('users')->insert([
             'name' => 'user',
-            'email' => 'user@gmail.com',
+            'email' => 'user@remarker.com',
             'password' => bcrypt('secret'),
             'created_at' => \Carbon\Carbon::now(),
         ]);

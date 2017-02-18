@@ -14,7 +14,7 @@
 $factory->define(App\User::class, function () {
     return [
         'name' => 'admin',
-        'email' => 'admin@gmail.com',
+        'email' => 'admin@remarker.com',
         'password' => bcrypt('secret'),
         'remember_token' => str_random(10),
         'created_at' => \Carbon\Carbon::now(),

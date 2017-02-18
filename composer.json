@@ -49,7 +49,8 @@
             "php artisan optimize"
         ],
         "test": "docker exec -i remarker_web_1 vendor/bin/phpunit",
-        "coverage": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-text --colors=never"
+        "coverage": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-text --colors=never",
+        "coverage-html": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-html coverage-app"
     },
     "config": {
         "preferred-install": "dist"
