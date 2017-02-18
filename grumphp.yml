@@ -28,5 +28,10 @@ parameters:
                  - "*/database/*"
             ruleset: ['cleancode', 'codesize', 'naming', 'unusedcode']
             triggered_by: ['php']
+        npm_script:
+            script: lint
+            triggered_by: [js, jsx, coffee, ts, less, sass, scss]
+            working_directory: "./"
+            is_run_task: true
     testsuites: []
     extensions: []

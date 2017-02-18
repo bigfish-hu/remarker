@@ -35,13 +35,13 @@ export class AuthService {
   logout = () => {
     // @todo decouple localstorage
     localStorage.removeItem(this.tokenName);
-  };
+  }
 
   extractToken = (res: Response) => {
     if (typeof res.json().token !== 'undefined') {
       this.saveToken(res.json().token);
     }
-  };
+  }
 
   saveToken(token: string) {
     localStorage.setItem(this.tokenName, token);
