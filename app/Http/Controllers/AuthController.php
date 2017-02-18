@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\JWTAuth;
 use App\User;
@@ -16,6 +15,11 @@ class AuthController extends Controller
      */
     protected $jwt;
 
+    /**
+     * AuthController constructor.
+     *
+     * @param JWTAuth $jwt
+     */
     public function __construct(JWTAuth $jwt)
     {
         $this->jwt = $jwt;
@@ -25,9 +29,10 @@ class AuthController extends Controller
      * Authorize user.
      *
      * @param Request $request
-     * @return JSON user details and auth credentials
-     * @internal param Request $Instance instance
      *
+     * @return \Illuminate\Http\Response
+     *
+     * @internal param Request $Instance instance
      */
     public function postLogin(Request $request)
     {
@@ -38,33 +43,36 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        $user = User::whereEmail($credentials['email'])->first();
-
         if (! $token = $this->jwt->attempt($credentials)) {
-            return response()->json(['error' => 'Invalid Credentials'], 401);
+            return response(['error' => 'Invalid Credentials'], Response::HTTP_UNAUTHORIZED);
         }
 
-        return response()->success(['token' => $token]);
+        return response(['token' => $token]);
     }
 
     /**
      * Get authenticated user details and auth credentials.
      *
-     * @return JSON
+     * @return \Illuminate\Http\Response
      */
     public function getAuthenticatedUser()
     {
         if (! $user = $this->getCurrentUser()) {
-            return response()->json('unauthenticated', 401);
+            return response('', Response::HTTP_UNAUTHORIZED);
         }
 
-        return response()->success(compact('user'));
+        return response(compact('user'));
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function updateAuthenticatedUser(Request $request)
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = $request->user();
 
         if (!$request->has('id')) {
             return $this->changePassword($request);
@@ -75,16 +83,11 @@ class AuthController extends Controller
             'email' => $request->input('email')
         ]);
 
-        return response()->success(compact('user'));
-    }
-
-    public function registration(Request $request)
-    {
-        // @todo
+        return response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
-     * @return bool|false|User
+     * @return bool|User
      */
     private function getCurrentUser()
     {
@@ -95,10 +98,17 @@ class AuthController extends Controller
         return $user;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     private function changePassword(Request $request)
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = $request->user();
 
         $this->validate($request, [
             'oldpassword'  => 'required|min:6',
@@ -107,13 +117,14 @@ class AuthController extends Controller
         ]);
 
         $oldpassword = $request->input('oldpassword');
-        $newpassword = $request->input('newpassword');
+        $newpassword = $request->input('newpassword1');
 
         if (!Hash::check($oldpassword, $user->password)) {
             return response(['error' => 'Invalid Old Password'], Response::HTTP_BAD_REQUEST);
         }
 
-        $user->password = Hash::make($newpassword);
+        $user->password = $newpassword;
+        $user->save();
 
         return response('', Response::HTTP_NO_CONTENT);
     }

@@ -54,7 +54,7 @@ export class UserService {
   }
 
   private extractUser(response): User {
-    let res = response.data.user;
+    let res = response.user;
     let user = new User();
 
     user.id = res.id;

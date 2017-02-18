@@ -137,7 +137,7 @@
     "server:prod:ci": "http-server dist -p 3000 -c-1 --cors",
     "webdriver:update": "npm run webdriver-manager update",
     "webdriver:start": "npm run webdriver-manager start",
-    "lint": "npm run tslint \"src/**/*.ts\" --force",
+    "lint": "npm run tslint \"ng2-admin/**/*.ts\" --force",
     "ngc": "./node_modules/.bin/ngc-w -p tsconfig.webpack.json",
     "pree2e": "npm run webdriver:update -- --standalone",
     "pretest": "npm run lint",

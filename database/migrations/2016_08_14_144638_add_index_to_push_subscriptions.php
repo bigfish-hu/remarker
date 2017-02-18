@@ -13,8 +13,7 @@ class AddIndexToPushSubscriptions extends Migration
      */
     public function up()
     {
-        Schema::table('push_subscriptions', function(Blueprint $table)
-        {
+        Schema::table('push_subscriptions', function (Blueprint $table) {
             $table->index('endpoint');
         });
     }
@@ -26,9 +25,8 @@ class AddIndexToPushSubscriptions extends Migration
      */
     public function down()
     {
-        Schema::table('push_subscriptions', function(Blueprint $table)
-        {
-            $table->dropIndex('endpoint');
+        Schema::table('push_subscriptions', function (Blueprint $table) {
+            $table->dropIndex('push_subscriptions_endpoint_index');
         });
     }
 }

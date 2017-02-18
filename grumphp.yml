@@ -15,20 +15,18 @@ parameters:
     tasks:
         phpcs:
             standard: PSR2
-            show_warnings: true
+            show_warnings: false
             tab_width: ~
             whitelist_patterns: []
             encoding: ~
-            ignore_patterns: []
+            ignore_patterns:
+                - "*/database/*"
             sniffs: []
             triggered_by: ['php']
         phpmd:
-            exclude: []
+            exclude:
+                 - "*/database/*"
             ruleset: ['cleancode', 'codesize', 'naming', 'unusedcode']
             triggered_by: ['php']
-        phpunit:
-            config_file: ~
-            group: []
-            always_execute: false
     testsuites: []
     extensions: []

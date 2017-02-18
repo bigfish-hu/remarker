@@ -14,14 +14,14 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin@remarker.com',
-            'password' => bcrypt('secret'),
+            'password' => \Illuminate\Support\Facades\Hash::make('secret'),
             'created_at' => \Carbon\Carbon::now(),
             'is_superadmin' => true,
         ]);
         DB::table('users')->insert([
             'name' => 'user',
             'email' => 'user@remarker.com',
-            'password' => bcrypt('secret'),
+            'password' => \Illuminate\Support\Facades\Hash::make('secret'),
             'created_at' => \Carbon\Carbon::now(),
         ]);
     }
