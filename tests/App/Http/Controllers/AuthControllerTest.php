@@ -28,7 +28,7 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testLoginEmptyBody()
     {
-        $response = $this->postJson($this->baseUrl . 'api/auth/login')->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->postJson($this->baseUrl . 'api/auth/login')->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**

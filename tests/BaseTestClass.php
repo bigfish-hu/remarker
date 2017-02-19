@@ -52,6 +52,8 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
      * @param User $user
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function login(User $user)
     {

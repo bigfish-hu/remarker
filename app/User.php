@@ -71,6 +71,8 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
 
     /**
      * Set the password to be hashed when saved
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function setPasswordAttribute($password)
     {
