@@ -53,7 +53,7 @@
         ],
         "test": "docker exec -i remarker_web_1 vendor/bin/phpunit",
         "coverage": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-text --colors=never",
-        "coverage-html": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-html coverage-app",
+        "coverage-html": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-html coverage-php",
         "artisan": "docker exec -i remarker_web_1 php artisan"
     },
     "config": {

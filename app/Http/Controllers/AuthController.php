@@ -57,9 +57,7 @@ class AuthController extends Controller
      */
     public function getAuthenticatedUser()
     {
-        if (! $user = $this->getCurrentUser()) {
-            return response('', Response::HTTP_UNAUTHORIZED);
-        }
+        $user = $this->jwt->parseToken()->authenticate();
 
         return response(compact('user'));
     }
@@ -84,18 +82,6 @@ class AuthController extends Controller
         ]);
 
         return response('', Response::HTTP_NO_CONTENT);
-    }
-
-    /**
-     * @return bool|User
-     */
-    private function getCurrentUser()
-    {
-        if (! $user = $this->jwt->parseToken()->authenticate()) {
-            return false;
-        }
-
-        return $user;
     }
 
     /**

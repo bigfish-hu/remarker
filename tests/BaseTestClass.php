@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\User;
 use Illuminate\Support\Facades\Artisan;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
 {
@@ -13,9 +14,6 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
      * @var string
      */
     protected $baseUrl = 'http://localhost:8080/';
-
-    /** @var User $admin */
-    protected $admin;
 
     /**
      * Creates the application.
@@ -42,8 +40,24 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
         $this->artisan('migrate');
     }
 
+    /**
+     * @return User
+     */
     protected function createAdmin()
     {
-        $this->admin = factory(User::class, 'admin')->create();
+        return factory(User::class, 'admin')->create();
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return string
+     */
+    protected function login(User $user)
+    {
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token);
+
+        return $token;
     }
 }

@@ -11,6 +11,17 @@ use Illuminate\Notifications\Notifiable;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * Class User
+ * @package App
+ *
+ * @property integer $id
+ * @property string $name
+ * @property string $email
+ * @property integer $is_superadmin
+ * @property string $created_at
+ * @property string $updated_at
+ */
 class User extends Model implements JWTSubject, AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable, Notifiable, HasPushSubscriptions;

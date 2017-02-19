@@ -2,6 +2,7 @@
 
 namespace Tests\App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Response;
 use Tests\BaseTestClass;
 
@@ -11,11 +12,14 @@ class AuthControllerTest extends BaseTestClass
     private $adminEmail = 'admin@remarker.com';
     private $adminPassword = 'secret';
 
+    /** @var User $admin */
+    private $admin;
+
     public function setUp()
     {
         parent::setUp();
 
-        $this->createAdmin();
+        $this->admin = $this->createAdmin();
     }
 
     /**
@@ -24,9 +28,7 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testLoginEmptyBody()
     {
-        $response = $this->postJson($this->baseUrl . 'api/auth/login');
-
-        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        $response = $this->postJson($this->baseUrl . 'api/auth/login')->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -35,12 +37,10 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testLoginInvalidEmail()
     {
-        $response = $this->postJson($this->baseUrl . 'api/auth/login', [
+        $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => 'dsgfdg',
             'password' => 'sdg34fd'
-        ]);
-
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -49,12 +49,10 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testLoginBadEmailBadPassword()
     {
-        $response = $this->postJson($this->baseUrl . 'api/auth/login', [
+        $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => 'not@existing.email',
             'password' => 'sdg34fd'
-        ]);
-
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        ])->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -63,12 +61,10 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testLoginGoodEmailBadPassword()
     {
-        $response = $this->postJson($this->baseUrl . 'api/auth/login', [
+        $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => $this->adminEmail,
             'password' => 'asfdsgdg'
-        ]);
-
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        ])->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -80,9 +76,7 @@ class AuthControllerTest extends BaseTestClass
         $response = $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => $this->adminEmail,
             'password' => $this->adminPassword
-        ]);
-
-        $response->assertStatus(Response::HTTP_OK);
+        ])->assertStatus(Response::HTTP_OK);
         $this->assertNotEmpty(json_decode($response->getContent(), true)['token']);
     }
 
@@ -92,9 +86,7 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testGetUserNoToken()
     {
-        $response = $this->getJson($this->baseUrl . 'api/users/me');
-
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $this->getJson($this->baseUrl . 'api/users/me')->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -103,11 +95,9 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testGetUserInvalidToken()
     {
-        $response = $this->getJson($this->baseUrl . 'api/users/me', [
+        $this->getJson($this->baseUrl . 'api/users/me', [
             'Authorization' => 'Bearer fdgdhdsfhfsdhgd'
-        ]);
-
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        ])->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -116,5 +106,23 @@ class AuthControllerTest extends BaseTestClass
      */
     public function testGetUserValidToken()
     {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+
+        $response = $this->getJson($this->baseUrl . 'api/users/me', [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_OK);
+
+        $response = json_decode($response->getContent(), true);
+
+        $this->assertArrayHasKey('user', $response);
+        $this->assertArrayHasKey('id', $response['user']);
+        $this->assertArrayHasKey('name', $response['user']);
+        $this->assertArrayHasKey('email', $response['user']);
+
+        $this->assertEquals($user->id, $response['user']['id']);
+        $this->assertEquals($user->name, $response['user']['name']);
+        $this->assertEquals($user->email, $response['user']['email']);
     }
 }
