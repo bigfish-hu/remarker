@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\User;
 use Illuminate\Support\Facades\Artisan;
 
 abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
@@ -12,6 +13,9 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
      * @var string
      */
     protected $baseUrl = 'http://localhost:8080/';
+
+    /** @var User $admin */
+    protected $admin;
 
     /**
      * Creates the application.
@@ -35,7 +39,11 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
 
     public function setupDatabase()
     {
-        Artisan::call('migrate');
-        Artisan::call('db:seed');
+        $this->artisan('migrate');
+    }
+
+    protected function createAdmin()
+    {
+        $this->admin = factory(User::class, 'admin')->create();
     }
 }

@@ -11,18 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => 'admin',
-            'email' => 'admin@remarker.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('secret'),
-            'created_at' => \Carbon\Carbon::now(),
-            'is_superadmin' => true,
-        ]);
-        DB::table('users')->insert([
-            'name' => 'user',
-            'email' => 'user@remarker.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('secret'),
-            'created_at' => \Carbon\Carbon::now(),
-        ]);
+        factory(User::class, 'admin')->create();
+        factory(User::class, 'user')->create();
     }
 }

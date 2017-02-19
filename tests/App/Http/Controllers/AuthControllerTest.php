@@ -11,11 +11,18 @@ class AuthControllerTest extends BaseTestClass
     private $adminEmail = 'admin@remarker.com';
     private $adminPassword = 'secret';
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->createAdmin();
+    }
+
     /**
      * @group auth
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
-    public function testLogin_emptyBody()
+    public function testLoginEmptyBody()
     {
         $response = $this->postJson($this->baseUrl . 'api/auth/login');
 
@@ -26,55 +33,88 @@ class AuthControllerTest extends BaseTestClass
      * @group auth
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
-    public function testLogin_InvalidEmail()
+    public function testLoginInvalidEmail()
     {
         $response = $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => 'dsgfdg',
             'password' => 'sdg34fd'
         ]);
 
-        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
      * @group auth
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
-    public function testLogin_badEmail_badPassword()
+    public function testLoginBadEmailBadPassword()
     {
         $response = $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => 'not@existing.email',
             'password' => 'sdg34fd'
         ]);
 
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
      * @group auth
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
-    public function testLogin_goodEmail_badPassword()
+    public function testLoginGoodEmailBadPassword()
     {
         $response = $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => $this->adminEmail,
             'password' => 'asfdsgdg'
         ]);
 
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
      * @group auth
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
-    public function testLogin_goodEmail_goodPassword()
+    public function testLoginGoodEmailGoodPassword()
     {
         $response = $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => $this->adminEmail,
             'password' => $this->adminPassword
         ]);
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertNotEmpty(json_decode($response->getContent(), true)['token']);
+    }
+
+    /**
+     * @group auth
+     * @covers \App\Http\Controllers\AuthController::getAuthenticatedUser
+     */
+    public function testGetUserNoToken()
+    {
+        $response = $this->getJson($this->baseUrl . 'api/users/me');
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @group auth
+     * @covers \App\Http\Controllers\AuthController::getAuthenticatedUser
+     */
+    public function testGetUserInvalidToken()
+    {
+        $response = $this->getJson($this->baseUrl . 'api/users/me', [
+            'Authorization' => 'Bearer fdgdhdsfhfsdhgd'
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @group auth
+     * @covers \App\Http\Controllers\AuthController::getAuthenticatedUser
+     */
+    public function testGetUserValidToken()
+    {
     }
 }
