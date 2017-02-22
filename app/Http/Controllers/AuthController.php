@@ -10,31 +10,18 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    /**
-     * @var \Tymon\JWTAuth\JWTAuth
-     */
+
     protected $jwt;
 
-    /**
-     * AuthController constructor.
-     *
-     * @param JWTAuth $jwt
-     */
     public function __construct(JWTAuth $jwt)
     {
         $this->jwt = $jwt;
     }
 
     /**
-     * Authorize user.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\Response
-     *
      * @internal param Request $Instance instance
      */
-    public function postLogin(Request $request)
+    public function postLogin(Request $request) : Response
     {
         $this->validate($request, [
             'email'    => 'required|email',
@@ -50,25 +37,20 @@ class AuthController extends Controller
         return response(['token' => $token]);
     }
 
-    /**
-     * Get authenticated user details and auth credentials.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getAuthenticatedUser()
+    public function getAuthenticatedUser() : Response
     {
         $user = $this->jwt->parseToken()->authenticate();
 
         return response(compact('user'));
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function updateAuthenticatedUser(Request $request)
+    public function updateAuthenticatedUser(Request $request) : Response
     {
+        $this->validate($request, [
+            'email' => 'required|email|unique:users',
+            'name' => 'required|max:255',
+        ]);
+
         /** @var User $user */
         $user = $request->user();
 
@@ -85,13 +67,9 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function changePassword(Request $request)
+    private function changePassword(Request $request) : Response
     {
         /** @var User $user */
         $user = $request->user();

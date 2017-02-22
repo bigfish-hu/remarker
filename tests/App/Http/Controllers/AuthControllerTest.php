@@ -6,11 +6,15 @@ use App\User;
 use Illuminate\Http\Response;
 use Tests\BaseTestClass;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class AuthControllerTest extends BaseTestClass
 {
 
     private $adminEmail = 'admin@remarker.com';
     private $adminPassword = 'secret';
+    private $adminName = 'admin';
 
     /** @var User $admin */
     private $admin;
@@ -24,6 +28,7 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group POST
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
     public function testLoginEmptyBody()
@@ -33,6 +38,7 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group POST
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
     public function testLoginInvalidEmail()
@@ -45,6 +51,7 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group POST
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
     public function testLoginBadEmailBadPassword()
@@ -57,6 +64,7 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group POST
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
     public function testLoginGoodEmailBadPassword()
@@ -69,6 +77,7 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group POST
      * @covers \App\Http\Controllers\AuthController::postLogin
      */
     public function testLoginGoodEmailGoodPassword()
@@ -82,6 +91,8 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group perMe
+     * @group GET
      * @covers \App\Http\Controllers\AuthController::getAuthenticatedUser
      */
     public function testGetUserNoToken()
@@ -91,6 +102,8 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group perMe
+     * @group GET
      * @covers \App\Http\Controllers\AuthController::getAuthenticatedUser
      */
     public function testGetUserInvalidToken()
@@ -102,6 +115,8 @@ class AuthControllerTest extends BaseTestClass
 
     /**
      * @group auth
+     * @group perMe
+     * @group GET
      * @covers \App\Http\Controllers\AuthController::getAuthenticatedUser
      */
     public function testGetUserValidToken()
@@ -124,5 +139,191 @@ class AuthControllerTest extends BaseTestClass
         $this->assertEquals($user->id, $response['user']['id']);
         $this->assertEquals($user->name, $response['user']['name']);
         $this->assertEquals($user->email, $response['user']['email']);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     */
+    public function testUpdateUser()
+    {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+
+        $this->assertEquals($user->name, $this->adminName);
+        $this->assertEquals($user->email, $this->adminEmail);
+
+        $newName = 'new name';
+        $newEmail = 'new@email.com';
+
+        $this->putJson($this->baseUrl . 'api/users/me', [
+            'id' => $user->id,
+            'name' => $newName,
+            'email' => $newEmail
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $user = $user->fresh();
+
+        $this->assertEquals($user->name, $newName);
+        $this->assertEquals($user->email, $newEmail);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     */
+    public function testUpdateUserInvalidEmail()
+    {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+
+        $this->assertEquals($user->name, $this->adminName);
+        $this->assertEquals($user->email, $this->adminEmail);
+
+        $newName = 'new name';
+        $newEmail = 'newinvalidemailcom';
+
+        $response = $this->putJson($this->baseUrl . 'api/users/me', [
+            'id' => $user->id,
+            'name' => $newName,
+            'email' => $newEmail
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $response->assertJson([
+            'email' => [
+                __('validation.email', ['attribute' => 'email'])
+            ]
+        ]);
+
+        $user = $user->fresh();
+
+        $this->assertEquals($user->name, $this->adminName);
+        $this->assertEquals($user->email, $this->adminEmail);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     */
+    public function testUpdateUserDuplicateEmail()
+    {
+        /** @var User $user1 */
+        $user = $this->createUser();
+
+        $userEmail = $user->email;
+
+        /** @var User $admin */
+        $admin = $this->admin;
+        $token = $this->login($admin);
+
+        $this->assertEquals($admin->name, $this->adminName);
+        $this->assertEquals($admin->email, $this->adminEmail);
+        $this->assertNotEquals($admin->email, $userEmail);
+
+        $newName = 'new name';
+        $newEmail = $userEmail;
+
+        $response = $this->putJson($this->baseUrl . 'api/users/me', [
+            'id' => $admin->id,
+            'name' => $newName,
+            'email' => $newEmail
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $response->assertJson([
+            'email' => [
+                __('validation.unique', ['attribute' => 'email'])
+            ]
+        ]);
+
+        $admin = $admin->fresh();
+
+        $this->assertEquals($admin->name, $this->adminName);
+        $this->assertEquals($admin->email, $this->adminEmail);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     */
+    public function testUpdateUserNoEmail()
+    {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+
+        $this->assertEquals($user->name, $this->adminName);
+        $this->assertEquals($user->email, $this->adminEmail);
+
+        $newName = 'new name';
+
+        $response = $this->putJson($this->baseUrl . 'api/users/me', [
+            'id' => $user->id,
+            'name' => $newName
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $response->assertJson([
+            'email' => [
+                __('validation.required', ['attribute' => 'email'])
+            ]
+        ]);
+
+        $user = $user->fresh();
+
+        $this->assertEquals($user->name, $this->adminName);
+        $this->assertEquals($user->email, $this->adminEmail);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     */
+    public function testUpdateUserNoName()
+    {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+
+        $this->assertEquals($user->name, $this->adminName);
+        $this->assertEquals($user->email, $this->adminEmail);
+
+        $newEmail = 'new@email.com';
+
+        $response = $this->putJson($this->baseUrl . 'api/users/me', [
+            'id' => $user->id,
+            'email' => $newEmail
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $response->assertJson([
+            'name' => [
+                __('validation.required', ['attribute' => 'name'])
+            ]
+        ]);
+
+        $user = $user->fresh();
+
+        $this->assertEquals($user->name, $this->adminName);
+        $this->assertEquals($user->email, $this->adminEmail);
     }
 }

@@ -3,24 +3,16 @@
 namespace Tests;
 
 use App\User;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
 {
-    /**
-     * The base URL to use while testing the application.
-     *
-     * @var string
-     */
+
     protected $baseUrl = 'http://localhost:8080/';
 
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
+    public function createApplication(): Application
     {
         $app = require __DIR__.'/../bootstrap/app.php';
 
@@ -40,22 +32,20 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
         $this->artisan('migrate');
     }
 
-    /**
-     * @return User
-     */
-    protected function createAdmin()
+    protected function createAdmin() : User
     {
         return factory(User::class, 'admin')->create();
     }
 
+    protected function createUser() : User
+    {
+        return factory(User::class, 'user')->create();
+    }
+
     /**
-     * @param User $user
-     *
-     * @return string
-     *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function login(User $user)
+    protected function login(User $user) : string
     {
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
