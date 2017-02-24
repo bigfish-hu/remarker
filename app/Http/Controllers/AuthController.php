@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-
-    protected $jwt;
+    private $jwt;
 
     public function __construct(JWTAuth $jwt)
     {
@@ -46,6 +45,10 @@ class AuthController extends Controller
 
     public function updateAuthenticatedUser(Request $request) : Response
     {
+        if (!$request->has('id')) {
+            return $this->changePassword($request);
+        }
+
         $this->validate($request, [
             'email' => 'required|email|unique:users',
             'name' => 'required|max:255',
@@ -53,10 +56,6 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = $request->user();
-
-        if (!$request->has('id')) {
-            return $this->changePassword($request);
-        }
 
         $user->update([
             'name' => $request->input('name'),
@@ -84,7 +83,7 @@ class AuthController extends Controller
         $newpassword = $request->input('newpassword1');
 
         if (!Hash::check($oldpassword, $user->password)) {
-            return response(['error' => 'Invalid Old Password'], Response::HTTP_BAD_REQUEST);
+            return response(['error' => __('passwords.invalid_old')], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $user->password = $newpassword;

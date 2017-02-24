@@ -40,6 +40,7 @@ class AuthControllerTest extends BaseTestClass
      * @group auth
      * @group POST
      * @covers \App\Http\Controllers\AuthController::postLogin
+     * @covers \App\Http\Controllers\AuthController::__construct
      */
     public function testLoginInvalidEmail()
     {
@@ -325,5 +326,103 @@ class AuthControllerTest extends BaseTestClass
 
         $this->assertEquals($user->name, $this->adminName);
         $this->assertEquals($user->email, $this->adminEmail);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     * @covers \App\Http\Controllers\AuthController::changePassword
+     */
+    public function testChangePassword()
+    {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+        $oldPassword = $this->adminPassword;
+        $oldPasswordHash = $user->password;
+
+        $newPassword = 'newpassword';
+
+        $this->putJson($this->baseUrl . 'api/users/me', [
+            'oldpassword'  => $oldPassword,
+            'newpassword1' => $newPassword,
+            'newpassword2' => $newPassword,
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $user = $user->fresh();
+
+        $this->assertNotEquals($oldPasswordHash, $user->password);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     * @covers \App\Http\Controllers\AuthController::changePassword
+     */
+    public function testChangePasswordInvalidOldPassword()
+    {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+        $oldPasswordHash = $user->password;
+
+        $newPassword = 'newpassword';
+
+        $response = $this->putJson($this->baseUrl . 'api/users/me', [
+            'oldpassword'  => 'invalid',
+            'newpassword1' => $newPassword,
+            'newpassword2' => $newPassword,
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $response->assertJson([
+            'error' => __('passwords.invalid_old')
+        ]);
+
+        $user = $user->fresh();
+
+        $this->assertEquals($oldPasswordHash, $user->password);
+    }
+
+    /**
+     * @group auth
+     * @group perMe
+     * @group PUT
+     * @covers \App\Http\Controllers\AuthController::updateAuthenticatedUser
+     * @covers \App\Http\Controllers\AuthController::changePassword
+     */
+    public function testChangePasswordDistinctNewPasswords()
+    {
+        /** @var User $user */
+        $user = $this->admin;
+        $token = $this->login($user);
+        $oldPassword = $this->adminPassword;
+        $oldPasswordHash = $user->password;
+
+        $newPassword = 'newpassword';
+
+        $response = $this->putJson($this->baseUrl . 'api/users/me', [
+            'oldpassword'  => $oldPassword,
+            'newpassword1' => $newPassword,
+            'newpassword2' => $newPassword . '1',
+        ], [
+            'Authorization' => 'Bearer '.$token
+        ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $response->assertJson([
+            'newpassword2' => [
+                __('validation.same', ['attribute' => 'newpassword2', 'other' => 'newpassword1'])
+            ]
+        ]);
+        $user = $user->fresh();
+
+        $this->assertEquals($oldPasswordHash, $user->password);
     }
 }
