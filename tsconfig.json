@@ -29,5 +29,6 @@
   "buildOnSave": false,
   "atom": {
     "rewriteTsconfig": false
-  }
+  },
+  "skipLibCheck": true
 }
