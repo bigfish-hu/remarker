@@ -40,11 +40,11 @@ Route::group(['prefix' => 'api'], function () {
         Route::delete('/subscriptions/{endpoint}', 'PushSubscriptionController@destroy');
 
         Route::group(['middleware' => 'admin'], function () {
-            Route::get('/users/{id}', 'AdminController@getUser');
+            Route::get('/users/{user_id}', 'AdminController@getUser');
             Route::get('/users', 'AdminController@getUsers');
             Route::post('/users', 'AdminController@createUser');
-            Route::put('/users/{id}', 'AdminController@updateUser');
-            Route::delete('/users/{id}', 'AdminController@deleteUser');
+            Route::put('/users/{user_id}', 'AdminController@updateUser');
+            Route::delete('/users/{user_id}', 'AdminController@deleteUser');
 
             Route::get('/projects/{id}/users', 'ProjectController@getProjectUsers');
             Route::get('/projects/sync', 'ProjectController@getProjectsFromIssueTrackers');

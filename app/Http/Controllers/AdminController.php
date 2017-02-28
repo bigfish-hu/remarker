@@ -6,45 +6,30 @@ use App\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class AdminController extends Controller
 {
-    /**
-     * Show all users
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getUsers()
+    public function getUsers() : Response
     {
         $users = User::get();
         return response()->success(compact('users'));
     }
 
-    /**
-     * Get a user by id.
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function getUser($id)
+    public function getUser(int $user_id) : Response
     {
         $user = User::with(array('projects' => function ($query) {
             $query->select('id', 'name');
-        }))->find($id);
+        }))->find($user_id);
 
         return response()->success(compact('user'));
     }
 
-    /**
-     * Create a new user
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function createUser(Request $request)
+    public function createUser(Request $request) : Response
     {
         $input = $request->all();
 
-        /** @var AdminController $this */
         $this->validate($request, [
             'data.user.email' => 'required|email|unique:users,email|max:50',
             'data.user.name' => 'required|min:3|max:50',
@@ -66,16 +51,9 @@ class AdminController extends Controller
         return response()->success(compact('user'));
     }
 
-    /**
-     * Update an existing user.
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function updateUser(Request $request, $id)
+    public function updateUser(Request $request, int $user_id) : Response
     {
-        $user = User::find($id);
+        $user = User::find($user_id);
 
         $this->validate($request, [
             'data.user.id' => 'required|integer',
@@ -97,15 +75,9 @@ class AdminController extends Controller
         return response('', Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * Utterly destroy, delete, exterminate a user by id.
-     *
-     * @param array|int $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function deleteUser($id)
+    public function deleteUser(int $user_id) : Response
     {
-        User::destroy($id);
+        User::destroy($user_id);
 
         return response('', Response::HTTP_NO_CONTENT);
     }

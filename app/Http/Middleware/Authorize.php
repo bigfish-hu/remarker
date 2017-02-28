@@ -17,7 +17,7 @@ class Authorize
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (JWTAuth::parseToken()->authenticate()->is_superadmin !== 1) {
+        if ((int)JWTAuth::parseToken()->authenticate()->is_superadmin !== 1) {
             return response('Unauthorized.', 401);
         }
         return $next($request);

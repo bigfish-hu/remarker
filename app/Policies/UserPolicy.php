@@ -17,7 +17,6 @@ class UserPolicy
      */
     public function before(User $user)
     {
-        var_dump($user->toArray());
         return (bool)$user->isSuperAdmin();
     }
 }
