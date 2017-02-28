@@ -25,8 +25,9 @@ $factory->defineAs(App\User::class, 'user', function () {
     return [
         'name' => 'user',
         'email' => 'user@remarker.com',
-        'password' => \Illuminate\Support\Facades\Hash::make('secret'),
+        'password' => 'secret',
         'created_at' => \Carbon\Carbon::now(),
+        'is_superadmin' => false
     ];
 });
 
