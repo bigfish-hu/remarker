@@ -19,9 +19,7 @@ class AdminController extends Controller
 
     public function getUser(int $user_id) : Response
     {
-        $user = User::with(array('projects' => function ($query) {
-            $query->select('id', 'name');
-        }))->find($user_id);
+        $user = User::query()->find($user_id);
 
         return response()->success(compact('user'));
     }
