@@ -29,24 +29,24 @@ class AdminController extends Controller
         $input = $request->all();
 
         $this->validate($request, [
-            'data.user.email' => 'required|email|unique:users,email|max:50',
-            'data.user.name' => 'required|min:3|max:50',
-            'data.user.password' => 'required|string|min:6'
+            'email' => 'required|email|unique:users,email|max:50',
+            'name' => 'required|min:3|max:50',
+            'password' => 'required|string|min:6'
         ]);
 
         $userData = [
-            'name' => $input['data']['user']['name'],
-            'email' => $input['data']['user']['email'],
-            'password' => $input['data']['user']['password'],
+            'name' => $input['name'],
+            'email' => $input['email'],
+            'password' => $input['password'],
         ];
 
-        if (isset($input['data']['user']['is_superadmin'])) {
-            $userData['is_superadmin'] = $input['data']['user']['is_superadmin'];
+        if (isset($input['is_superadmin'])) {
+            $userData['is_superadmin'] = $input['is_superadmin'];
         }
 
-        $user = User::create($userData);
+        User::create($userData);
 
-        return response()->success(compact('user'));
+        return response('', Response::HTTP_CREATED);
     }
 
     public function updateUser(Request $request, int $user_id) : Response

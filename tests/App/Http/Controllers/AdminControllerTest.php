@@ -76,4 +76,42 @@ class AdminControllerTest extends BaseTestClass
             ]
         ]);
     }
+
+    public function testCreateUser()
+    {
+        $newUserAttributes = [
+            'name' => 'new user',
+            'email' => 'new@user.com',
+            'password' => 'newuser'
+        ];
+
+        $this->postJson($this->baseUrl . 'api/users', $newUserAttributes, [
+            'Authorization' => 'Bearer '.$this->adminToken
+        ])->assertStatus(Response::HTTP_CREATED);
+
+        $user = User::query()->where('email', $newUserAttributes['email'])->first();
+
+        $this->assertNotNull($user);
+        $this->assertInstanceOf(User::class, $user);
+    }
+
+    public function testCreateUserAdmin()
+    {
+        $newUserAttributes = [
+            'name' => 'new user',
+            'email' => 'new@user.com',
+            'password' => 'newuser',
+            'is_superadmin' => 1
+        ];
+
+        $this->postJson($this->baseUrl . 'api/users', $newUserAttributes, [
+            'Authorization' => 'Bearer '.$this->adminToken
+        ])->assertStatus(Response::HTTP_CREATED);
+
+        $user = User::query()->where('email', $newUserAttributes['email'])->first();
+
+        $this->assertNotNull($user);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals(1, $user->is_superadmin);
+    }
 }
