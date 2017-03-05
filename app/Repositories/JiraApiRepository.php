@@ -48,7 +48,7 @@ class JiraApiRepository extends IssueTrackerApiBaseRepository implements IssueTr
     }
 
 
-    public function createIssue(IssueTracker $issueTracker, Feedback $feedback)
+    public function createIssue(Feedback $feedback)
     {
         $headers = [
             "Content-Type" => "application/json"
