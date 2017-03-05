@@ -1,16 +1,16 @@
 sudo: required
 
-services:
-  - docker
+language: php
+
+php:
+  - 7.0
+  - 7.1
 
 before_script:
-  - sudo /etc/init.d/mysql stop
-  - docker-compose build
-  - docker-compose up -d
-  - docker exec -it remarker_web_1 composer install
+  - composer install
 
 script:
-  - composer coverage-clover
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
   - vendor/bin/test-reporter
