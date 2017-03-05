@@ -3,10 +3,13 @@ sudo: required
 services:
   - docker
 
-script:
+before_script:
+  - sudo /etc/init.d/mysql stop
   - docker-compose build
   - docker-compose up -d
   - docker exec -it remarker_web_1 composer install
+
+script:
   - composer coverage-clover
 
 after_success:
