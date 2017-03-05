@@ -1,6 +1,9 @@
 # Remarker  
 
 [![Dependency Status](https://www.versioneye.com/user/projects/589b641b6a7781004a93f8ca/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/589b641b6a7781004a93f8ca)
+[![Build Status](https://travis-ci.org/bigfish-hu/remarker.svg?branch=master)](https://travis-ci.org/bigfish-hu/remarker)
+[![Code Climate](https://codeclimate.com/github/bigfish-hu/remarker/badges/gpa.svg)](https://codeclimate.com/github/bigfish-hu/remarker)
+[![Test Coverage](https://codeclimate.com/github/bigfish-hu/remarker/badges/coverage.svg)](https://codeclimate.com/github/bigfish-hu/remarker/coverage)
 
 ## Development setup  
 

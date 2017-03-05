@@ -20,7 +20,8 @@
         "symfony/dom-crawler": "2.8.*|3.*",
         "phpro/grumphp": "^0.11.2",
         "squizlabs/php_codesniffer": "^2.8",
-        "phpmd/phpmd": "^2.6"
+        "phpmd/phpmd": "^2.6",
+        "codeclimate/php-test-reporter": "^0.4.4"
     },
     "autoload": {
         "classmap": [
@@ -54,6 +55,7 @@
         "test": "docker exec -i remarker_web_1 vendor/bin/phpunit",
         "coverage": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-text --colors=never",
         "coverage-html": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-html coverage-php",
+        "coverage-clover": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-clover build/logs/clover.xml",
         "artisan": "docker exec -i remarker_web_1 php artisan"
     },
     "config": {
