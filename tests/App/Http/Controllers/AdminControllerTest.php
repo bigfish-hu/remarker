@@ -57,6 +57,15 @@ class AdminControllerTest extends BaseTestClass
         ]);
     }
 
+    public function testGetAllUserNotAdmin()
+    {
+        $userToken = $this->login($this->user);
+
+        $this->getJson($this->baseUrl . 'api/users', [
+            'Authorization' => 'Bearer '.$userToken
+        ])->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
     public function testGetUser()
     {
         $response = $this->getJson($this->baseUrl . 'api/users/2', [
@@ -113,5 +122,24 @@ class AdminControllerTest extends BaseTestClass
         $this->assertNotNull($user);
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals(1, $user->is_superadmin);
+    }
+
+    public function testModifyUser()
+    {
+        $userNewAttributes = [
+            'name' => 'new username',
+        ];
+
+        $this->putJson($this->baseUrl . 'api/users/' . $this->user->id, $userNewAttributes, [
+            'Authorization' => 'Bearer '.$this->adminToken
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $user = $this->user->fresh();
+
+        $this->assertNotNull($user);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($userNewAttributes['name'], $user->name);
+        $this->assertNotEquals($this->user->name, $user->name);
+        $this->assertEquals($this->user->email, $user->email);
     }
 }

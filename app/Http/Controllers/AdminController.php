@@ -54,21 +54,12 @@ class AdminController extends Controller
         $user = User::find($user_id);
 
         $this->validate($request, [
-            'data.user.id' => 'required|integer',
-            'data.user.name' => 'required|min:3',
-            'data.user.email' => 'required|email|unique:users,email,'.$user->id,
-            'data.user.projects.*.id' => 'required|integer'
+            'name' => 'min:3',
+            'email' => 'email|unique:users,email,'.$user->id,
+            'is_superadmin' => 'boolean'
         ]);
 
-        $request = $request->all();
-        $userData = $request['data']['user'];
-
-        $projectIds = array_map(function ($project) {
-            return $project['id'];
-        }, $userData['projects']);
-
-        $user->update($userData);
-        $user->projects()->sync($projectIds);
+        $user->update(array_filter($request->all()));
 
         return response('', Response::HTTP_NO_CONTENT);
     }
