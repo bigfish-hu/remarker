@@ -1,10 +1,5 @@
 <?php
 
-ini_set('xdebug.max_nesting_level', 200);
-ini_set('xdebug.var_display_max_depth', 5);
-ini_set('xdebug.var_display_max_children', 256);
-ini_set('xdebug.var_display_max_data', 1024);
-
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

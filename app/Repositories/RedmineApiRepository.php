@@ -35,47 +35,6 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
         return json_decode($response->getBody(), true)['projects'];
     }
 
-    public function notify(Project $project, Feedback $feedback)
-    {
-        if (isset($issueTrackerConfig["projects"][$project->getCode()]) === false) {
-            throw new ProjectNotFound();
-        }
-        $projectConfig = $issueTrackerConfig["projects"][$project->getCode()];
-
-        $token = "";
-        $this->uploadImage($feedback, $issueTrackerConfig, $token);
-        $this->createIssue($feedback, $issueTrackerConfig, $projectConfig, $token);
-    }
-
-
-    protected function uploadImage(
-        Feedback $feedback,
-        array $issueTrackerConfig,
-        &$token
-    ) {
-        $headers = [
-            "Content-Type" => "application/octet-stream"
-        ];
-        $body = $feedback->getScreenshot();
-
-        $response = $this->sendRequest(
-            new Request("POST", $issueTrackerConfig["url"] . "/uploads.json", $headers, $body),
-            $issueTrackerConfig
-        );
-
-        if ($response->getStatusCode() !== 201) {
-            throw new RedmineIssueCantBeCreated("");
-        }
-
-        $body = json_decode($response->getBody()->getContents(), true);
-        if (empty($body["upload"]["token"])) {
-            throw new RedmineIssueCantBeCreated("");
-        }
-
-        $token = $body["upload"]["token"];
-    }
-
-
     public function createIssue(Feedback $feedback)
     {
         $description = $this->createIssueDescription($feedback);
@@ -94,7 +53,7 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
                 "description" => $description,
                 "uploads" => [
                     [
-                        "token" => $token,
+                        "token" => '',
                         "filename" => "screenshot.jpg",
                         "content_type" => "image/jpg"
                     ]
@@ -102,11 +61,7 @@ class RedmineApiRepository extends IssueTrackerApiBaseRepository implements Issu
             ]
         ];
 
-        $response = $this->sendRequest(new Request("POST", $this->config["url"] . "/issues.json", $headers, json_encode($body)));
-
-        if ($response->getStatusCode() !== 201) {
-            throw new RedmineIssueCantBeCreated("");
-        }
+        $this->sendRequest(new Request("POST", $this->config["url"] . "/issues.json", $headers, json_encode($body)));
     }
 
 

@@ -3,9 +3,7 @@
 namespace App\Repositories;
 
 use App\Feedback;
-use App\IssueTracker;
 use App\Project;
-use App\Contracts\ApiClientInterface;
 
 abstract class IssueTrackerApiBaseRepository
 {

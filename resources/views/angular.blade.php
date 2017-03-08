@@ -9,7 +9,7 @@
 
   <meta name="description" content="Admin for Remarker">
 
-  
+
   <!-- Configured Head Tags  -->
   <link rel="apple-touch-icon" sizes="57x57" href="/dist/assets/icon/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="/dist/assets/icon/apple-icon-60x60.png">
@@ -27,7 +27,7 @@
 	<meta name="msapplication-TileColor" content="#ffffff">
 	<meta name="msapplication-TileImage" content="/dist/assets/icon/ms-icon-144x144.png">
 	<meta name="theme-color" content="#4691d1">
-  
+
 
   <!-- base url -->
   <base href="/admin">
