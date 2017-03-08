@@ -18,7 +18,7 @@ class TrackerController extends Controller
      * Create a new tracker
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function createTracker(Request $request)
     {

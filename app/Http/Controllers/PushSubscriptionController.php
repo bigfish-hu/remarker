@@ -32,7 +32,7 @@ class PushSubscriptionController extends Controller
      * Delete the specified subscription.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $endpoint)
     {
