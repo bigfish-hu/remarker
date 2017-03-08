@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use App\Feedback;
-use App\Project;
 use App\Contracts\IssueTrackerApiInterface;
 use App\Contracts\ApiClientInterface;
 use GuzzleHttp\Psr7\Request;
