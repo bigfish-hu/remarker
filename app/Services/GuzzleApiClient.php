@@ -13,7 +13,6 @@ class GuzzleApiClient implements ApiClientInterface
     protected $client;
 
     /**
-     * @param array $config
      */
     public function __construct()
     {

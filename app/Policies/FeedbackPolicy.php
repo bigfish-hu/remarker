@@ -14,7 +14,6 @@ class FeedbackPolicy
      * Determine if the given feedback can be viewed by the user.
      *
      * @param  \App\User  $user
-     * @param  \App\Feedback  $post
      * @return bool
      */
     public function show(User $user, Feedback $feedback)
