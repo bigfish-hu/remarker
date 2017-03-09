@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\IssueTracker;
 use Illuminate\Http\Request;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class TrackerController extends Controller
 {
     public function getTrackers()
@@ -58,8 +61,6 @@ class TrackerController extends Controller
 
         /** @var IssueTracker $user */
         $tracker = IssueTracker::query()->find((int)$id);
-
-        $input = $this->unsetEmptyInputFields($input);
 
         $tracker->update($input);
 

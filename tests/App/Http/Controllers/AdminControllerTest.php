@@ -142,4 +142,15 @@ class AdminControllerTest extends BaseTestClass
         $this->assertNotEquals($this->user->name, $user->name);
         $this->assertEquals($this->user->email, $user->email);
     }
+
+    public function testDeleteUser()
+    {
+        $this->deleteJson($this->baseUrl . 'api/users/' . $this->user->id, [], [
+            'Authorization' => 'Bearer '.$this->adminToken
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $user = User::query()->find($this->user->id);
+
+        $this->assertNull($user);
+    }
 }
