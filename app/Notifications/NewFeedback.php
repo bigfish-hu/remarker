@@ -5,8 +5,6 @@ namespace App\Notifications;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use NotificationChannels\WebPush\WebPushChannel;
 use NotificationChannels\WebPush\WebPushMessage;
 
@@ -27,7 +25,6 @@ class NewFeedback extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
      * @return array
      */
     public function via()
@@ -37,7 +34,6 @@ class NewFeedback extends Notification
 
     /**
      *
-     * @param  User  $notifiable
      */
     public function toWebPush()
     {

@@ -17,7 +17,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
         Response::macro('success', function ($data) {
             return Response::json([
                 'errors'  => false,
-                 'data' => $data,
+                    'data' => $data,
                 ]);
         });
 
