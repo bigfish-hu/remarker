@@ -19,6 +19,12 @@ class Feedback extends Model
         'user_agent', 'screen_resolution', 'cookie_enabled', 'project_id', 'ext_user_id', 'screenshot'
     ];
 
+    protected $casts = [
+        'cookie_enabled' => 'boolean',
+        'project_id' => 'integer',
+        'ext_user_id' => 'integer'
+    ];
+
     public function feedbackHistory()
     {
         return $this->hasMany('App\FeedbackHistory');

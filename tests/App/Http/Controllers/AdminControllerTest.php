@@ -27,6 +27,11 @@ class AdminControllerTest extends BaseTestClass
         $this->adminToken = $this->login($this->admin);
     }
 
+    /**
+     * @group admin
+     * @group GET
+     * @covers \App\Http\Controllers\AdminController::getUsers()
+     */
     public function testGetAllUser()
     {
         $response = $this->getJson($this->baseUrl . 'api/users', [
@@ -57,6 +62,11 @@ class AdminControllerTest extends BaseTestClass
         ]);
     }
 
+    /**
+     * @group admin
+     * @group GET
+     * @covers \App\Http\Controllers\AdminController::getUsers()
+     */
     public function testGetAllUserNotAdmin()
     {
         $userToken = $this->login($this->user);
@@ -66,6 +76,11 @@ class AdminControllerTest extends BaseTestClass
         ])->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
+    /**
+     * @group admin
+     * @group GET
+     * @covers \App\Http\Controllers\AdminController::getUser()
+     */
     public function testGetUser()
     {
         $response = $this->getJson($this->baseUrl . 'api/users/2', [
@@ -86,6 +101,11 @@ class AdminControllerTest extends BaseTestClass
         ]);
     }
 
+    /**
+     * @group admin
+     * @group POST
+     * @covers \App\Http\Controllers\AdminController::createUser()
+     */
     public function testCreateUser()
     {
         $newUserAttributes = [
@@ -104,6 +124,11 @@ class AdminControllerTest extends BaseTestClass
         $this->assertInstanceOf(User::class, $user);
     }
 
+    /**
+     * @group admin
+     * @group POST
+     * @covers \App\Http\Controllers\AdminController::createUser()
+     */
     public function testCreateUserAdmin()
     {
         $newUserAttributes = [
@@ -124,6 +149,11 @@ class AdminControllerTest extends BaseTestClass
         $this->assertEquals(1, $user->is_superadmin);
     }
 
+    /**
+     * @group admin
+     * @group PUT
+     * @covers \App\Http\Controllers\AdminController::updateUser()
+     */
     public function testModifyUser()
     {
         $userNewAttributes = [
@@ -143,6 +173,11 @@ class AdminControllerTest extends BaseTestClass
         $this->assertEquals($this->user->email, $user->email);
     }
 
+    /**
+     * @group admin
+     * @group DELETE
+     * @covers \App\Http\Controllers\AdminController::deleteUser()
+     */
     public function testDeleteUser()
     {
         $this->deleteJson($this->baseUrl . 'api/users/' . $this->user->id, [], [

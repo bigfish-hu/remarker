@@ -6,7 +6,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use NotificationChannels\WebPush\HasPushSubscriptions;
@@ -63,7 +63,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
 
     public function feedbacks($fields)
     {
-        $this->load(['projects.feedbacks' => function (Builder $q) use (&$feedbacks, $fields) {
+        $this->load(['projects.feedbacks' => function (HasMany $q) use (&$feedbacks, $fields) {
             $feedbacks = $q->join('projects', 'feedbacks.project_id', '=', 'projects.id')->select($fields)->get();
         }]);
 
