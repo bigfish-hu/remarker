@@ -58,3 +58,30 @@ $factory->define(App\Feedback::class, function (Faker\Generator $faker) {
         'screenshot' => 'data:image/png;base64,'.base64_encode(fread(fopen(__DIR__.'/../cat.png', 'r'), filesize(__DIR__.'/../cat.png')))
     ];
 });
+
+$factory->defineAs(\App\Project::class, 'project1', function () {
+    return [
+        'name' => 'project1',
+        'ext_id' => 11,
+        'issue_tracker' => 'redmine',
+        'is_automatic_notification' => false,
+    ];
+});
+
+$factory->defineAs(\App\Project::class, 'project2', function () {
+    return [
+        'name' => 'project2',
+        'ext_id' => 12,
+        'issue_tracker' => 'jira',
+        'is_automatic_notification' => true,
+    ];
+});
+
+$factory->defineAs(\App\Project::class, 'project3', function () {
+    return [
+        'name' => 'project3',
+        'ext_id' => 13,
+        'issue_tracker' => 'mantis',
+        'is_automatic_notification' => false,
+    ];
+});
