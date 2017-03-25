@@ -19,9 +19,6 @@ class FeedbackController extends Controller
 {
     private $tableName = 'feedbacks';
 
-    /**
-     * @return Response
-     */
     public function getFeedbacks() : Response
     {
         $params = Input::all();
@@ -41,14 +38,11 @@ class FeedbackController extends Controller
 
         $fields[] = 'projects.name as project_name';
 
-        /**
-         * @var $user \App\User
-         */
+        /** @var $user \App\User */
         $user = Auth::user();
-
         $feedbacks = $user->feedbacks($fields);
 
-        return response(compact('feedbacks'));
+        return response(json_encode(compact('feedbacks')));
     }
 
     /**
