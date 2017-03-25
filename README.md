@@ -5,6 +5,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bigfish-hu/remarker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bigfish-hu/remarker/?branch=master)
 [![Dependency Status](https://www.versioneye.com/user/projects/589b641b6a7781004a93f8ca/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/589b641b6a7781004a93f8ca)
 [![Build Status](https://travis-ci.org/bigfish-hu/remarker.svg?branch=master)](https://travis-ci.org/bigfish-hu/remarker)
+[![StyleCI](https://styleci.io/repos/57279861/shield?branch=master)](https://styleci.io/repos/57279861)
 [![Test Coverage](https://codeclimate.com/github/bigfish-hu/remarker/badges/coverage.svg)](https://codeclimate.com/github/bigfish-hu/remarker/coverage)
 
 ## Development setup  
