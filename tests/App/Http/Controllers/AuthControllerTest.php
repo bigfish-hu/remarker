@@ -11,7 +11,6 @@ use Tests\BaseTestClass;
  */
 class AuthControllerTest extends BaseTestClass
 {
-
     private $adminEmail = 'admin@remarker.com';
     private $adminPassword = 'secret';
     private $adminName = 'admin';

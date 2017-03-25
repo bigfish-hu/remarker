@@ -19,12 +19,10 @@ Route::get('admin/manifest.json', function () {
 });
 
 Route::group(['prefix' => 'api'], function () {
-
     Route::post('auth/login', 'AuthController@postLogin');
     Route::post('auth/register', 'AuthController@registration');
 
     Route::group(['middleware' => 'jwt.refresh'], function () {
-
         Route::get('users/me', 'AuthController@getAuthenticatedUser');
         Route::put('users/me', 'AuthController@updateAuthenticatedUser');
 

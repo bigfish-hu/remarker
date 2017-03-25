@@ -9,7 +9,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
 {
-
     protected $baseUrl = 'http://localhost:8080/';
 
     public function createApplication(): Application

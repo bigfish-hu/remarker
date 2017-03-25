@@ -31,7 +31,6 @@ class CreateFeedbacksTable extends Migration
             $table->timestamps();
         });
         DB::statement("ALTER TABLE feedbacks ADD screenshot LONGBLOB");
-
     }
 
     /**

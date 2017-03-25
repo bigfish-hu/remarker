@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FeedbackHistory extends Model
 {
-
     protected $table = 'feedback_history';
 
     /**

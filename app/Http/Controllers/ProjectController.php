@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Response;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class ProjectController extends Controller
 {
-
     public function getProjects()
     {
         $params = Input::all();
