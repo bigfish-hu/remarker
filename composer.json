@@ -55,7 +55,7 @@
         "test": "docker exec -i remarker_web_1 vendor/bin/phpunit",
         "coverage": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-text --colors=never",
         "coverage-html": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-html coverage-php",
-        "coverage-clover": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-clover build/logs/clover.xml",
+        "coverage-clover": "docker exec -i remarker_web_1 vendor/bin/phpunit --coverage-clover clover.xml",
         "artisan": "docker exec -i remarker_web_1 php artisan",
         "docker-update": "docker exec -i remarker_web_1 composer update"
     },

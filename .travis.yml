@@ -19,8 +19,5 @@ script:
   - composer coverage-clover
 
 after_success:
-  - vendor/bin/test-reporter
-
-addons:
-    code_climate:
-        repo_token: b6d9309226c2150e2e642db85ed04195941d29bedaa4f10f0c6d0e2b1f2b09e8
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover ./clover.xml
