@@ -1,17 +1,22 @@
 sudo: required
 
+services:
+  - docker
+
 language: php
 
 php:
   - 7.0
-  - 7.1
 
 before_script:
-  - composer install
+  - sudo /etc/init.d/mysql stop
+  - docker-compose up -d
+  - composer docker-update
   - cp .env.example .env
 
 script:
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - docker exec -it remarker_web_1 php -v
+  - composer coverage-clover
 
 after_success:
   - vendor/bin/test-reporter
@@ -19,4 +24,3 @@ after_success:
 addons:
     code_climate:
         repo_token: b6d9309226c2150e2e642db85ed04195941d29bedaa4f10f0c6d0e2b1f2b09e8
-

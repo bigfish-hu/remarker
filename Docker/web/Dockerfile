@@ -1,6 +1,3 @@
-#
-# Web node
-#
 FROM debian:jessie
 MAINTAINER BIG FISH <cafe@bigfish.hu>
 
@@ -21,7 +18,7 @@ RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/
 # Install packages
 #
 RUN apt-get update && \
-    apt-get install -y php7.0-common \
+    apt-get install -y php7.0 \
                        php7.0-cli \
                        php7.0-fpm \
                        php7.0-curl \
@@ -35,6 +32,7 @@ RUN apt-get update && \
                        php7.0-json \
                        php7.0-xdebug \
                        php7.0-sqlite3 \
+                       php7.0-zip \
                        nginx
 
 #
