@@ -9,15 +9,20 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Http\Response;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class FeedbackController extends Controller
 {
+    private $tableName = 'feedbacks';
 
     /**
      * @return Response
      */
-    public function getFeedbacks()
+    public function getFeedbacks() : Response
     {
         $params = Input::all();
 
@@ -25,54 +30,60 @@ class FeedbackController extends Controller
 
         if (array_key_exists('fields', $params) && $params['fields']) {
             $fields = explode(',', $params['fields']);
+            $tableFields = Schema::getColumnListing($this->tableName);
+
+            $fields = array_map(function ($item) use ($tableFields) {
+                if (in_array($item, $tableFields)) {
+                    return $this->tableName.'.'.$item;
+                }
+            }, $fields);
         }
 
-        $allFields = array_map(function ($item) {
-            return 'feedbacks.'.$item;
-        }, $fields);
-
-        $allFields[] = 'projects.name as project_name';
+        $fields[] = 'projects.name as project_name';
 
         /**
          * @var $user \App\User
          */
         $user = Auth::user();
 
-        $feedbacks = $user->feedbacks($allFields);
+        $feedbacks = $user->feedbacks($fields);
 
-        return response()->success(compact('feedbacks'));
+        return response(compact('feedbacks'));
     }
 
     /**
-     * @param int $id
+     * @param $feedbackId
      * @return Response
+     * @internal param int $id
      */
-    public function deleteFeedback($id)
+    public function deleteFeedback($feedbackId)
     {
-        Feedback::destroy($id);
+        Feedback::destroy($feedbackId);
 
         return response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
-     * @param int $id
+     * @param $feedbackId
      * @return Response
+     * @internal param int $id
      */
-    public function getFeedback($id)
+    public function getFeedback($feedbackId)
     {
-        $feedback = Feedback::find($id);
+        $feedback = Feedback::find($feedbackId);
 
         return response()->success(compact('feedback'));
     }
 
     /**
      * @param Request $request
-     * @param int $id
+     * @param $feedbackId
      * @return Response
+     * @internal param int $id
      */
-    public function updateFeedback(Request $request, $id)
+    public function updateFeedback(Request $request, $feedbackId)
     {
-        $feedback = Feedback::find($id);
+        $feedback = Feedback::find($feedbackId);
 
         $request = $request->all();
         $description = $request['data']['feedback']['description'];
