@@ -80,7 +80,7 @@ class FeedbackController extends Controller
      */
     public function createFeedback(Request $request)
     {
-        $data = $request->input('data')['attributes'];
+        $data = $request->input('data');
 
         $browser = $data['browser'];
 
@@ -88,15 +88,15 @@ class FeedbackController extends Controller
             'title' => $data['title'],
             'description' => $data['description'],
             'url' => $data['url'],
-            'reporter_name' => $data['name'],
-            'reporter_email' => $data['email'],
+            'reporter_name' => $data['reporter_name'],
+            'reporter_email' => $data['reporter_email'],
             'screenshot' => $data['screenshot'],
 
-            'browser' => $browser['appName'],
+            'browser' => $browser['browser'],
             'platform' => $browser['platform'],
-            'user_agent' => $browser['userAgent'],
-            'screen_resolution' => $browser['screen'],
-            'cookie_enabled' => $browser['cookieEnabled'],
+            'user_agent' => $browser['user_agent'],
+            'screen_resolution' => $browser['screen_resolution'],
+            'cookie_enabled' => $browser['cookie_enabled'],
             'project_id' => $data['project_id'],
             'ext_user_id' => null,
         ]);

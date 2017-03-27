@@ -257,4 +257,47 @@ class FeedbackControllerTest extends BaseTestClass
         $this->assertNotEquals($feedback1->description, $feedback->description);
         $this->assertEquals($newAttributes['description'], $feedback->description);
     }
+
+    /**
+     * @group feedback
+     * @group POST
+     * @covers \App\Http\Controllers\FeedbackController::createFeedback()
+     */
+    public function testCreateFeedback()
+    {
+        /** @var Project $project1 */
+        $project1 = factory(Project::class, 'project1')->create();
+
+        $data = [
+            'data' => [
+                    'title' => 'feedback title',
+                    'description' => 'feedback description',
+                    'url' => 'feedback url',
+                    'reporter_name' => 'feedback reporter name',
+                    'reporter_email' => 'feedback reporter email',
+                    'screenshot' => 'feedback screenshot in base64',
+                    'project_id' => $project1->id,
+                    'browser' => [
+                        'browser' => 'Chrome',
+                        'platform' => 'GNU/Linux',
+                        'user_agent' => 'Chrome-on-linux',
+                        'screen_resolution' => '1024x768',
+                        'cookie_enabled' => true,
+                    ]
+
+            ]
+        ];
+
+        $this->postJson($this->baseUrl . 'createFeedback', $data, [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $feedback = Feedback::first();
+
+        $this->assertEquals($data['data']['title'], $feedback->title);
+        $this->assertEquals($data['data']['description'], $feedback->description);
+        $this->assertEquals($data['data']['url'], $feedback->url);
+        $this->assertEquals($data['data']['reporter_name'], $feedback->reporter_name);
+        $this->assertEquals($data['data']['reporter_email'], $feedback->reporter_email);
+    }
 }

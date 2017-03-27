@@ -136,11 +136,7 @@
                     rect 		= {};
                     drag 		= false;
                     highlight 	= 1,
-                            post		= {};
-
-                    post.type = "feedback";
-                    post.attributes = {};
-
+                    post		= {};
 
                     if (settings.postBrowserInfo) {
                         var unknown = '-';
@@ -304,21 +300,20 @@
                                 flashVersion = unknown;
                             }
                         }
-                        post.attributes.browser 				= {};
-                        post.attributes.browser.appCodeName	= navigator.appCodeName;
-                        post.attributes.browser.appName		= browser + ' ' + majorVersion + ' (' + version + ')';
-                        post.attributes.browser.appVersion		= version;
-                        post.attributes.browser.cookieEnabled	= navigator.cookieEnabled;
-                        post.attributes.browser.onLine			= navigator.onLine;
-                        post.attributes.browser.platform		= os + ' ' + osVersion;
-                        post.attributes.browser.screen = screenSize;
-                        post.attributes.browser.userAgent		= navigator.userAgent;
+                        post.browser 				= {};
+                        post.browser.browser		= browser + ' ' + majorVersion + ' (' + version + ')';
+                        post.browser.browser_version		= version;
+                        post.browser.cookie_enabled	= navigator.cookieEnabled;
+                        post.browser.on_line			= navigator.onLine;
+                        post.browser.platform		= os + ' ' + osVersion;
+                        post.browser.screen_resolution = screenSize;
+                        post.browser.user_agent		= navigator.userAgent;
 
                         $('#feedback-browser-info').show();
                     }
 
                     if (settings.postURL) {
-                        post.attributes.url = document.URL;
+                        post.url = document.URL;
                         $('#feedback-page-info').show();
                     }
 
@@ -622,8 +617,8 @@
                                 _ctx.drawImage(canvas, 0, sy, w, dh, 0, 0, w, dh);
                                 img = _canvas.get(0).toDataURL();
                                 $(document).scrollTop(sy);
-                                post.attributes.screenshot = img;
-                                settings.onScreenshotTaken(post.attributes.screenshot);
+                                post.screenshot = img;
+                                settings.onScreenshotTaken(post.screenshot);
                                 if(settings.showDescriptionModal) {
                                     $('#feedback-canvas-tmp').remove();
                                     $('#feedback-overview').show();
@@ -689,11 +684,11 @@
                             $('#feedback-submit-success,#feedback-submit-error').remove();
                             $('#feedback-overview').hide();
 
-                            post.attributes.project_id = settings.project_id;
-                            post.attributes.title = $('#feedback-title').val();
-                            post.attributes.description = $('#feedback-note').val();
-                            post.attributes.name = $('#feedback-name').val();
-                            post.attributes.email = $('#feedback-email').val();
+                            post.project_id = settings.project_id;
+                            post.title = $('#feedback-title').val();
+                            post.description = $('#feedback-note').val();
+                            post.reporter_name = $('#feedback-name').val();
+                            post.reporter_email = $('#feedback-email').val();
 
                             post = {"data": post};
                             //data = JSON.stringify(post);
