@@ -45,42 +45,29 @@ class FeedbackController extends Controller
         return response(json_encode(compact('feedbacks')));
     }
 
-    /**
-     * @param $feedbackId
-     * @return Response
-     * @internal param int $id
-     */
-    public function deleteFeedback($feedbackId)
+    public function deleteFeedback(int $feedbackId) : Response
     {
         Feedback::destroy($feedbackId);
 
         return response('', Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @param $feedbackId
-     * @return Response
-     * @internal param int $id
-     */
-    public function getFeedback($feedbackId)
+    public function getFeedback(int $feedbackId) : Response
     {
         $feedback = Feedback::find($feedbackId);
 
-        return response()->success(compact('feedback'));
+        if (empty($feedback)) {
+            return response('', Response::HTTP_NOT_FOUND);
+        }
+
+        return response(compact('feedback'), Response::HTTP_OK);
     }
 
-    /**
-     * @param Request $request
-     * @param $feedbackId
-     * @return Response
-     * @internal param int $id
-     */
-    public function updateFeedback(Request $request, $feedbackId)
+    public function updateFeedback(Request $request, int $feedbackId) : Response
     {
         $feedback = Feedback::find($feedbackId);
 
-        $request = $request->all();
-        $description = $request['data']['feedback']['description'];
+        $description = $request->get('description');
 
         $feedback->update(['description' => $description]);
 
@@ -123,7 +110,6 @@ class FeedbackController extends Controller
         foreach ($users as $user) {
             $user->notify(new NewFeedback());
         }
-
 
         return response('', Response::HTTP_CREATED);
     }

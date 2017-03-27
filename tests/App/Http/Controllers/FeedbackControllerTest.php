@@ -10,6 +10,7 @@ use Tests\BaseTestClass;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class FeedbackControllerTest extends BaseTestClass
 {
@@ -152,5 +153,108 @@ class FeedbackControllerTest extends BaseTestClass
         $this->assertArrayHasKey('id', $response['feedbacks'][0]);
         $this->assertEquals($feedback1->id, $response['feedbacks'][0]['id']);
         $this->assertArrayNotHasKey('title', $response['feedbacks'][0]);
+    }
+
+    /**
+     * @group feedback
+     * @group DELETE
+     * @covers \App\Http\Controllers\FeedbackController::deleteFeedback()
+     */
+    public function testDeleteFeedback()
+    {
+        /** @var Project $project1 */
+        $project1 = factory(Project::class, 'project1')->create();
+        /** @var Feedback $feedback1 */
+        $feedback1 = factory(Feedback::class)->create();
+
+        $project1->users()->attach($this->user->id);
+        $feedback1->project_id = $project1->id;
+        $feedback1->save();
+
+        $this->deleteJson($this->baseUrl . 'api/feedbacks/' . $feedback1->id, [], [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $feedbacks = Feedback::all();
+
+        $this->assertTrue($feedbacks->isEmpty());
+    }
+
+    /**
+     * @group feedback
+     * @group GET
+     * @covers \App\Http\Controllers\FeedbackController::getFeedback()
+     */
+    public function testGetFeedback()
+    {
+        /** @var Project $project1 */
+        $project1 = factory(Project::class, 'project1')->create();
+        /** @var Feedback $feedback1 */
+        $feedback1 = factory(Feedback::class)->create();
+
+        $project1->users()->attach($this->user->id);
+        $feedback1->project_id = $project1->id;
+        $feedback1->save();
+
+        $response = $this->getJson($this->baseUrl . 'api/feedbacks/' . $feedback1->id, [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_OK);
+
+        $response = json_decode($response->getContent(), true);
+
+        $this->assertEquals($feedback1->id, $response['feedback']['id']);
+    }
+
+    /**
+     * @group feedback
+     * @group GET
+     * @covers \App\Http\Controllers\FeedbackController::getFeedback()
+     */
+    public function testGetFeedbackNotExists()
+    {
+        /** @var Project $project1 */
+        $project1 = factory(Project::class, 'project1')->create();
+        /** @var Feedback $feedback1 */
+        $feedback1 = factory(Feedback::class)->create();
+
+        $project1->users()->attach($this->user->id);
+        $feedback1->project_id = $project1->id;
+        $feedback1->save();
+
+        $this->getJson($this->baseUrl . 'api/feedbacks/' . 42, [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @group feedback
+     * @group PUT
+     * @covers \App\Http\Controllers\FeedbackController::updateFeedback()
+     */
+    public function testUpdateFeedback()
+    {
+        /** @var Project $project1 */
+        $project1 = factory(Project::class, 'project1')->create();
+        /** @var Feedback $feedback1 */
+        $feedback1 = factory(Feedback::class)->create();
+
+        $project1->users()->attach($this->user->id);
+        $feedback1->project_id = $project1->id;
+        $feedback1->save();
+
+        $newAttributes = [
+            'title' => 'new title',
+            'description' => 'new description'
+        ];
+
+        $this->putJson($this->baseUrl . 'api/feedbacks/' . $feedback1->id, $newAttributes, [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $feedback = Feedback::query()->find($feedback1->id);
+
+        $this->assertEquals($feedback1->title, $feedback->title);
+        $this->assertNotEquals($feedback1->description, $feedback->description);
+        $this->assertEquals($newAttributes['description'], $feedback->description);
     }
 }
