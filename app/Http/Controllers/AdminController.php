@@ -14,14 +14,14 @@ class AdminController extends Controller
     public function getUsers() : Response
     {
         $users = User::get();
-        return response()->success(compact('users'));
+        return response(compact('users'));
     }
 
     public function getUser(int $user_id) : Response
     {
         $user = User::query()->find($user_id);
 
-        return response()->success(compact('user'));
+        return response(compact('user'));
     }
 
     public function createUser(Request $request) : Response

@@ -32,31 +32,29 @@ class AdminControllerTest extends BaseTestClass
      * @group GET
      * @covers \App\Http\Controllers\AdminController::getUsers()
      */
-    public function testGetAllUser()
+    public function testGetAllUsers()
     {
         $response = $this->getJson($this->baseUrl . 'api/users', [
             'Authorization' => 'Bearer '.$this->adminToken
         ])->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'data' => [
-                'users' => [
-                    [
-                        'id' => $this->admin->id,
-                        'name' => $this->admin->name,
-                        'email' => $this->admin->email,
-                        'is_superadmin' => $this->admin->is_superadmin,
-                        'created_at' => $this->admin->created_at,
-                        'updated_at' => $this->admin->updated_at
-                    ],
-                    [
-                        'id' => $this->user->id,
-                        'name' => $this->user->name,
-                        'email' => $this->user->email,
-                        'is_superadmin' => $this->user->is_superadmin,
-                        'created_at' => $this->user->created_at,
-                        'updated_at' => $this->user->updated_at
-                    ]
+            'users' => [
+                [
+                    'id' => $this->admin->id,
+                    'name' => $this->admin->name,
+                    'email' => $this->admin->email,
+                    'is_superadmin' => $this->admin->is_superadmin,
+                    'created_at' => $this->admin->created_at,
+                    'updated_at' => $this->admin->updated_at
+                ],
+                [
+                    'id' => $this->user->id,
+                    'name' => $this->user->name,
+                    'email' => $this->user->email,
+                    'is_superadmin' => $this->user->is_superadmin,
+                    'created_at' => $this->user->created_at,
+                    'updated_at' => $this->user->updated_at
                 ]
             ]
         ]);
@@ -88,15 +86,13 @@ class AdminControllerTest extends BaseTestClass
         ])->assertStatus(Response::HTTP_OK);
 
         $response->assertJson([
-            'data' => [
-                'user' => [
-                        'id' => $this->user->id,
-                        'name' => $this->user->name,
-                        'email' => $this->user->email,
-                        'is_superadmin' => $this->user->is_superadmin,
-                        'created_at' => $this->user->created_at,
-                        'updated_at' => $this->user->updated_at
-                ]
+            'user' => [
+                    'id' => $this->user->id,
+                    'name' => $this->user->name,
+                    'email' => $this->user->email,
+                    'is_superadmin' => $this->user->is_superadmin,
+                    'created_at' => $this->user->created_at,
+                    'updated_at' => $this->user->updated_at
             ]
         ]);
     }

@@ -17,15 +17,14 @@ class ProjectController extends Controller
     public function getProjects()
     {
         $params = Input::all();
+        $fields = '*';
 
         if (array_key_exists('fields', $params) && $params['fields']) {
             $fields = explode(',', $params['fields']);
-            $projects = Project::all($fields);
-        } else {
-            $projects = Project::all();
         }
+        $projects = Project::all($fields);
 
-        return response()->success(compact('projects'));
+        return response(compact('projects'));
     }
 
     public function getProjectsFromIssueTrackers(IssueTrackerApiConnectionService $apiService)
