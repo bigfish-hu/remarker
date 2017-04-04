@@ -17,6 +17,12 @@ class Project extends Model
         'name', 'ext_id', 'issue_tracker', 'is_automatic_notification'
     ];
 
+    protected $casts = [
+        'id' => 'integer',
+        'ext_id' => 'integer',
+        'is_automatic_notification' => 'boolean'
+    ];
+
     protected $hidden = ['pivot'];
 
 
