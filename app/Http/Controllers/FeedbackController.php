@@ -17,24 +17,9 @@ use Illuminate\Http\Response;
  */
 class FeedbackController extends Controller
 {
-    private $tableName = 'feedbacks';
-
-    public function getFeedbacks() : Response
+    public function getFeedbacks(Request $request) : Response
     {
-        $params = Input::all();
-
-        $fields = ['*'];
-
-        if (array_key_exists('fields', $params) && $params['fields']) {
-            $fields = explode(',', $params['fields']);
-            $tableFields = Schema::getColumnListing($this->tableName);
-
-            $fields = array_map(function ($item) use ($tableFields) {
-                if (in_array($item, $tableFields)) {
-                    return $this->tableName.'.'.$item;
-                }
-            }, $fields);
-        }
+        $fields = $this->extractExistingFieldsFromRequest($request, Feedback::TABLE);
 
         $fields[] = 'projects.name as project_name';
 

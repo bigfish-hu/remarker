@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    protected $table = 'projects';
+    const TABLE = 'projects';
+
+    protected $table = self::TABLE;
 
     /**
      * The attributes that are mass assignable.

@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Feedback extends Model
 {
-    protected $table = 'feedbacks';
+    const TABLE = 'feedbacks';
+
+    protected $table = self::TABLE;
 
     /**
      * The attributes that are mass assignable.
