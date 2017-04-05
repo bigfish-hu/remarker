@@ -27,7 +27,7 @@ class FeedbackController extends Controller
         $user = Auth::user();
         $feedbacks = $user->feedbacks($fields);
 
-        return response(json_encode(compact('feedbacks')));
+        return response(compact('feedbacks'));
     }
 
     public function deleteFeedback(int $feedbackId) : Response

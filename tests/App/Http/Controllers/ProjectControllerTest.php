@@ -41,4 +41,45 @@ class ProjectControllerTest extends BaseTestClass
             ["projects" => [$project->toArray()]]
         ]);
     }
+
+    /**
+     * @group project
+     * @group GET
+     * @covers \App\Http\Controllers\ProjectController::getProjects()
+     */
+    public function testGetProjectsFields()
+    {
+        $project = factory(Project::class, 'project1')->create();
+
+        $response = $this->getJson($this->baseUrl . 'api/projects?fields=name,ext_id', [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_OK);
+
+        $response->assertJsonFragment([
+            ["projects" => [[
+                'name' => $project->name,
+                'ext_id' => $project->ext_id,
+            ]]]
+        ]);
+    }
+
+    /**
+     * @group project
+     * @group GET
+     * @covers \App\Http\Controllers\ProjectController::getProjects()
+     */
+    public function testGetProjectsNotExistingFields()
+    {
+        $project = factory(Project::class, 'project1')->create();
+
+        $response = $this->getJson($this->baseUrl . 'api/projects?fields=name,something', [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_OK);
+
+        $response->assertJsonFragment([
+            ["projects" => [[
+                'name' => $project->name,
+            ]]]
+        ]);
+    }
 }

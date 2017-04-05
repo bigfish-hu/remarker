@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Project;
 use App\Services\IssueTrackerApiConnectionService;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Response;
@@ -14,15 +15,11 @@ use Illuminate\Http\Response;
  */
 class ProjectController extends Controller
 {
-    public function getProjects()
+    public function getProjects(Request $request)
     {
-        $params = Input::all();
-        $fields = '*';
+        $fields = $this->extractExistingFieldsFromRequest($request, Project::TABLE);
 
-        if (array_key_exists('fields', $params) && $params['fields']) {
-            $fields = explode(',', $params['fields']);
-        }
-        $projects = Project::all($fields);
+        $projects = Project::query()->get($fields);
 
         return response(compact('projects'));
     }

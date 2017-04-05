@@ -9,6 +9,9 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -22,12 +25,13 @@ class Controller extends BaseController
             $fields = explode(',', $params['fields']);
             $tableFields = Schema::getColumnListing($tableName);
 
-            $fields = array_map(function ($item) use ($tableFields, $tableName) {
+            $fields = array_filter(array_map(function ($item) use ($tableFields, $tableName) {
                 if (in_array($item, $tableFields)) {
                     return $tableName . '.' . $item;
                 }
-            }, $fields);
+            }, $fields));
         }
+
         return $fields;
     }
 }
