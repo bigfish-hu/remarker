@@ -82,4 +82,22 @@ class ProjectControllerTest extends BaseTestClass
             ]]]
         ]);
     }
+
+    /**
+     * @group project
+     * @group GET
+     * @covers \App\Http\Controllers\ProjectController::getProjects()
+     */
+    public function testGetProjectsOnlyNotExistingFields()
+    {
+        $project = factory(Project::class, 'project1')->create();
+
+        $response = $this->getJson($this->baseUrl . 'api/projects?fields=dfhfgjhgj,something', [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_OK);
+
+        $response->assertJsonFragment([
+            ["projects" => [$project->toArray()]]
+        ]);
+    }
 }

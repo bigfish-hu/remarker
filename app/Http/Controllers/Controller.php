@@ -32,6 +32,6 @@ class Controller extends BaseController
             }, $fields));
         }
 
-        return $fields;
+        return empty($fields) ? ['*'] : $fields;
     }
 }
