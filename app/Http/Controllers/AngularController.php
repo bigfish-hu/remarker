@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\File;
 
 class AngularController extends BaseController
 {
-    public function serveApp() : View
+    public function serveApp()
     {
-        return view('angular');
+        return File::get(public_path() . '/admin/index.html');
     }
 }
