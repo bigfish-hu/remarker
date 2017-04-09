@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +33,7 @@ class PushSubscriptionController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, $endpoint)
+    public function destroy($endpoint)
     {
         Auth::user()->deleteSubscription($endpoint);
 
