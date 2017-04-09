@@ -7,7 +7,6 @@ use App\Services\IssueTrackerApiConnectionService;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Response;
 
 /**

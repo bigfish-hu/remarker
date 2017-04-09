@@ -65,7 +65,6 @@ export class BaSidebar {
   }
 
   public updateSidebarHeight(): void {
-    // TODO: get rid of magic 84 constant
     this.menuHeight = this._elementRef.nativeElement.childNodes[0].clientHeight - 84;
   }
 

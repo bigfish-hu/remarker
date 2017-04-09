@@ -33,7 +33,6 @@ export class AuthService {
   }
 
   logout = () => {
-    // @todo decouple localstorage
     localStorage.removeItem(this.tokenName);
   };
 
