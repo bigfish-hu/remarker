@@ -17,4 +17,4 @@ import { routing } from './not-found.routing';
     providers: [
     ]
 })
-export default class NotFoundModule {}
+export class NotFoundModule {}

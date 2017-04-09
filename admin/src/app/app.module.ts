@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -29,7 +29,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     App
   ],
   imports: [
-    CommonModule,
+    BrowserModule,
     HttpModule,
     RouterModule,
     FormsModule,

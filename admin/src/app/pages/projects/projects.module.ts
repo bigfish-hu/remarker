@@ -19,4 +19,4 @@ import { routing } from './projects.routing';
   providers: [
   ]
 })
-export default class DashboardModule {}
+export class ProjectsModule {}

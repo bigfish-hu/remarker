@@ -19,4 +19,4 @@ import { routing } from './feedbacks.routing';
   providers: [
   ]
 })
-export default class FeedbacksModule {}
+export class FeedbacksModule {}

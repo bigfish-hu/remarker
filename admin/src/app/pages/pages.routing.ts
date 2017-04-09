@@ -6,8 +6,8 @@ import { ModuleWithProviders } from '@angular/core';
 
 export const routes: Routes = [
   { path: 'login', loadChildren: 'app/pages/login/login.module#LoginModule' },
-  { path: 'register', loadChildren: 'app/pages/register/register.module' },
-  { path: 'not-found', loadChildren: 'app/pages/not-found/not-found.module' },
+  { path: 'register', loadChildren: 'app/pages/register/register.module#RegisterModule' },
+  { path: 'not-found', loadChildren: 'app/pages/not-found/not-found.module#NotFoundModule' },
   {
     path: '',
     component: Pages,
@@ -17,12 +17,12 @@ export const routes: Routes = [
     },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadChildren: 'app/pages/dashboard/dashboard.module' },
-      { path: 'feedbacks', loadChildren: 'app/pages/feedbacks/feedbacks.module' },
-      { path: 'projects', loadChildren: 'app/pages/projects/projects.module' },
-      { path: 'users', loadChildren: 'app/pages/users/users.module' },
-      { path: 'profile', loadChildren: 'app/pages/profile/profile.module' },
-      { path: 'settings', loadChildren: 'app/pages/settings/settings.module' }
+      { path: 'dashboard', loadChildren: 'app/pages/dashboard/dashboard.module#DashboardModule' },
+      { path: 'feedbacks', loadChildren: 'app/pages/feedbacks/feedbacks.module#FeedbacksModule' },
+      { path: 'projects', loadChildren: 'app/pages/projects/projects.module#ProjectsModule' },
+      { path: 'users', loadChildren: 'app/pages/users/users.module#UsersModule' },
+      { path: 'profile', loadChildren: 'app/pages/profile/profile.module#ProfileModule' },
+      { path: 'settings', loadChildren: 'app/pages/settings/settings.module#SettingsModule' }
     ]
   }
 ];

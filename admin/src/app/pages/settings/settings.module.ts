@@ -19,4 +19,4 @@ import { routing } from './settings.routing';
   providers: [
   ]
 })
-export default class DashboardModule {}
+export class SettingsModule {}

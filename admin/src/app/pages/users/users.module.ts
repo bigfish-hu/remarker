@@ -19,4 +19,4 @@ import { routing } from './users.routing';
   providers: [
   ]
 })
-export default class DashboardModule {}
+export class UsersModule {}
