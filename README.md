@@ -25,7 +25,7 @@ Now you can login at `http://localhost:8080/admin` with the username `admin@rema
 ## Try it out  
 If you have a GitHub account you can deploy Remarker to a temporary cloud server (free for 2 hours). Thanks to [Dply.co](https://dply.co/)
   
-[![Dply](https://dply.co/b.svg)](https://dply.co/b/FDRxdPim)  
+[![Dply](https://dply.co/b.svg)](https://dply.co/b/DMNqhtCG) 
   
 (The deploy process takes ~8 minutes)  
 After the deployment go to `server_IP_address/admin` and log in with the username `admin@remarker.com` and the password `secret`.  

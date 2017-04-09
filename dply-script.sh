@@ -44,6 +44,7 @@ apt-get install -y php7.0-common \
                    php7.0-mysql \
                    php7.0-simplexml \
                    php7.0-json \
+                   php7.0-zip \
                    nginx \
                    mysql-server \
                    nodejs;
@@ -82,8 +83,8 @@ php artisan migrate;
 php artisan db:seed;
 
 echo "--- npm install, build";
-npm install;
-cd admin && ./node_modules/.bin/ng build --prod
+cd admin && npm install;
+./node_modules/.bin/ng build --prod
 
 chown -R www-data:www-data /var/www;
 service nginx restart;

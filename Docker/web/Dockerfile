@@ -92,5 +92,5 @@ EXPOSE 80 443
 #
 # Start services
 #
-CMD service php7.0-fpm start && nginx
+CMD service php7.0-fpm start && nginx -g "daemon off;"
 ENV DEBIAN_FRONTEND teletype
