@@ -83,7 +83,7 @@ php artisan db:seed;
 
 echo "--- npm install, build";
 npm install;
-npm run build:prod;
+cd admin && ./node_modules/.bin/ng build --prod
 
 chown -R www-data:www-data /var/www;
 service nginx restart;
