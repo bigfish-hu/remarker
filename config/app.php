@@ -120,7 +120,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     /*
     |--------------------------------------------------------------------------
@@ -171,7 +171,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         NotificationChannels\WebPush\WebPushServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-        Barryvdh\Cors\ServiceProvider::class
+        Barryvdh\Cors\ServiceProvider::class,
+        Folklore\GraphQL\ServiceProvider::class
     ],
 
     /*
@@ -218,6 +219,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'GraphQL' => Folklore\GraphQL\Support\Facades\GraphQL::class
     ],
 
 ];
