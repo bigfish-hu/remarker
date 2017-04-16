@@ -32,7 +32,7 @@ class User extends BaseType
             ],
             'is_superadmin' => [
                 'type' => Type::boolean(),
-                'description' => 'The field representing if the user a superadmin'
+                'description' => 'The field representing if the user is a superadmin'
             ]
         ];
     }
