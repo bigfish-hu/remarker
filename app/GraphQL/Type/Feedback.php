@@ -4,8 +4,10 @@ namespace App\GraphQL\Type;
 
 use GraphQL\Type\Definition\Type;
 use Folklore\GraphQL\Support\Type as BaseType;
-use GraphQL;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class Feedback extends BaseType
 {
     protected $attributes = [
@@ -67,6 +69,14 @@ class Feedback extends BaseType
             'screenshot' => [
                 'type' => Type::string(),
                 'description' => 'The screenshot about the bug'
+            ],
+            'created_at' => [
+                'type' => Type::string(),
+                'description' => 'The time of the feedback\'s creation'
+            ],
+            'updated_at' => [
+                'type' => Type::string(),
+                'description' => 'The time of the feedback\'s last update'
             ]
         ];
     }

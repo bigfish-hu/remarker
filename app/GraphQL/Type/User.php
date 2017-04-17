@@ -33,6 +33,14 @@ class User extends BaseType
             'is_superadmin' => [
                 'type' => Type::boolean(),
                 'description' => 'The field representing if the user is a superadmin'
+            ],
+            'created_at' => [
+                'type' => Type::string(),
+                'description' => 'The time of the user\'s creation'
+            ],
+            'updated_at' => [
+                'type' => Type::string(),
+                'description' => 'The time of the user\'s last update'
             ]
         ];
     }
