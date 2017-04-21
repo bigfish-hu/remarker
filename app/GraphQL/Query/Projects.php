@@ -2,27 +2,24 @@
 
 namespace App\GraphQL\Query;
 
-use App\User;
 use App\GraphQL\Query;
+use App\Project;
 use GraphQL\Type\Definition\Type;
 use GraphQL;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-class Users extends Query
+class Projects extends Query
 {
     protected $attributes = [
-        'name' => 'Users',
-        'description' => 'A query returning a set of users'
+        'name' => 'Projects',
+        'description' => 'A query returning a list of projects'
     ];
 
-    /**
-     * @return \App\GraphQL\Type\Users
-     */
     public function type()
     {
-        return GraphQL::type('Users');
+        return GraphQL::type('Projects');
     }
 
     /**
@@ -33,8 +30,8 @@ class Users extends Query
         return [
             'id' => ['name' => 'id', 'type' => Type::int()],
             'name' => ['name' => 'name', 'type' => Type::string()],
-            'email' => ['name' => 'email', 'type' => Type::string()],
-            'is_superadmin' => ['name' => 'is_superadmin', 'type' => Type::boolean()]
+            'ext_id' => ['name' => 'ext_id', 'type' => Type::int()],
+            'issue_tracker' => ['name' => 'issue_tracker', 'type' => Type::int()]
         ];
     }
 
@@ -43,6 +40,6 @@ class Users extends Query
      */
     protected function getQuery()
     {
-        return User::query();
+        return Project::query();
     }
 }

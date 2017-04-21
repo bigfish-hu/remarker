@@ -18,6 +18,10 @@ class Feedback extends BaseType
     public function fields()
     {
         return [
+            'id' => [
+                'type' => Type::nonNull(Type::int()),
+                'description' => 'The id of the feedback'
+            ],
             'title' => [
                 'type' => Type::nonNull(Type::string()),
                 'description' => 'The title of the feedback'

@@ -9,12 +9,13 @@ use GraphQL\Type\Definition\Type;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 abstract class Query extends GraphQLQuery
 {
     public function args()
     {
-        return [
+        return $this->getArguments() + [
             'page' => [
                 'name' => 'page',
                 'description' => 'The number of the queried page',
@@ -32,7 +33,7 @@ abstract class Query extends GraphQLQuery
     {
         $page = array_get($args, 'page', 1);
         $perPage = array_get($args, 'perPage', 10);
-        $query = User::query();
+        $query = $this->getQuery();
 
         if (empty($args)) {
             return $query->paginate($perPage, ['*'], 'page', $page);
@@ -48,4 +49,9 @@ abstract class Query extends GraphQLQuery
     }
 
     abstract protected function getArguments();
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    abstract protected function getQuery();
 }

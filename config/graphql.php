@@ -76,7 +76,9 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
-                'users' => 'App\GraphQL\Query\Users'
+                'users' => 'App\GraphQL\Query\Users',
+                'projects' => 'App\GraphQL\Query\Projects',
+                'feedbacks' => 'App\GraphQL\Query\Feedbacks',
             ],
             'mutation' => [
 
@@ -104,7 +106,9 @@ return [
         'Users' => 'App\GraphQL\Type\Users',
         'PageInfo' => 'App\GraphQL\Type\PageInfo',
         'Project' => 'App\GraphQL\Type\Project',
+        'Projects' => 'App\GraphQL\Type\Projects',
         'Feedback' => 'App\GraphQL\Type\Feedback',
+        'Feedbacks' => 'App\GraphQL\Type\Feedbacks',
     ],
 
     // This callable will received every Error objects for each errors GraphQL catch.
