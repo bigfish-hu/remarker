@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Type;
 
+use Folklore\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\Type;
 use Folklore\GraphQL\Support\Type as BaseType;
 
@@ -41,6 +42,10 @@ class User extends BaseType
             'updated_at' => [
                 'type' => Type::string(),
                 'description' => 'The time of the user\'s last update'
+            ],
+            'projects' => [
+                'type' => Type::listOf(GraphQL::type('Project')),
+                'description' => 'The projects the user has access to',
             ]
         ];
     }

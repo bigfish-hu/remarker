@@ -12,6 +12,8 @@ use GraphQL;
  */
 class Users extends Query
 {
+    protected $relations = ['projects'];
+
     protected $attributes = [
         'name' => 'Users',
         'description' => 'A query returning a set of users'

@@ -13,6 +13,8 @@ use GraphQL\Type\Definition\Type;
  */
 abstract class Query extends GraphQLQuery
 {
+    protected $relations;
+
     public function args()
     {
         return $this->getArguments() + [
@@ -34,6 +36,13 @@ abstract class Query extends GraphQLQuery
         $page = array_get($args, 'page', 1);
         $perPage = array_get($args, 'perPage', 10);
         $query = $this->getQuery();
+        $fields = $info->getFieldSelection(3);
+
+        foreach ($fields as $field) {
+            if (in_array($field, $this->relations)) {
+                $query->with($field);
+            }
+        }
 
         if (empty($args)) {
             return $query->paginate($perPage, ['*'], 'page', $page);
