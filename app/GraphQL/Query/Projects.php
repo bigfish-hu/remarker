@@ -12,6 +12,8 @@ use GraphQL;
  */
 class Projects extends Query
 {
+    protected $relations = ['feedbacks'];
+
     protected $attributes = [
         'name' => 'Projects',
         'description' => 'A query returning a list of projects'

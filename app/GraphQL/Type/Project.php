@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Type;
 
+use Folklore\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\Type;
 use Folklore\GraphQL\Support\Type as BaseType;
 
@@ -45,6 +46,10 @@ class Project extends BaseType
             'updated_at' => [
                 'type' => Type::string(),
                 'description' => 'The time of the project\'s last update'
+            ],
+            'feedbacks' => [
+                'type' => Type::listOf(GraphQL::type('Feedback')),
+                'description' => 'The feedbacks belonging to the project',
             ]
         ];
     }
