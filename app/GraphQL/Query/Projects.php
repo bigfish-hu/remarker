@@ -6,6 +6,8 @@ use App\GraphQL\Query;
 use App\Project;
 use GraphQL\Type\Definition\Type;
 use GraphQL;
+use Illuminate\Database\Eloquent\Builder;
+use GraphQL\Type\Definition\ObjectType;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
@@ -19,15 +21,12 @@ class Projects extends Query
         'description' => 'A query returning a list of projects'
     ];
 
-    public function type()
+    public function type() : ObjectType
     {
         return GraphQL::type('Projects');
     }
 
-    /**
-     * @return array
-     */
-    protected function getArguments()
+    protected function getTypeArguments() : array
     {
         return [
             'id' => ['name' => 'id', 'type' => Type::int()],
@@ -37,10 +36,7 @@ class Projects extends Query
         ];
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    protected function getQuery()
+    protected function getQuery() : Builder
     {
         return Project::query();
     }

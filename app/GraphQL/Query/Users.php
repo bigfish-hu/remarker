@@ -6,6 +6,8 @@ use App\User;
 use App\GraphQL\Query;
 use GraphQL\Type\Definition\Type;
 use GraphQL;
+use Illuminate\Database\Eloquent\Builder;
+use GraphQL\Type\Definition\ObjectType;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
@@ -19,18 +21,12 @@ class Users extends Query
         'description' => 'A query returning a set of users'
     ];
 
-    /**
-     * @return \App\GraphQL\Type\Users
-     */
-    public function type()
+    public function type() : ObjectType
     {
         return GraphQL::type('Users');
     }
 
-    /**
-     * @return array
-     */
-    protected function getArguments()
+    protected function getTypeArguments() : array
     {
         return [
             'id' => ['name' => 'id', 'type' => Type::int()],
@@ -40,10 +36,7 @@ class Users extends Query
         ];
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    protected function getQuery()
+    protected function getQuery() : Builder
     {
         return User::query();
     }

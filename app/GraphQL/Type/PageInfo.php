@@ -15,7 +15,7 @@ class PageInfo extends BaseType
         'description' => 'A type'
     ];
 
-    public function fields()
+    public function fields() : array
     {
         return [
             'total' => [
