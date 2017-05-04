@@ -18,13 +18,13 @@ abstract class CollectionType extends BaseType
             'pageInfo' => [
                 'name' => 'pageInfo',
                 'type' => \GraphQL::type('PageInfo'),
-                'resolve' => function ($root) {
+                'resolve' => function (\Illuminate\Pagination\LengthAwarePaginator $root) {
                     return array_except($root->toArray(), ['data']);
                 }
             ],
             'edges' => [
                 'type' => Type::listOf(\GraphQL::type($this->collectionOf)),
-                'resolve' => function ($root) {
+                'resolve' => function (\Illuminate\Pagination\LengthAwarePaginator $root) {
                     return $root;
                 }
             ]
