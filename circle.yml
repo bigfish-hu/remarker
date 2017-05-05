@@ -2,10 +2,13 @@ machine:
   node:
     version: 6
 
+dependencies:
+  override:
+    - cd admin
+    - npm install
+
 # Test Commands
 test:
-  pre:
-    - cd admin
   override:
     - npm run build -e prod
     - npm run test
