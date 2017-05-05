@@ -4,8 +4,7 @@ machine:
 
 dependencies:
   override:
-    - cd admin
-    - npm install
+    - cd admin && npm install
 
 # Test Commands
 test:
