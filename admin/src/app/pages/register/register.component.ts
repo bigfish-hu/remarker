@@ -2,13 +2,11 @@ import { Component } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { EmailValidator, EqualPasswordsValidator } from '../../theme/validators';
 
-// import 'style-loader!./register.scss';
-
 @Component({
-  selector: 'register',
+  selector: 'app-register',
   templateUrl: './register.html'
 })
-export class Register {
+export class RegisterComponent {
 
   public form: FormGroup;
   public name: AbstractControl;
@@ -17,7 +15,7 @@ export class Register {
   public repeatPassword: AbstractControl;
   public passwords: FormGroup;
 
-  public submitted: boolean = false;
+  public submitted = false;
 
   constructor(fb: FormBuilder) {
     this.form = fb.group({
