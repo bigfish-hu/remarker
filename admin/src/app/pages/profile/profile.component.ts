@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { EmailValidator, EqualPasswordsValidator } from '../../theme/validators';
+import { EqualPasswordsValidator } from '../../theme/validators';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';

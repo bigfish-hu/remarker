@@ -1,12 +1,11 @@
-import { Component, ViewEncapsulation, ViewChild, Input } from '@angular/core';
-
-import 'style-loader!./baCard.scss';
+import { Component, ViewChild, Input } from '@angular/core';
 
 @Component({
-  selector: 'ba-card',
+  selector: 'app-ba-card',
   templateUrl: './baCard.html',
+  styleUrls: ['./baCard.scss']
 })
-export class BaCard {
+export class BaCardComponent {
   @Input() title: String;
   @Input() baCardClass: String;
 }

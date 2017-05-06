@@ -3,7 +3,7 @@
 </div>
 
 <div class="row">
-  <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
+  <app-ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
     <h3 class="card-title" i18n>User Data</h3>
     <form (ngSubmit)="submitUserForm()" #userForm="ngForm">
       <div class="form-group">
@@ -34,9 +34,9 @@
       </div>
       <button type="submit" class="btn btn-success pull-xs-right" [disabled]="!userForm.form.valid" i18n>Submit</button>
     </form>
-  </ba-card>
+  </app-ba-card>
 
-  <ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
+  <app-ba-card class="col-xs-12 col-md-6" baCardClass="with-scroll">
     <h3 class="card-title" i18n>Change Password</h3>
     <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()">
       <div class="form-group" [ngClass]="{'has-error': (!oldPassword.valid && oldPassword.touched), 'has-success': (oldPassword.valid && oldPassword.touched)}">
@@ -54,5 +54,5 @@
       </div>
       <button type="submit" class="btn btn-success pull-xs-right" [disabled]="!passwordForm.valid" i18n>Submit</button>
     </form>
-  </ba-card>
+  </app-ba-card>
 </div>

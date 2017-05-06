@@ -1,14 +1,13 @@
-import { Component, ViewChild, HostListener, Input, ElementRef } from '@angular/core';
-
-import 'style-loader!./baBackTop.component.scss';
+import { Component, ViewChild, HostListener, Input, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
-  selector: 'ba-back-top',
+  selector: 'app-ba-back-top',
   template: `
     <i #baBackTop class="fa fa-angle-up back-top ba-back-top" title="Back to Top"></i>
-  `
+  `,
+  styleUrls: ['./baBackTop.component.scss']
 })
-export class BaBackTop {
+export class BaBackTopComponent implements AfterViewInit {
 
   @Input() position = 400;
   @Input() showSpeed = 500;

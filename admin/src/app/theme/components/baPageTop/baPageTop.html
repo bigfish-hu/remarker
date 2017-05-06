@@ -1,4 +1,4 @@
-<div class="page-top clearfix" baScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)"
+<div class="page-top clearfix" appBaScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)"
      [ngClass]="{scrolled: isScrolled}">
   <a routerLink="/dashboard" class="al-logo clearfix"><b>Remarker</b><span class="hidden-xs-down">Admin</span></a>
   <a (click)="toggleMenu()" class="collapse-menu-link fa fa-bars"></a>
@@ -16,6 +16,6 @@
         <li class="dropdown-item"><a (click)="logOut()" class="signout" i18n><i class="fa fa-power-off"></i>Sign out</a></li>
       </ul>
     </div>
-    <ba-msg-center></ba-msg-center>
+    <app-ba-msg-center></app-ba-msg-center>
   </div>
 </div>

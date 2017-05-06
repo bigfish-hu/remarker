@@ -8,5 +8,8 @@ engines:
       no-empty:
         enabled: false
 exclude_paths:
-- "**.php"
-- "Docker/"
+  - "**.php"
+  - "Docker/"
+ratings:
+   paths:
+    - "admin/**/*"

@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
 import { BaMsgCenterService } from './baMsgCenter.service';
 
-import 'style-loader!./baMsgCenter.scss';
-
 @Component({
-  selector: 'ba-msg-center',
+  selector: 'app-ba-msg-center',
   providers: [BaMsgCenterService],
-  templateUrl: './baMsgCenter.html'
+  templateUrl: './baMsgCenter.html',
+  styleUrls: ['./baMsgCenter.scss']
 })
-export class BaMsgCenter {
-
+export class BaMsgCenterComponent {
   public notifications: Object[];
   public messages: Object[];
 
@@ -17,5 +15,4 @@ export class BaMsgCenter {
     this.notifications = this._baMsgCenterService.getNotifications();
     this.messages = this._baMsgCenterService.getMessages();
   }
-
 }

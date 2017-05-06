@@ -5,10 +5,10 @@ import { BaCardBlurHelper } from './baCardBlurHelper.service';
 import { BgMetrics } from './bgMetrics';
 
 @Directive({
-  selector: '[baCardBlur]',
+  selector: '[appBaCardBlur]',
   providers: [BaCardBlurHelper]
 })
-export class BaCardBlur {
+export class BaCardBlurDirective {
 
   @HostBinding('class.card-blur') isEnabled = false;
 

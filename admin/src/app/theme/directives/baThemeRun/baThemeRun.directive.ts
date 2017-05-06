@@ -1,11 +1,11 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive, HostBinding, OnInit } from '@angular/core';
 
 import { BaThemeConfigProvider, isMobile } from '../../../theme';
 
 @Directive({
-  selector: '[baThemeRun]'
+  selector: '[appBaThemeRun]'
 })
-export class BaThemeRun {
+export class BaThemeRunDirective implements OnInit {
 
   @HostBinding('class') classesString: string;
   private _classes: string[] = [];

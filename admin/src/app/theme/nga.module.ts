@@ -4,26 +4,22 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import {
-  BaThemeConfig
-} from './theme.config';
-
-import {
   BaThemeConfigProvider
 } from './theme.configProvider';
 
 import {
-  BaBackTop,
-  BaCard,
-  BaMsgCenter,
-  BaPageTop,
-  BaSidebar
+  BaBackTopComponent,
+  BaCardComponent,
+  BaMsgCenterComponent,
+  BaPageTopComponent,
+  BaSidebarComponent
 } from './components';
 
-import { BaCardBlur } from './components/baCard/baCardBlur.directive';
+import { BaCardBlurDirective } from './components/baCard/baCardBlur.directive';
 
 import {
-  BaScrollPosition,
-  BaThemeRun
+  BaScrollPositionDirective,
+  BaThemeRunDirective
 } from './directives';
 
 import {
@@ -38,17 +34,17 @@ import {
 } from './validators';
 
 const NGA_COMPONENTS = [
-  BaBackTop,
-  BaCard,
-  BaMsgCenter,
-  BaPageTop,
-  BaSidebar
+  BaBackTopComponent,
+  BaCardComponent,
+  BaMsgCenterComponent,
+  BaPageTopComponent,
+  BaSidebarComponent
 ];
 
 const NGA_DIRECTIVES = [
-  BaScrollPosition,
-  BaThemeRun,
-  BaCardBlur
+  BaScrollPositionDirective,
+  BaThemeRunDirective,
+  BaCardBlurDirective
 ];
 
 const NGA_SERVICES = [
@@ -75,7 +71,6 @@ const NGA_VALIDATORS = [
   ],
   providers: [
     BaThemeConfigProvider,
-    BaThemeConfig,
     ...NGA_VALIDATORS,
     ...NGA_SERVICES
   ],

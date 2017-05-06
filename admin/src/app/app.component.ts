@@ -14,7 +14,7 @@ import 'style-loader!./theme/initial.scss';
   encapsulation: ViewEncapsulation.None,
   template: `
       <ng2-slim-loading-bar></ng2-slim-loading-bar>
-    <main [ngClass]="{'menu-collapsed': isMenuCollapsed}" baThemeRun>
+    <main [ngClass]="{'menu-collapsed': isMenuCollapsed}" appBaThemeRun>
       <div class="additional-bg"></div>
       <router-outlet></router-outlet>
       <toaster-container></toaster-container>

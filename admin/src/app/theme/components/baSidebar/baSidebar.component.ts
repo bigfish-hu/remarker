@@ -1,18 +1,16 @@
-import { Component, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { GlobalState } from '../../../global.state';
 import { layoutSizes } from '../../../theme';
-import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.model';
 
-import 'style-loader!./baSidebar.scss';
-
 @Component({
-  selector: 'ba-sidebar',
-  templateUrl: './baSidebar.html'
+  selector: 'app-ba-sidebar',
+  templateUrl: './baSidebar.html',
+  styleUrls: ['./baSidebar.scss']
 })
-export class BaSidebar {
+export class BaSidebarComponent implements OnInit, AfterViewInit {
   public menuHeight: number;
   public isMenuCollapsed = false;
   public isMenuShouldCollapsed = false;

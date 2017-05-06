@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { GlobalState } from '../../../global.state';
@@ -6,15 +6,13 @@ import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
 
 import { User } from '../../../models/user.model';
-import { Observable } from 'rxjs/Observable';
-
-import 'style-loader!./baPageTop.scss';
 
 @Component({
-  selector: 'ba-page-top',
-  templateUrl: './baPageTop.html'
+  selector: 'app-ba-page-top',
+  templateUrl: './baPageTop.html',
+  styleUrls: ['./baPageTop.scss']
 })
-export class BaPageTop {
+export class BaPageTopComponent implements OnInit {
 
   public isScrolled = false;
   public isMenuCollapsed = false;

@@ -21,7 +21,11 @@ export class BaCardBlurHelper {
   public getBodyBgImageSizes(): BgMetrics {
     const elemW = document.documentElement.clientWidth;
     const elemH = document.documentElement.clientHeight;
-    if (elemW <= 640) return;
+
+    if (elemW <= 640) {
+      return;
+    }
+
     const imgRatio = (this.image.height / this.image.width);       // original img ratio
     const containerRatio = (elemH / elemW);     // container ratio
 
