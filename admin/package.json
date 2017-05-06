@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
+    "ng": "./node_modules/@angular/cli/bin/ng",
+    "start": "./node_modules/@angular/cli/bin/ng serve",
     "build": "./node_modules/@angular/cli/bin/ng build",
     "test": "./node_modules/@angular/cli/bin/ng test -cc -sr",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "lint": "./node_modules/@angular/cli/bin/ng lint",
+    "e2e": "./node_modules/@angular/cli/bin/ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -37,7 +37,7 @@
     "@types/jasmine": "2.5.47",
     "@types/jquery": "^2.0.41",
     "@types/node": "~7.0.12",
-    "codelyzer": "~2.1.0",
+    "codelyzer": "~3.0.0",
     "coveralls": "^2.13.1",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
@@ -49,7 +49,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.0",
     "ts-node": "~3.0.0",
-    "tslint": "~4.0.0",
-    "typescript": "~2.2.0"
+    "tslint": "~5.1.0",
+    "typescript": "~2.3.1"
   }
 }
