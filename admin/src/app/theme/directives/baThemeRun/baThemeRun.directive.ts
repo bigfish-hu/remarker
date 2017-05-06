@@ -8,7 +8,7 @@ import { BaThemeConfigProvider, isMobile } from '../../../theme';
 export class BaThemeRun {
 
   @HostBinding('class') classesString: string;
-  private _classes: Array<string> = [];
+  private _classes: string[] = [];
 
   constructor(private _baConfig: BaThemeConfigProvider) {
   }

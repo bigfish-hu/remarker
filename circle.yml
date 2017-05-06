@@ -13,4 +13,4 @@ test:
     - cd admin && npm run test
   post:
     - cd admin && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-    - cd admin && ./node_modules/codeclimate-test-reporter/bin/codeclimate.js < lcov.info
+    - cd admin && ./node_modules/codeclimate-test-reporter/bin/codeclimate.js < ./coverage/lcov.info

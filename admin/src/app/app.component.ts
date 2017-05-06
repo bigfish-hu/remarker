@@ -27,7 +27,7 @@ import 'style-loader!./theme/initial.scss';
   `
 })
 export class App {
-  isMenuCollapsed: boolean = false;
+  isMenuCollapsed = false;
   private sub: any;
 
   constructor(private _state: GlobalState,
@@ -40,7 +40,7 @@ export class App {
       this.isMenuCollapsed = isCollapsed;
     });
 
-    this.sub = this.router.events.subscribe(event => {
+    this.sub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.slimLoader.start();
       } else if ( event instanceof NavigationEnd ||

@@ -16,7 +16,7 @@ export class BaScrollPosition {
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
-    let isScrolled = window.scrollY > this.maxHeight;
+    const isScrolled = window.scrollY > this.maxHeight;
     if (isScrolled !== this._isScrolled) {
       this._isScrolled = isScrolled;
       this.scrollChange.emit(isScrolled);

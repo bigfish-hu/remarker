@@ -39,7 +39,7 @@ export class UserService {
   }
 
   changePassword(oldpassword: string, newpassword1: string, newpassword2: string) {
-    let requestObject = {
+    const requestObject = {
       oldpassword: oldpassword,
       newpassword1: newpassword1,
       newpassword2: newpassword2

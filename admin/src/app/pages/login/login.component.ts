@@ -14,7 +14,7 @@ export class Login {
   public form: FormGroup;
   public email: AbstractControl;
   public password: AbstractControl;
-  public submitted: boolean = false;
+  public submitted = false;
 
   constructor(
       fb: FormBuilder,

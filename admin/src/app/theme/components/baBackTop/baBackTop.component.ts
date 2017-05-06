@@ -10,9 +10,9 @@ import 'style-loader!./baBackTop.component.scss';
 })
 export class BaBackTop {
 
-  @Input() position: number = 400;
-  @Input() showSpeed: number = 500;
-  @Input() moveSpeed: number = 1000;
+  @Input() position = 400;
+  @Input() showSpeed = 500;
+  @Input() moveSpeed = 1000;
 
   @ViewChild('baBackTop') private _selector: ElementRef;
 
@@ -28,7 +28,7 @@ export class BaBackTop {
 
   @HostListener('window:scroll')
   _onWindowScroll(): void {
-    let el = this._selector.nativeElement;
+    const el = this._selector.nativeElement;
     window.scrollY > this.position
         ? jQuery(el).fadeIn(this.showSpeed)
         : jQuery(el).fadeOut(this.showSpeed);

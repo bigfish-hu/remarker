@@ -14,8 +14,8 @@ import 'style-loader!./baSidebar.scss';
 })
 export class BaSidebar {
   public menuHeight: number;
-  public isMenuCollapsed: boolean = false;
-  public isMenuShouldCollapsed: boolean = false;
+  public isMenuCollapsed = false;
+  public isMenuShouldCollapsed = false;
   public user: User;
 
   constructor(
@@ -42,7 +42,7 @@ export class BaSidebar {
   @HostListener('window:resize')
   public onWindowResize(): void {
 
-    let isMenuShouldCollapsed = this._shouldMenuCollapse();
+    const isMenuShouldCollapsed = this._shouldMenuCollapse();
 
     if (this.isMenuShouldCollapsed !== isMenuShouldCollapsed) {
       this.menuCollapseStateChange(isMenuShouldCollapsed);

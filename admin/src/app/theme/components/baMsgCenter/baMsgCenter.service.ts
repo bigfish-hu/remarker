@@ -11,11 +11,11 @@ export class BaMsgCenterService {
 
   ];
 
-  public getMessages(): Array<Object> {
+  public getMessages(): Object[] {
     return this._messages;
   }
 
-  public getNotifications(): Array<Object> {
+  public getNotifications(): Object[] {
     return this._notifications;
   }
 }

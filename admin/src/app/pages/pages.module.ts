@@ -1,7 +1,7 @@
-import { NgModule }      from '@angular/core';
-import { CommonModule }  from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import { routing }       from './pages.routing';
+import { routing } from './pages.routing';
 import { NgaModule } from '../theme/nga.module';
 
 import { Pages } from './pages.component';
@@ -17,5 +17,4 @@ import { ResolveMe } from '../services/resolve-me.service';
   declarations: [Pages],
   providers: [AuthGuard, ResolveMe]
 })
-export class PagesModule {
-}
+export class PagesModule {}

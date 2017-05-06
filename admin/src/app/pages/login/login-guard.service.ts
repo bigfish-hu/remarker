@@ -4,7 +4,7 @@ import { AuthService } from '../../services/auth.service';
 
 @Injectable()
 export class LoginGuard implements CanActivate {
-    private dashboardRoute: string = '/dashboard';
+    private dashboardRoute = '/dashboard';
 
     constructor(private authService: AuthService, private router: Router) {}
 

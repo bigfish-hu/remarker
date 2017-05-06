@@ -16,8 +16,8 @@ import 'style-loader!./baPageTop.scss';
 })
 export class BaPageTop {
 
-  public isScrolled: boolean = false;
-  public isMenuCollapsed: boolean = false;
+  public isScrolled = false;
+  public isMenuCollapsed = false;
   public user: User;
 
   constructor(

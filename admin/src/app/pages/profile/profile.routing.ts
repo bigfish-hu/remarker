@@ -1,12 +1,12 @@
-import { Routes, RouterModule }  from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
-import { Profile } from './profile.component';
+import { ProfileComponent } from './profile.component';
 import { ResolveMe } from '../../services/resolve-me.service';
 
 const routes: Routes = [
   {
     path: '',
-    component: Profile,
+    component: ProfileComponent,
     resolve: {
       me: ResolveMe
     },

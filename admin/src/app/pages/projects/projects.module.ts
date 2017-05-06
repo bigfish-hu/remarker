@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
-import { Projects } from './projects.component';
+import { ProjectsComponent } from './projects.component';
 import { routing } from './projects.routing';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { routing } from './projects.routing';
     routing
   ],
   declarations: [
-    Projects
+    ProjectsComponent
   ],
   providers: [
   ]

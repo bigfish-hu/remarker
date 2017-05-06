@@ -10,7 +10,7 @@ import { BgMetrics } from './bgMetrics';
 })
 export class BaCardBlur {
 
-  @HostBinding('class.card-blur') isEnabled: boolean = false;
+  @HostBinding('class.card-blur') isEnabled = false;
 
   private _bodyBgSize: BgMetrics;
 

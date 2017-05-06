@@ -10,8 +10,8 @@ import 'style-loader!./baMsgCenter.scss';
 })
 export class BaMsgCenter {
 
-  public notifications: Array<Object>;
-  public messages: Array<Object>;
+  public notifications: Object[];
+  public messages: Object[];
 
   constructor(private _baMsgCenterService: BaMsgCenterService) {
     this.notifications = this._baMsgCenterService.getNotifications();

@@ -1,17 +1,15 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { EmailValidator, EqualPasswordsValidator } from '../../theme/validators';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
-// import 'style-loader!./profile.scss';
-
 @Component({
-  selector: 'profile',
+  selector: 'app-profile',
   templateUrl: './profile.html'
 })
-export class Profile {
+export class ProfileComponent implements OnInit {
   public user: User;
   public oldPassword: AbstractControl;
   public newPassword1: AbstractControl;
@@ -47,5 +45,4 @@ export class Profile {
         this.oldPassword.value, this.newPassword1.value, this.newPassword2.value
     ).subscribe();
   }
-
 }
