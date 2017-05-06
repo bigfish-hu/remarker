@@ -14,7 +14,7 @@ import * as jQuery from 'jquery';
 
 import { routing } from './app.routing';
 
-import { App } from './app.component';
+import { AppComponent } from './app.component';
 import { AppState } from './app.service';
 import { GlobalState } from './global.state';
 import { PagesModule } from './pages/pages.module';
@@ -24,9 +24,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 }
 
 @NgModule({
-  bootstrap: [App],
+  bootstrap: [AppComponent],
   declarations: [
-    App
+    AppComponent
   ],
   imports: [
     BrowserModule,

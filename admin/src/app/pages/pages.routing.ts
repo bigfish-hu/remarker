@@ -1,5 +1,5 @@
-import { Routes, RouterModule }  from '@angular/router';
-import { Pages } from './pages.component';
+import { Routes, RouterModule } from '@angular/router';
+import { PagesComponent } from './pages.component';
 import { AuthGuard } from '../services/auth-guard.service';
 import { ResolveMe } from '../services/resolve-me.service';
 import { ModuleWithProviders } from '@angular/core';
@@ -10,7 +10,7 @@ export const routes: Routes = [
   { path: 'not-found', loadChildren: 'app/pages/not-found/not-found.module#NotFoundModule' },
   {
     path: '',
-    component: Pages,
+    component: PagesComponent,
     canActivate: [AuthGuard],
     resolve: {
       me: ResolveMe

@@ -1,8 +1,7 @@
 import './app.loader.ts';
-import { Component, ViewEncapsulation } from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ViewEncapsulation} from '@angular/core';
 import { GlobalState } from './global.state';
 import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './theme/services';
-import { layoutPaths } from './theme/theme.constants';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { Router, NavigationStart, NavigationEnd,
   NavigationCancel, NavigationError } from '@angular/router';
@@ -10,12 +9,8 @@ import { Router, NavigationStart, NavigationEnd,
 import 'style-loader!./app.scss';
 import 'style-loader!./theme/initial.scss';
 
-/*
- * App Component
- * Top Level Component
- */
 @Component({
-  selector: 'app',
+  selector: 'app-component',
   encapsulation: ViewEncapsulation.None,
   template: `
       <ng2-slim-loading-bar></ng2-slim-loading-bar>
@@ -26,7 +21,7 @@ import 'style-loader!./theme/initial.scss';
     </main>
   `
 })
-export class App {
+export class AppComponent implements AfterViewInit, OnDestroy {
   isMenuCollapsed = false;
   private sub: any;
 

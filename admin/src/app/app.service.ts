@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-export type InteralStateType = {
+export interface InteralStateType {
   [key: string]: any
-};
+}
 
 @Injectable()
 export class AppState {

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { routing } from './pages.routing';
 import { NgaModule } from '../theme/nga.module';
 
-import { Pages } from './pages.component';
+import { PagesComponent } from './pages.component';
 import { AuthGuard } from '../services/auth-guard.service';
 import { ResolveMe } from '../services/resolve-me.service';
 
@@ -14,7 +14,7 @@ import { ResolveMe } from '../services/resolve-me.service';
     NgaModule,
     routing
   ],
-  declarations: [Pages],
+  declarations: [PagesComponent],
   providers: [AuthGuard, ResolveMe]
 })
 export class PagesModule {}
