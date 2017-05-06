@@ -1,14 +1,7 @@
 import { Component } from '@angular/core';
 
-// import 'style-loader!./users.scss';
-
 @Component({
-  selector: 'users',
+  selector: 'app-users',
   templateUrl: './users.html'
 })
-export class Users {
-
-  constructor() {
-  }
-
-}
+export class UsersComponent {}

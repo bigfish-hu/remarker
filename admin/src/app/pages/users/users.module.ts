@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
-import { Users } from './users.component';
+import { UsersComponent } from './users.component';
 import { routing } from './users.routing';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { routing } from './users.routing';
     routing
   ],
   declarations: [
-    Users
+    UsersComponent
   ],
   providers: [
   ]

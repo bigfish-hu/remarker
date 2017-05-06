@@ -1,11 +1,11 @@
-import { Routes, RouterModule }  from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
-import { Settings } from './settings.component';
+import { SettingsComponent } from './settings.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: Settings
+    component: SettingsComponent
   }
 ];
 

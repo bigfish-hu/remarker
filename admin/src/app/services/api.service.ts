@@ -21,7 +21,7 @@ export class ApiService {
 
   public post(url: string, data: Object, headers: Object = {}): Observable<Response> {
 
-    let options = new RequestOptions({ headers: this.headers});
+    const options = new RequestOptions({ headers: this.headers});
 
     return this.http.post(url, JSON.stringify(data), options)
       .map((response: Response) => <Response>response.json())
@@ -33,7 +33,7 @@ export class ApiService {
 
   public get(url: string, headers: Object = {}): Observable<Response> {
 
-    let options = new RequestOptions({ headers: this.headers});
+    const options = new RequestOptions({ headers: this.headers});
 
     return this.http.get(url, options)
       .map((response: Response) => <Response>response.json())
@@ -45,7 +45,7 @@ export class ApiService {
 
   public put(url: string, data: Object, headers: Object = {}): Observable<Response> {
 
-    let options = new RequestOptions({ headers: this.headers});
+    const options = new RequestOptions({ headers: this.headers});
 
     return this.http.put(url, JSON.stringify(data), options)
         .map((response: Response) => <Response>response.json())

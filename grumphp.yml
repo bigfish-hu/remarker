@@ -29,9 +29,9 @@ parameters:
             ruleset: ['cleancode', 'codesize', 'naming', 'unusedcode']
             triggered_by: ['php']
         npm_script:
-              script: "lint"
-              triggered_by: [js, jsx, coffee, ts, less, sass, scss]
-              working_directory: "./admin"
-              is_run_task: true
+            script: "lint"
+            triggered_by: [js, jsx, coffee, ts, less, sass, scss]
+            working_directory: "./admin"
+            is_run_task: true
     testsuites: []
     extensions: []

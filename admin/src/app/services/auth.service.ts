@@ -12,10 +12,10 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AuthService {
   user: User;
-  redirectRoute: string = '/dashboard';
-  loginRoute: string = '/login';
-  private loginUrl: string = '/api/auth/login';
-  private tokenName: string = 'id_token';
+  redirectRoute = '/dashboard';
+  loginRoute = '/login';
+  private loginUrl = '/api/auth/login';
+  private tokenName = 'id_token';
 
   constructor(private http: Http, private toastr: ToastrService) {}
 

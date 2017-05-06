@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
-import { Settings } from './settings.component';
+import { SettingsComponent } from './settings.component';
 import { routing } from './settings.routing';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { routing } from './settings.routing';
     routing
   ],
   declarations: [
-    Settings
+    SettingsComponent
   ],
   providers: [
   ]

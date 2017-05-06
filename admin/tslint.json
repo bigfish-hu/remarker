@@ -31,7 +31,7 @@
       "variables-before-functions"
     ],
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-console": [
       true,
       "debug",
@@ -111,6 +111,9 @@
     "directive-class-suffix": true,
     "no-access-missing-member": true,
     "templates-use-public": true,
-    "invoke-injectable": true
+    "invoke-injectable": true,
+    "arrow-parens": true,
+    "no-consecutive-blank-lines": [true, 2],
+    "array-type": [true, "array-simple"]
   }
 }

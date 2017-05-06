@@ -10,7 +10,7 @@ import 'rxjs/add/observable/of';
 @Injectable()
 export class UserService {
   private user: User;
-  private url: string = '/api/users/me';
+  private url = '/api/users/me';
 
   constructor(private http: ApiService) {}
 
@@ -21,7 +21,7 @@ export class UserService {
   getMe(force: boolean = false): Observable<User> {
     if (force || !this.isUserSet()) {
       return this.http.get(this.url)
-        .map(res => { return this.extractUser(res); })
+        .map((res) => { return this.extractUser(res); })
         .do((data) => {
           this.user = data;
         });
@@ -32,7 +32,7 @@ export class UserService {
 
   updateMe(user: User) {
     return this.http.put(this.url, user)
-        .map(res => { return this.extractUser(res); })
+        .map((res) => { return this.extractUser(res); })
         .do((data) => {
           this.user = data;
         });
@@ -54,8 +54,8 @@ export class UserService {
   }
 
   private extractUser(response): User {
-    let res = response.user;
-    let user = new User();
+    const res = response.user;
+    const user = new User();
 
     user.id = res.id;
     user.name = res.name;
