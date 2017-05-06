@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 
-// import 'style-loader!./not-found.scss';
-
 @Component({
-  selector: 'not-found',
+  selector: 'app-not-found',
   templateUrl: './not-found.html',
 })
-export class NotFound {
-  constructor() {
-  }
-}
+export class NotFoundComponent {}

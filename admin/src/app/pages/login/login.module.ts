@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
-import { Login } from './login.component';
+import { LoginComponent } from './login.component';
 import { routing } from './login.routing';
 import { LoginGuard } from './login-guard.service';
 import { AuthService } from '../../services/auth.service';
@@ -17,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
     routing
   ],
   declarations: [
-    Login
+    LoginComponent
   ],
   providers: [
     AuthService,

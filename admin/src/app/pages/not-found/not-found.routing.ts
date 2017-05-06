@@ -1,11 +1,11 @@
-import { Routes, RouterModule }  from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
-import { NotFound } from './not-found.component';
+import { NotFoundComponent } from './not-found.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: NotFound,
+    component: NotFoundComponent,
   }
 ];
 

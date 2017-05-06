@@ -1,11 +1,11 @@
-import { Routes, RouterModule }  from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
-import { Feedbacks } from './feedbacks.component';
+import { FeedbacksComponent } from './feedbacks.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: Feedbacks
+    component: FeedbacksComponent
   }
 ];
 

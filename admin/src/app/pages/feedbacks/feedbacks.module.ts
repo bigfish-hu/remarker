@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
-import { Feedbacks } from './feedbacks.component';
+import { FeedbacksComponent } from './feedbacks.component';
 import { routing } from './feedbacks.routing';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { routing } from './feedbacks.routing';
     routing
   ],
   declarations: [
-    Feedbacks
+    FeedbacksComponent
   ],
   providers: [
   ]

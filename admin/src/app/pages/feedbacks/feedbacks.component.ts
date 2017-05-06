@@ -1,14 +1,7 @@
 import { Component } from '@angular/core';
 
-// import 'style-loader!./feedbacks.scss';
-
 @Component({
-  selector: 'feedbacks',
+  selector: 'app-feedbacks',
   templateUrl: './feedbacks.html'
 })
-export class Feedbacks {
-
-  constructor() {
-  }
-
-}
+export class FeedbacksComponent {}

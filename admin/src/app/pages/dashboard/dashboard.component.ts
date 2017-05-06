@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
 
-import 'style-loader!./dashboard.scss';
-
 @Component({
-  selector: 'dashboard',
-  templateUrl: './dashboard.html'
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.html',
+  styleUrls: ['./dashboard.scss']
 })
-export class Dashboard {
-
-  constructor() {
-  }
-
-}
+export class DashboardComponent {}

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgaModule } from '../../theme/nga.module';
 
-import { NotFound } from './not-found.component';
+import { NotFoundComponent } from './not-found.component';
 import { routing } from './not-found.routing';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { routing } from './not-found.routing';
         routing
     ],
     declarations: [
-        NotFound
+        NotFoundComponent
     ],
     providers: [
     ]

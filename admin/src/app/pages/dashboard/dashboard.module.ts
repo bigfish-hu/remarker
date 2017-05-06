@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
-import { Dashboard } from './dashboard.component';
+import { DashboardComponent } from './dashboard.component';
 import { routing } from './dashboard.routing';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { routing } from './dashboard.routing';
     routing
   ],
   declarations: [
-    Dashboard
+    DashboardComponent
   ],
   providers: [
   ]
