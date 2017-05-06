@@ -9,11 +9,7 @@ dependencies:
 # Test Commands
 test:
   override:
-    - npm run build -e prod
-    - npm run test
-      pwd:
-        admin
+    - cd admin && npm run build -e prod
+    - cd admin && npm run test
   post:
-    - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-      pwd:
-        admin
+    - cd admin && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
