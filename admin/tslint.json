@@ -70,6 +70,7 @@
     ],
     "radix": true,
     "semicolon": [
+      true,
       "always"
     ],
     "triple-equals": [
@@ -113,7 +114,7 @@
     "templates-use-public": true,
     "invoke-injectable": true,
     "arrow-parens": true,
-    "no-consecutive-blank-lines": [true, 2],
+    "no-consecutive-blank-lines": [true, 1],
     "array-type": [true, "array-simple"]
   }
 }

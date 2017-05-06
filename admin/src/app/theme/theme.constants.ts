@@ -14,11 +14,11 @@ export const layoutPaths = {
 export class ColorHelper {
   static shade = (color, weight) => {
     return ColorHelper.mix('#000000', color, weight);
-  };
+  }
 
   static tint = (color, weight) => {
     return ColorHelper.mix('#ffffff', color, weight);
-  };
+  }
 
   static hexToRgbA = (hex, alpha) => {
     let c: any;
@@ -32,7 +32,7 @@ export class ColorHelper {
       return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')';
     }
     throw new Error('Bad Hex');
-  };
+  }
 
   static mix = (color1, color2, weight) => {
 
@@ -47,7 +47,7 @@ export class ColorHelper {
       result += ('0' + resultPart).slice(-2);
     }
     return result;
-  };
+  }
 }
 
 export const isMobile = () =>

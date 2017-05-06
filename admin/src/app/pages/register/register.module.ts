@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register.component';
 import { routing } from './register.routing';
 
-
 @NgModule({
   imports: [
     CommonModule,

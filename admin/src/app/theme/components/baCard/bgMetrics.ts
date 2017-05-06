@@ -4,4 +4,3 @@ export interface BgMetrics {
   positionX: number;
   positionY: number;
 }
-

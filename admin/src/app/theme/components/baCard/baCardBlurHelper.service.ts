@@ -8,7 +8,6 @@ export class BaCardBlurHelper {
   private image: HTMLImageElement;
   private imageLoadSubject: Subject<void>;
 
-
   public init() {
     this._genBgImage();
     this._genImageLoadSubject();
