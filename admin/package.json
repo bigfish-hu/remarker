@@ -37,6 +37,7 @@
     "@types/jasmine": "2.5.47",
     "@types/jquery": "^2.0.41",
     "@types/node": "~7.0.12",
+    "codeclimate-test-reporter": "^0.4.1",
     "codelyzer": "~3.0.0",
     "coveralls": "^2.13.1",
     "jasmine-core": "~2.5.2",
