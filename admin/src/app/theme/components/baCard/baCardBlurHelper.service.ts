@@ -28,7 +28,9 @@ export class BaCardBlurHelper {
     const imgRatio = (this.image.height / this.image.width);       // original img ratio
     const containerRatio = (elemH / elemW);     // container ratio
 
-    let finalHeight, finalWidth;
+    let finalHeight;
+    let finalWidth;
+
     if (containerRatio > imgRatio) {
       finalHeight = elemH;
       finalWidth = (elemH / imgRatio);

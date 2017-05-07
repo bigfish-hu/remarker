@@ -40,9 +40,9 @@ export class UserService {
 
   changePassword(oldpassword: string, newpassword1: string, newpassword2: string) {
     const requestObject = {
-      oldpassword: oldpassword,
-      newpassword1: newpassword1,
-      newpassword2: newpassword2
+      oldpassword,
+      newpassword1,
+      newpassword2
     };
     return this.http.put(this.url, requestObject);
   }

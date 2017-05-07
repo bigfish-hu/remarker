@@ -20,7 +20,7 @@ export class GlobalState {
       this._data[event] = value;
 
       this._data.next({
-        event: event,
+        event,
         data: this._data[event]
       });
     }
@@ -34,10 +34,10 @@ export class GlobalState {
   }
 
   _onEvent(data: any) {
-    const subscribers = this._subscriptions.get(data['event']) || [];
+    const subscribers = this._subscriptions.get(data.event) || [];
 
     subscribers.forEach((callback) => {
-      callback.call(null, data['data']);
+      callback.call(null, data.data);
     });
   }
 }

@@ -15,7 +15,7 @@ export class BaBackTopComponent implements AfterViewInit {
 
   @ViewChild('baBackTop') private _selector: ElementRef;
 
-  ngAfterViewInit () {
+  ngAfterViewInit() {
     this._onWindowScroll();
   }
 

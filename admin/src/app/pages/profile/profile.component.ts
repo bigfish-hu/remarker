@@ -20,16 +20,16 @@ export class ProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, fb: FormBuilder, private userService: UserService ) {
     this.passwordForm = fb.group({
-      'oldPassword': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      'newPasswords': fb.group({
-        'newPassword1': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-        'newPassword2': ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      oldPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      newPasswords: fb.group({
+        newPassword1: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+        newPassword2: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     }, {validator: EqualPasswordsValidator.validate('newPassword1', 'newPassword2')})
   });
-    this.oldPassword = this.passwordForm.controls['oldPassword'];
-    this.newPasswords = <FormGroup> this.passwordForm.controls['newPasswords'];
-    this.newPassword1 = this.newPasswords.controls['newPassword1'];
-    this.newPassword2 = this.newPasswords.controls['newPassword2'];
+    this.oldPassword = this.passwordForm.controls.oldPassword;
+    this.newPasswords = this.passwordForm.controls.newPasswords as FormGroup;
+    this.newPassword1 = this.newPasswords.controls.newPassword1;
+    this.newPassword2 = this.newPasswords.controls.newPassword2;
   }
 
   public ngOnInit(): void {

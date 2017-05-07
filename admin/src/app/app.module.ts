@@ -20,7 +20,7 @@ import { GlobalState } from './global.state';
 import { PagesModule } from './pages/pages.module';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
-  return new AuthHttp( new AuthConfig({}), http, options);
+  return new AuthHttp(new AuthConfig({}), http, options);
 }
 
 @NgModule({

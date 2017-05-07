@@ -7,6 +7,10 @@ engines:
         enabled: false
       no-empty:
         enabled: false
+      interface-name:
+        enabled: false
+      arrow-return-shorthand:
+        enabled: false
 exclude_paths:
   - "**.php"
   - "Docker/"

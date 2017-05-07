@@ -24,7 +24,7 @@ export class ApiService {
     const options = new RequestOptions({ headers: this.headers});
 
     return this.http.post(url, JSON.stringify(data), options)
-      .map((response: Response) => <Response>response.json())
+      .map((response: Response) => response.json() as Response)
       .catch((error) => {
         this.toastr.error(error);
         return Observable.throw(error);
@@ -36,7 +36,7 @@ export class ApiService {
     const options = new RequestOptions({ headers: this.headers});
 
     return this.http.get(url, options)
-      .map((response: Response) => <Response>response.json())
+      .map((response: Response) => response.json() as Response)
       .catch((error) => {
         this.toastr.error(error);
         return Observable.throw(error);
@@ -48,7 +48,7 @@ export class ApiService {
     const options = new RequestOptions({ headers: this.headers});
 
     return this.http.put(url, JSON.stringify(data), options)
-        .map((response: Response) => <Response>response.json())
+        .map((response: Response) => response.json() as Response)
         .catch((error) => {
           this.toastr.error(error);
           return Observable.throw(error);

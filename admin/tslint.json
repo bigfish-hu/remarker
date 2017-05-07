@@ -27,8 +27,27 @@
     "member-access": false,
     "member-ordering": [
       true,
-      "static-before-instance",
-      "variables-before-functions"
+      {
+        "order": [
+          "public-static-field",
+          "public-instance-field",
+          "protected-static-field",
+          "protected-instance-field",
+          "private-static-field",
+          "private-instance-field",
+
+          "public-constructor",
+          "protected-constructor",
+          "private-constructor",
+
+          "public-static-method",
+          "public-instance-method",
+          "protected-static-method",
+          "protected-instance-method",
+          "private-static-method",
+          "private-instance-method"
+        ]
+      }
     ],
     "no-arg": true,
     "no-bitwise": false,
@@ -48,7 +67,7 @@
     "no-eval": true,
     "no-inferrable-types": [true, "ignore-params"],
     "no-shadowed-variable": true,
-    "no-string-literal": false,
+    "no-string-literal": true,
     "no-string-throw": true,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
@@ -115,6 +134,13 @@
     "invoke-injectable": true,
     "arrow-parens": true,
     "no-consecutive-blank-lines": [true, 1],
-    "array-type": [true, "array-simple"]
+    "array-type": [true, "array-simple"],
+    "object-literal-shorthand": true,
+    "object-literal-key-quotes": [true, "as-needed"],
+    "no-angle-bracket-type-assertion": true,
+    "space-before-function-paren": [true, "never"],
+    "one-variable-per-declaration": true,
+    "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"]
+
   }
 }
