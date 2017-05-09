@@ -85,8 +85,8 @@ class AuthControllerTest extends BaseTestClass
         $response = $this->postJson($this->baseUrl . 'api/auth/login', [
             'email' => $this->adminEmail,
             'password' => $this->adminPassword
-        ])->assertStatus(Response::HTTP_OK);
-        $this->assertNotEmpty(json_decode($response->getContent(), true)['token']);
+        ])->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertHeader('Authorization');
     }
 
     /**
