@@ -19,30 +19,30 @@ export class AuthService {
 
   constructor(private http: Http, private toastr: ToastrService) {}
 
-  loggedIn() {
+  public loggedIn() {
     return tokenNotExpired(this.tokenName);
   }
 
-  login(values: Object) {
+  public login(values: Object) {
     return this.http.post(this.loginUrl, values)
-    .map((response) => { this.extractToken(response); })
+    .map((response) => { this.saveToken(response); })
     .catch((error) => {
       this.toastr.error(error);
       return Observable.throw(error);
     });
   }
 
-  logout = () => {
+  public logout() {
     localStorage.removeItem(this.tokenName);
   }
 
-  extractToken = (res: Response) => {
-    if (typeof res.json().token !== 'undefined') {
-      this.saveToken(res.json().token);
+  public saveToken(response: Response) {
+    if (response.headers.has('Authorization')) {
+      this.saveTokenToLocalStorage(response.headers.get('Authorization').substring(7));
     }
   }
 
-  saveToken(token: string) {
+  private saveTokenToLocalStorage(token: string) {
     localStorage.setItem(this.tokenName, token);
   }
 }

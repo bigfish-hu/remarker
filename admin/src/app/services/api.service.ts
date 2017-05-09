@@ -1,8 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Headers, Response, RequestOptions } from '@angular/http';
 import { ToastrService } from './toastr.service';
 import { AuthHttp } from 'angular2-jwt';
+import { AuthService } from './auth.service';
 
 import 'rxjs/add/observable/throw';
 
@@ -15,7 +16,7 @@ export class ApiService {
 
   private headers: Headers;
 
-  constructor(private http: AuthHttp, private toastr: ToastrService) {
+  constructor(private http: AuthHttp, private toastr: ToastrService, private authService: AuthService) {
     this.headers = new Headers({ 'Content-Type': 'application/json' });
   }
 
@@ -24,7 +25,10 @@ export class ApiService {
     const options = new RequestOptions({ headers: this.headers});
 
     return this.http.post(url, JSON.stringify(data), options)
-      .map((response: Response) => response.json() as Response)
+      .map((response: Response) => {
+        this.authService.saveToken(response);
+        return response.json() as Response;
+      })
       .catch((error) => {
         this.toastr.error(error);
         return Observable.throw(error);
@@ -36,7 +40,10 @@ export class ApiService {
     const options = new RequestOptions({ headers: this.headers});
 
     return this.http.get(url, options)
-      .map((response: Response) => response.json() as Response)
+      .map((response: Response) => {
+        this.authService.saveToken(response);
+        return response.json() as Response;
+      })
       .catch((error) => {
         this.toastr.error(error);
         return Observable.throw(error);
@@ -48,16 +55,13 @@ export class ApiService {
     const options = new RequestOptions({ headers: this.headers});
 
     return this.http.put(url, JSON.stringify(data), options)
-        .map((response: Response) => response.json() as Response)
+        .map((response: Response) => {
+            this.authService.saveToken(response);
+            return response.json() as Response;
+        })
         .catch((error) => {
           this.toastr.error(error);
           return Observable.throw(error);
         });
   }
-
-  public setHeader(name: string, value: string) {
-    this.headers.append(name, value);
-    return this;
-  }
-
 }

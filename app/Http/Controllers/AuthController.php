@@ -33,7 +33,7 @@ class AuthController extends Controller
             return response(['error' => 'Invalid Credentials'], Response::HTTP_UNAUTHORIZED);
         }
 
-        return response(['token' => $token]);
+        return response('', Response::HTTP_NO_CONTENT, ['Authorization' => 'Bearer '.$token]);
     }
 
     public function getAuthenticatedUser() : Response

@@ -32,31 +32,36 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
+     * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Exception $exception)
     {
-        parent::report($e);
+        parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Exception $exception)
     {
-        if ($e instanceof UnauthorizedHttpException) {
-            return response($e->getMessage(), Response::HTTP_UNAUTHORIZED);
-        } elseif ($e instanceof JWTException) {
-            return response($e->getMessage(), Response::HTTP_UNAUTHORIZED);
-        } elseif ($e instanceof BadRequestHttpException) {
-            return response($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        if ($exception instanceof UnauthorizedHttpException) {
+            return response($this->renderJSONError($exception), Response::HTTP_UNAUTHORIZED);
+        } elseif ($exception instanceof JWTException) {
+            return response($this->renderJSONError($exception), Response::HTTP_UNAUTHORIZED);
+        } elseif ($exception instanceof BadRequestHttpException) {
+            return response($this->renderJSONError($exception), Response::HTTP_UNAUTHORIZED);
         }
 
-        return parent::render($request, $e);
+        return parent::render($request, $exception);
+    }
+
+    private function renderJSONError(Exception $exception)
+    {
+        return json_encode(['error' => $exception->getMessage()]);
     }
 }
