@@ -1,10 +1,7 @@
 {
   "name": "Remarker",
   "description": "BIGFISH - Remarker",
-  "repository": "https://github.com/bigfish-hu/remarker",
+  "repository": "https://github.com/bigfish-hu/remarker/tree/issue-5",
   "keywords": ["php", "js", "remarker"],
-  "website": "http://bigfish.hu",
-  "env": {
-    "BUILDPACK_URL": "https://github.com/bigfish-hu/remarker"
-  }
+  "website": "http://bigfish.hu"
 }
