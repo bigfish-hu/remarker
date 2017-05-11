@@ -32,3 +32,5 @@ If you have a GitHub account you can deploy Remarker to a temporary cloud server
   
 (The deploy process takes ~8 minutes)  
 After the deployment go to `server_IP_address/admin` and log in with the username `admin@remarker.com` and the password `secret`.  
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/bigfish-hu/remarker/tree/issue-5)  
