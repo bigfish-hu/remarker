@@ -9,8 +9,15 @@ export class ToastrService {
 
   public error(error: Response | any) {
     if (error instanceof Response) {
+
       const body = error.json() || '';
-      this.toastr.pop('error', error.statusText, body.error || JSON.stringify(body));
+      for (const type in body) {
+        if (body.hasOwnProperty(type)) {
+          body[type].forEach((err) => {
+            this.toastr.pop('error', error.statusText, err || JSON.stringify(body));
+          });
+        }
+      }
     } else {
       this.toastr.pop('error', error.statusText || '', error.message || error.toString());
     }

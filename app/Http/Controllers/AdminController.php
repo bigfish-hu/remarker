@@ -54,14 +54,14 @@ class AdminController extends Controller
         $user = User::find($user_id);
 
         $this->validate($request, [
-            'name' => 'min:3',
-            'email' => 'email|unique:users,email,'.$user->id,
+            'name' => 'required|min:2|max:255',
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'is_superadmin' => 'boolean'
         ]);
 
         $user->update(array_filter($request->all()));
 
-        return response('', Response::HTTP_NO_CONTENT);
+        return response(compact('user'), Response::HTTP_ACCEPTED);
     }
 
     public function deleteUser(int $user_id) : Response

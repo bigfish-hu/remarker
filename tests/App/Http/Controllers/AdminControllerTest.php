@@ -154,11 +154,12 @@ class AdminControllerTest extends BaseTestClass
     {
         $userNewAttributes = [
             'name' => 'new username',
+            'email' => $this->user->email
         ];
 
         $this->putJson($this->baseUrl . 'api/users/' . $this->user->id, $userNewAttributes, [
             'Authorization' => 'Bearer '.$this->adminToken
-        ])->assertStatus(Response::HTTP_NO_CONTENT);
+        ])->assertStatus(Response::HTTP_ACCEPTED);
 
         $user = $this->user->fresh();
 

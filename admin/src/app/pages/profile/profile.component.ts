@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
   }
 
   public submitUserForm() {
-    this.userService.updateMe(this.user).subscribe((data: any) => { this.user = data; });
+    this.userService.updateMe(this.user).subscribe((data: any) => { this.user = data || this.user; });
   }
 
   public submitPasswordForm() {

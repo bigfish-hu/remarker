@@ -165,7 +165,7 @@ class AuthControllerTest extends BaseTestClass
             'email' => $newEmail
         ], [
             'Authorization' => 'Bearer '.$token
-        ])->assertStatus(Response::HTTP_NO_CONTENT);
+        ])->assertStatus(Response::HTTP_ACCEPTED);
 
         $user = $user->fresh();
 

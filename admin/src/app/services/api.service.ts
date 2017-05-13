@@ -29,7 +29,8 @@ export class ApiService {
         this.authService.saveToken(response);
         return response.json() as Response;
       })
-      .catch((error) => {
+      .catch((error: Response) => {
+        this.authService.saveToken(error);
         this.toastr.error(error);
         return Observable.throw(error);
       });
@@ -44,9 +45,10 @@ export class ApiService {
         this.authService.saveToken(response);
         return response.json() as Response;
       })
-      .catch((error) => {
-        this.toastr.error(error);
-        return Observable.throw(error);
+        .catch((error: Response) => {
+          this.authService.saveToken(error);
+          this.toastr.error(error);
+          return Observable.throw(error);
       });
   }
 
@@ -59,7 +61,8 @@ export class ApiService {
             this.authService.saveToken(response);
             return response.json() as Response;
         })
-        .catch((error) => {
+        .catch((error: Response) => {
+          this.authService.saveToken(error);
           this.toastr.error(error);
           return Observable.throw(error);
         });

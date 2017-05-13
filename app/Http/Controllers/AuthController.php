@@ -49,20 +49,20 @@ class AuthController extends Controller
             return $this->changePassword($request);
         }
 
-        $this->validate($request, [
-            'email' => 'required|email|unique:users',
-            'name' => 'required|max:255',
-        ]);
-
         /** @var User $user */
         $user = $request->user();
+
+        $this->validate($request, [
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'name' => 'required|min:2|max:255',
+        ]);
 
         $user->update([
             'name' => $request->input('name'),
             'email' => $request->input('email')
         ]);
 
-        return response('', Response::HTTP_NO_CONTENT);
+        return response(compact('user'), Response::HTTP_ACCEPTED);
     }
 
     /**
