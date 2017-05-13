@@ -46,7 +46,11 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "php artisan optimize",
+            "ln -s .env.example .env",
+            "php artisan key:generate",
+            "php artisan jwt:secret",
+            "docker exec -it remarker_web_1 chown -R www-data storage/ bootstrap/cache"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",

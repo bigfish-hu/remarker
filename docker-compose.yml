@@ -4,7 +4,7 @@ services:
   web:
     build: ./Docker/web/
     volumes:
-      - ./:/var/www
+      - ./:/var/www/remarker
     ports:
       - 8080:80
     links:
@@ -19,7 +19,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - mysql-data:/var/lib/mysql
+      - ./Docker/mysql/data:/var/lib/mysql
 
 volumes:
   mysql-data:

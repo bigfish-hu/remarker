@@ -15,13 +15,9 @@
 
   requirements: npm, docker-compose  
 
-- `docker-compose build`
-- `docker-compose up -d`
-- `docker exec -it remarker_web_1 composer install`
-- `npm install`
-- `npm run build`  
-- `docker exec -it remarker_web_1 php artisan migrate`  
-- `docker exec -it remarker_web_1 php artisan db:seed`
+- `git clone https://github.com/bigfish-hu/remarker.git`
+- `cd remarker`
+- `./install.sh`
 
 Now you can login at `http://localhost:8080/admin` with the username `admin@remarker.com` and the password `secret`.  
 

@@ -54,6 +54,7 @@ RUN usermod \
 #
 # Get composer
 #
+RUN useradd composer
 RUN cd /usr/local/bin \
     && wget -q https://getcomposer.org/download/1.0.0/composer.phar \
     && chmod ugo+rx composer.phar \
@@ -76,13 +77,11 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 #
 # WWW docroot
 #
-RUN mkdir -p /var/www \
-    && chown -R www-data:www-data /var/www
+RUN mkdir -p /var/www/remarker \
+    && chown -R www-data:www-data /var/www/remarker
 
-RUN rm -rf /var/www/*
-
-WORKDIR /var/www
-VOLUME ["/var/www"]
+WORKDIR /var/www/remarker
+VOLUME ["/var/www/remarker"]
 
 #
 # Expose port(s)
