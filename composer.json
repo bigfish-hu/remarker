@@ -46,6 +46,7 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "cp -f .env.example .env",
             "php artisan optimize",
             "php artisan key:generate",
             "php artisan jwt:secret"
