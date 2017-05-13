@@ -3,6 +3,8 @@ services:
   # Web node
   web:
     build: ./Docker/web/
+    hostname: remarker
+    domainname: localhost
     volumes:
       - ./:/var/www/remarker
     ports:
@@ -20,7 +22,3 @@ services:
       - 3306:3306
     volumes:
       - ./Docker/mysql/data:/var/lib/mysql
-
-volumes:
-  mysql-data:
-    driver: local

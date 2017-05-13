@@ -42,6 +42,7 @@ ADD ./conf/php/000-php-settings.ini /etc/php7.0/mods-available/000-php-settings.
 ADD ./conf/php/000-php-settings.ini /etc/php7.0/cli/conf.d/000-php-settings.ini
 ADD ./conf/php/000-php-settings.ini /etc/php7.0/fpm/conf.d/000-php-settings.ini
 
+COPY ./conf/php/fpm/www.conf /etc/php7.0/fpm/pool.d/www.conf
 
 #
 # Set up www-data user
@@ -86,7 +87,7 @@ VOLUME ["/var/www/remarker"]
 #
 # Expose port(s)
 #
-EXPOSE 80 443
+EXPOSE 80 443 9000
 
 #
 # Start services
