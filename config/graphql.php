@@ -120,6 +120,7 @@ return [
     //     'locations' => []
     // ]
     //
-    'error_formatter' => ['\Folklore\GraphQL\GraphQL', 'formatError']
+    'error_formatter' => ['\Folklore\GraphQL\GraphQL', 'formatError'],
+    'variables_input_name' => 'variables'
 
 ];
