@@ -43,7 +43,9 @@ return [
     'controllers' => '\Folklore\GraphQL\GraphQLController@query',
 
     // Any middleware for the graphql route group
-    'middleware' => [],
+    'middleware' => [
+        'jwt.refresh'
+    ],
 
     // The name of the default schema used when no argument is provided
     // to GraphQL::schema() or when the route is used without the graphql_schema

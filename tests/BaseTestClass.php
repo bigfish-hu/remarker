@@ -43,6 +43,8 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
+     * @param User $user
+     * @return string
      */
     protected function login(User $user) : string
     {
@@ -50,5 +52,39 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
         JWTAuth::setToken($token);
 
         return $token;
+    }
+
+    /**
+     * @param array $array
+     * @return mixed
+     */
+    protected function assertArrayHasData(array $array)
+    {
+        $this->assertArrayHasKey('data', $array);
+        return $array['data'];
+    }
+
+    /**
+     * @param array $response
+     * @return array|mixed
+     */
+    protected function assertArrayHasUsers(array $response)
+    {
+        $this->assertArrayHasKey('users', $response);
+        $this->assertNotEmpty($response['users']);
+        $response = $response['users'];
+        return $response;
+    }
+
+    /**
+     * @param $response
+     * @return array|mixed
+     */
+    protected function assertArrayHasEdges($response)
+    {
+        $this->assertArrayHasKey('edges', $response);
+        $this->assertNotEmpty($response['edges']);
+        $response = $response['edges'];
+        return $response;
     }
 }
