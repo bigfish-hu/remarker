@@ -58,7 +58,7 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
      */
     public function projects()
     {
-        return $this->belongsToMany('App\Project');
+        return $this->belongsToMany('App\Project')->withPivot('is_admin');
     }
 
     public function feedbacks($fields)
