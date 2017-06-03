@@ -51,7 +51,7 @@ class User extends BaseType
                 'args' => [
                     'perPage' => [
                         'type' => Type::int(),
-                        'description' => 'The number of the items per page'
+                        'description' => 'The number of items per page'
                     ],
                     'page' => [
                         'type' => Type::int(),

@@ -15,7 +15,7 @@ class Project extends BaseType
 {
     protected $attributes = [
         'name' => 'Project',
-        'description' => 'A type'
+        'description' => 'A project'
     ];
 
     public function fields() : array
@@ -55,7 +55,7 @@ class Project extends BaseType
                 'args' => [
                     'perPage' => [
                         'type' => Type::int(),
-                        'description' => 'paginate',
+                        'description' => 'The number of items per page',
                     ],
                     'page' => [
                         'type' => Type::int(),
