@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Project;
 use App\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
@@ -39,6 +40,11 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
     protected function createUser() : User
     {
         return factory(User::class, 'user')->create();
+    }
+
+    protected function createProject(string $type) : Project
+    {
+        return factory(Project::class, $type)->create();
     }
 
     /**
@@ -86,5 +92,16 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
         $this->assertNotEmpty($response['edges']);
         $response = $response['edges'];
         return $response;
+    }
+
+    /**
+     * @param $response
+     * @return array|mixed
+     */
+    protected function assertArrayHasProjects($response)
+    {
+        $this->assertArrayHasKey('projects', $response);
+        $this->assertNotEmpty($response['projects']);
+        return $response['projects'];
     }
 }

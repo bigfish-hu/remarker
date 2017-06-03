@@ -14,7 +14,7 @@ class UpdateProjectUserTable extends Migration
     public function up()
     {
         Schema::table('project_user', function (Blueprint $table) {
-            $table->boolean('is_admin');
+            $table->boolean('is_admin')->default(false);
         });
     }
 
