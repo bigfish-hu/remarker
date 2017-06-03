@@ -15,7 +15,7 @@ class User extends BaseType
 {
     protected $attributes = [
         'name' => 'User',
-        'description' => 'A type'
+        'description' => 'A user'
     ];
 
     public function fields() : array
@@ -27,11 +27,11 @@ class User extends BaseType
             ],
             'name' => [
                 'type' => Type::nonNull(Type::string()),
-                'description' => 'The name of user'
+                'description' => 'The name of the user'
             ],
             'email' => [
                 'type' => Type::nonNull(Type::string()),
-                'description' => 'The email of user'
+                'description' => 'The email of the user'
             ],
             'is_superadmin' => [
                 'type' => Type::boolean(),
@@ -51,7 +51,7 @@ class User extends BaseType
                 'args' => [
                     'perPage' => [
                         'type' => Type::int(),
-                        'description' => 'paginate'
+                        'description' => 'The number of the items per page'
                     ],
                     'page' => [
                         'type' => Type::int(),
