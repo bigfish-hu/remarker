@@ -4,7 +4,6 @@ namespace App\GraphQL\Type;
 
 use GraphQL\Type\Definition\Type;
 use App\GraphQL\CollectionType;
-use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
