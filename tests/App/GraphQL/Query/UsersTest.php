@@ -28,6 +28,11 @@ class UsersTest extends BaseTestClass
         $this->userToken = $this->login($this->user1);
     }
 
+    /**
+     * @group graphql
+     * @group POST
+     * @covers \App\GraphQL\Query::resolve()
+     */
     public function testGetAllUsers()
     {
         $query = "{
@@ -67,12 +72,13 @@ class UsersTest extends BaseTestClass
         ], $response[1]);
     }
 
+    /**
+     * @group graphql
+     * @group POST
+     * @covers \App\GraphQL\Query\Users::resolve()
+     */
     public function testGetAllUsersWithProjects()
     {
-        ini_set('xdebug.var_display_max_depth', 5);
-        ini_set('xdebug.var_display_max_children', 256);
-        ini_set('xdebug.var_display_max_data', 1024);
-
         $project = $this->createProject('project1');
         $this->user1->projects()->save($project, ['is_admin' => true]);
 
