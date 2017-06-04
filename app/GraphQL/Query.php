@@ -20,7 +20,14 @@ abstract class Query extends GraphQLQuery
         return $this->getTypeArguments() + $this->getPaginationArguments();
     }
 
-    public function resolve($root, $args, $context, ResolveInfo $info)
+    /**
+     * @param $root
+     * @param array $args
+     * @param \App\User $context
+     * @param ResolveInfo $info
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function resolve($root, array $args, \App\User $context, ResolveInfo $info)
     {
         $query = $this->getQuery();
 

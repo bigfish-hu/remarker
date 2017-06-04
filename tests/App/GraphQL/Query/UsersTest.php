@@ -30,7 +30,7 @@ class UsersTest extends BaseTestClass
 
     /**
      * @group graphql
-     * @group POST
+     * @group user
      * @covers \App\GraphQL\Query::resolve()
      */
     public function testGetAllUsers()
@@ -74,8 +74,9 @@ class UsersTest extends BaseTestClass
 
     /**
      * @group graphql
-     * @group POST
-     * @covers \App\GraphQL\Query\Users::resolve()
+     * @group user
+     * @group project
+     * @covers \App\GraphQL\Type\User::resolveProjectsField()
      */
     public function testGetAllUsersWithProjects()
     {
@@ -91,7 +92,6 @@ class UsersTest extends BaseTestClass
                             edges {
                               id
                               name
-                            
                             }
                           }
                         }
@@ -132,5 +132,61 @@ class UsersTest extends BaseTestClass
             'id' => 1,
             'name' =>  'project1'
         ], $projects[0]);
+    }
+
+    /**
+     * @group graphql
+     * @group user
+     * @group project
+     * @group feedback
+     * @covers \App\GraphQL\Type\Project::resolveFeedbacksField()
+     */
+    public function testGetAllUsersWithProjectsAndFeedbacks()
+    {
+        $project = $this->createProject('project1');
+        $feedback1 = $this->createFeedback();
+        $project->feedbacks()->save($feedback1);
+        $this->user1->projects()->save($project, ['is_admin' => true]);
+
+        $query = "{
+                      users {
+                        edges {
+                          id
+                          name
+                          projects {
+                            edges {
+                              id
+                              name
+                              feedbacks {
+                                edges {
+                                  id
+                                  title
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    ";
+
+        $response = $this->postJson($this->baseUrl . 'graphql', [
+            'query' => $query
+        ], [
+            'Authorization' => 'Bearer '.$this->userToken
+        ])->assertStatus(Response::HTTP_OK);
+
+        $response = json_decode($response->getContent(), true);
+        $response = $response['data']['users']['edges'];
+        $project1 = $response[0]['projects']['edges'][0];
+
+        $feedbacks1 = $this->assertArrayHasFeedbacks($project1);
+        $feedbacks1 = $this->assertArrayHasEdges($feedbacks1);
+        $this->assertCount(1, $feedbacks1);
+
+        $this->assertEquals([
+            'id' => $feedback1->id,
+            'title' =>  $feedback1->title
+        ], $feedbacks1[0]);
     }
 }

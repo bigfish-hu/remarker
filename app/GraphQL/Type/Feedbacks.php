@@ -2,7 +2,9 @@
 
 namespace App\GraphQL\Type;
 
+use GraphQL\Type\Definition\Type;
 use App\GraphQL\CollectionType;
+use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
@@ -15,4 +17,16 @@ class Feedbacks extends CollectionType
         'name' => 'Feedbacks',
         'description' => 'A type'
     ];
+
+    public function fields()
+    {
+        return parent::fields() + [
+            'edges' => [
+                'type' => Type::listOf(\GraphQL::type('Feedback')),
+                'resolve' => function ($root) {
+                    return $root;
+                }
+            ]
+        ];
+    }
 }

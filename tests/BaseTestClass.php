@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Feedback;
 use App\Project;
 use App\User;
 use Illuminate\Foundation\Application;
@@ -47,6 +48,11 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
         return factory(Project::class, $type)->create();
     }
 
+    protected function createFeedback() : Feedback
+    {
+        return factory(Feedback::class)->create();
+    }
+
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @param User $user
@@ -83,10 +89,10 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * @param $response
+     * @param array $response
      * @return array|mixed
      */
-    protected function assertArrayHasEdges($response)
+    protected function assertArrayHasEdges(array $response)
     {
         $this->assertArrayHasKey('edges', $response);
         $this->assertNotEmpty($response['edges']);
@@ -95,13 +101,24 @@ abstract class BaseTestClass extends \Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * @param $response
+     * @param array $response
      * @return array|mixed
      */
-    protected function assertArrayHasProjects($response)
+    protected function assertArrayHasProjects(array $response)
     {
         $this->assertArrayHasKey('projects', $response);
         $this->assertNotEmpty($response['projects']);
         return $response['projects'];
+    }
+
+    /**
+     * @param array $response
+     * @return array|mixed
+     */
+    protected function assertArrayHasFeedbacks(array $response)
+    {
+        $this->assertArrayHasKey('feedbacks', $response);
+        $this->assertNotEmpty($response['feedbacks']);
+        return $response['feedbacks'];
     }
 }

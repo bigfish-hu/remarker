@@ -69,11 +69,11 @@ class Project extends BaseType
     /**
      * @param \App\Project $root
      * @param array|null $args
-     * @param array|null $context
+     * @param \App\User $context
      * @param ResolveInfo $info
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function resolveFeedbacksField(\App\Project $root, $args, $context, ResolveInfo $info)
+    public function resolveFeedbacksField(\App\Project $root, $args, \App\User $context, ResolveInfo $info)
     {
         $page = array_get($args, 'page', 1);
         $perPage = array_get($args, 'perPage', 10);
