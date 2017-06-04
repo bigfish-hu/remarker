@@ -16,7 +16,7 @@ class Users extends CollectionType
         'description' => 'A collection of users with pagination information'
     ];
 
-    public function fields()
+    public function fields() : array
     {
         return parent::fields() + [
             'edges' => [

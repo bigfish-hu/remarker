@@ -18,7 +18,7 @@ class Feedbacks extends CollectionType
         'description' => 'A type'
     ];
 
-    public function fields()
+    public function fields() : array
     {
         return parent::fields() + [
             'edges' => [

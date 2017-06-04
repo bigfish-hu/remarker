@@ -9,7 +9,7 @@ use Folklore\GraphQL\Support\Type as BaseType;
  */
 abstract class CollectionType extends BaseType
 {
-    public function fields()
+    public function fields() : array
     {
         return [
             'pageInfo' => [
